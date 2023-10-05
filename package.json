@@ -36,8 +36,7 @@
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
     "react-native-typescript-transformer": "^1.2.13",
-    "typescript": "^5.2.2",
-    "yarn": "^1.22.19"
+    "typescript": "^5.2.2"
   },
   "private": true,
   "lint-staged": {
