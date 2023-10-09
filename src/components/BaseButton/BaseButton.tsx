@@ -1,19 +1,19 @@
-import { TouchableOpacityProps } from 'react-native';
+import { Button, ButtonProps } from '@rneui/themed';
 import { FC, PropsWithChildren } from 'react';
 import styled from 'styled-components/native';
 import { color } from 'src/common/constants/color';
 
 export interface BaseButtonProps {
-  title?: string;
-  bgColor?: string;
   height?: number;
   width?: number;
   borderRadius?: number;
+  borderColor?: string;
+  borderWidth?: number;
 }
-export type WraperButtonProp = TouchableOpacityProps & BaseButtonProps;
+export type WraperButtonProp = ButtonProps & BaseButtonProps;
 
 const defaultProps: WraperButtonProp = {
-  bgColor: color.primary,
+  color: color.primary,
   width: 300,
   height: 40,
   borderRadius: 5
@@ -21,30 +21,25 @@ const defaultProps: WraperButtonProp = {
 
 function BaseButton(props: WraperButtonProp) {
   return (
-    <WraperButton
-      onPress={props.onPress}
-      width={props.width}
-      height={props.height}
-      bgColor={props.bgColor}
-      borderRadius={props.borderRadius}
-    >
-      <TextButton>{props.title}</TextButton>
-    </WraperButton>
+    <WrapperButton onPress={props.onPress} width={props.width} height={props.height}>
+      <Button
+        loading={props.loading}
+        color={props.color}
+        type={props.type}
+        radius={props.borderRadius}
+        disabled={props.disabled}
+        buttonStyle={{ borderColor: props.borderColor, borderWidth: props.borderWidth }}
+      >
+        {props.title}
+      </Button>
+    </WrapperButton>
   );
 }
 BaseButton.defaultProps = defaultProps;
-const TextButton = styled.Text`
-  text-align: center;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: bold;
-`;
-const WraperButton: FC<PropsWithChildren<WraperButtonProp>> = styled.TouchableOpacity`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  background-color: ${(props) => props.bgColor};
-  border-radius: ${(props) => props.borderRadius};
-  justify-content: center;
+
+const WrapperButton: FC<PropsWithChildren<WraperButtonProp>> = styled.View`
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
 `;
 
 export default BaseButton;
