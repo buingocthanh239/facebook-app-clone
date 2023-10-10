@@ -1,43 +1,65 @@
-import { Button, ButtonProps } from '@rneui/themed';
+import { Button, ButtonProps } from 'react-native-paper';
+import { TouchableOpacityProps } from 'react-native';
 import { FC, PropsWithChildren } from 'react';
 import styled from 'styled-components/native';
 import { color } from 'src/common/constants/color';
 
 export interface BaseButtonProps {
-  height?: number;
-  width?: number;
   borderRadius?: number;
   borderColor?: string;
   borderWidth?: number;
 }
-export type WraperButtonProp = ButtonProps & BaseButtonProps;
+
+export interface CustomTouchProps {
+  height?: number;
+  width?: number;
+}
+export type WraperButtonProp = ButtonProps & BaseButtonProps & CustomTouchProps;
 
 const defaultProps: WraperButtonProp = {
-  color: color.primary,
+  mode: 'contained',
+  children: '',
+  borderColor: color.primary,
+  buttonColor: color.primary,
+  textColor: color.white,
   width: 300,
   height: 40,
-  borderRadius: 5
+  borderRadius: 5,
+  borderWidth: 3
 };
 
 function BaseButton(props: WraperButtonProp) {
   return (
-    <WrapperButton onPress={props.onPress} width={props.width} height={props.height}>
+    <WrapperButton width={props.width} height={props.height} activeOpacity={0.7}>
       <Button
         loading={props.loading}
-        color={props.color}
-        type={props.type}
-        radius={props.borderRadius}
+        buttonColor={props.mode === 'contained' ? props.buttonColor : ''}
         disabled={props.disabled}
-        buttonStyle={{ borderColor: props.borderColor, borderWidth: props.borderWidth }}
+        textColor={props.mode === 'outlined' ? color.primary : props.textColor}
+        mode={props.mode}
+        onPress={props.onPress}
+        style={[
+          {
+            borderRadius: props.borderRadius
+          },
+          props.mode === 'outlined'
+            ? {
+                borderColor: props.borderColor,
+                borderWidth: props.borderWidth
+              }
+            : {}
+        ]}
       >
-        {props.title}
+        {!props.loading ? props.children : ''}
       </Button>
     </WrapperButton>
   );
 }
 BaseButton.defaultProps = defaultProps;
 
-const WrapperButton: FC<PropsWithChildren<WraperButtonProp>> = styled.View`
+const WrapperButton: FC<
+  PropsWithChildren<CustomTouchProps & TouchableOpacityProps>
+> = styled.TouchableOpacity`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
 `;
