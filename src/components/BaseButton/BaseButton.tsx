@@ -60,8 +60,8 @@ BaseButton.defaultProps = defaultProps;
 const WrapperButton: FC<
   PropsWithChildren<CustomTouchProps & TouchableOpacityProps>
 > = styled.TouchableOpacity`
-  width: ${(props) => props.width}px;
-  height: ${(props) => props.height}px;
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
 `;
 
 export default BaseButton;

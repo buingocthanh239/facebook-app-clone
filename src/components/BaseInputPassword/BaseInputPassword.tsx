@@ -67,7 +67,7 @@ const TextError = styled.Text`
   padding-left: 8px;
 `;
 const Label: FC<PropsWithChildren<LableProps>> = styled.Text`
-  color: ${(props) => (props.error ? color.error : color.primary)};
+  color: ${props => (props.error ? color.error : color.primary)};
   padding-bottom: 8px;
   font-size: 16px;
   padding-left: 12px;

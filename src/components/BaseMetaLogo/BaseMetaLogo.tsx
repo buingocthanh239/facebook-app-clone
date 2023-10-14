@@ -15,8 +15,8 @@ function BaseMetaLogo(props: BaseMetaLogoProps) {
 }
 BaseMetaLogo.defaultProps = defaultProps;
 const ImageLogo: FC<PropsWithChildren<BaseMetaLogoProps>> = styled.Image`
-  width: ${(props) => props.width}px;
-  height: ${(props) => props.height}px;
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
   object-fit: contain;
   align-self: center;
 `;
