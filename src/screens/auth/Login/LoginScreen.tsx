@@ -27,11 +27,13 @@ function LoginScreen() {
             mode='outlined'
             style={{ marginBottom: 10, marginTop: 8 }}
           />
-          <BaseButton children='Đăng nhập' width={350} />
+          <BaseButton width={350}>Đăng nhập</BaseButton>
           <BaseTextTitle style={{ marginTop: 10 }}>Bạn quên mật khẩu ư?</BaseTextTitle>
         </View>
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-          <BaseButton children='Tạo tài khoản mới' width={350} mode='outlined' />
+          <BaseButton width={350} mode='outlined'>
+            Tạo tài khoản mới
+          </BaseButton>
           <BaseMetaLogo />
         </View>
       </View>
