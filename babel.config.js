@@ -10,6 +10,7 @@ module.exports = {
           src: './src'
         }
       }
-    ]
+    ],
+    'optional-require'
   ]
 };

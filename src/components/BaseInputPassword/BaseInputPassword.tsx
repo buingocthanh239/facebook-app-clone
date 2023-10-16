@@ -8,7 +8,8 @@ import { BaseInputProps, LableProps } from '../BaseInputText/BaseInputText';
 const defaultProps: BaseInputProps = {
   hideLabel: false,
   required: false,
-  activeOutlineColor: color.primary
+  activeOutlineColor: color.activeOutlineColor,
+  outlineColor: color.outlineColor
 };
 function BaseInputPassword(props: BaseInputProps) {
   const [hidden, setHidden] = useState(false);
@@ -48,6 +49,7 @@ function BaseInputPassword(props: BaseInputProps) {
         numberOfLines={props.numberOfLines}
         value={props.value}
         error={errorText ? true : false}
+        outlineStyle={{ borderWidth: 1.5, borderRadius: 8 }}
         style={props.style}
         autoFocus={props.autoFocus}
         secureTextEntry={hidden}

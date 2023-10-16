@@ -25,10 +25,10 @@ const defaultProps: WraperButtonProp = {
   width: 300,
   height: 40,
   borderRadius: 100,
-  borderWidth: 2
+  borderWidth: 1.5
 };
 
-function BaseButton(props: WraperButtonProp) {
+function BaseButton(props: WraperButtonProp): JSX.Element {
   return (
     <WrapperButton width={props.width} height={props.height} activeOpacity={0.7}>
       <Button
@@ -39,6 +39,7 @@ function BaseButton(props: WraperButtonProp) {
         mode={props.mode}
         onPress={props.onPress}
         style={[
+          props.style,
           {
             borderRadius: props.borderRadius
           },
@@ -60,8 +61,8 @@ BaseButton.defaultProps = defaultProps;
 const WrapperButton: FC<
   PropsWithChildren<CustomTouchProps & TouchableOpacityProps>
 > = styled.TouchableOpacity`
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
+  width: ${props => props.width}dp;
+  height: ${props => props.height}dp;
 `;
 
 export default BaseButton;

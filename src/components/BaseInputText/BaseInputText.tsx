@@ -15,10 +15,12 @@ export interface LableProps {
 const defaultProps: BaseInputProps = {
   hideLabel: false,
   required: false,
-  activeOutlineColor: color.primary
+  activeOutlineColor: color.activeOutlineColor,
+  outlineColor: color.outlineColor,
+  selectionColor: color.outlineColor
 };
 export type BaseInputProps = InputTextProps & TextInputProps;
-function BaseInputText(props: BaseInputProps) {
+function BaseInputText(props: BaseInputProps): JSX.Element {
   const { errorText } = props;
   return (
     <View>
@@ -38,6 +40,7 @@ function BaseInputText(props: BaseInputProps) {
         mode={props.mode}
         placeholder={props.placeholder}
         onChangeText={props.onChangeText}
+        selectionColor={props.selectionColor}
         cursorColor={props.cursorColor}
         underlineColor={props.underlineColor}
         activeUnderlineColor={props.activeUnderlineColor}
@@ -50,6 +53,7 @@ function BaseInputText(props: BaseInputProps) {
         error={errorText ? true : false}
         keyboardType={props.keyboardType}
         autoFocus={props.autoFocus}
+        outlineStyle={{ borderWidth: 1.5, borderRadius: 8 }}
         style={props.style}
       />
       {errorText ? <TextError>{errorText}</TextError> : ''}
@@ -59,19 +63,19 @@ function BaseInputText(props: BaseInputProps) {
 BaseInputText.defaultProps = defaultProps;
 const TextError = styled.Text`
   color: ${color.error};
-  padding-top: 4px;
-  font-size: 14px;
-  padding-left: 8px;
+  padding-top: 4dp;
+  font-size: 14dp;
+  padding-left: 8dp;
 `;
 const Label: FC<PropsWithChildren<LableProps>> = styled.Text`
   color: ${props => (props.error ? color.error : color.primary)};
-  padding-bottom: 8px;
-  font-size: 16px;
-  padding-left: 12px;
+  padding-bottom: 8dp;
+  font-size: 16dp;
+  padding-left: 12dp;
   font-weight: bold;
 `;
 const RequiredIcon = styled.Text`
   color: ${color.error};
-  padding-left: 4px;
+  padding-left: 4dp;
 `;
 export default BaseInputText;
