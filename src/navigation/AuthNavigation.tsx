@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import BaseHeader from 'src/components/BaseHeader';
+import BaseHeader from '../components/BaseHeader';
 import { LoginScreen, SignInScreen } from 'src/screens/auth';
 
 const Stack = createNativeStackNavigator();

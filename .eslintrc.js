@@ -17,7 +17,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
-    'no-unused-vars': ['error', {vars: 'all'}],
+    'no-unused-vars': ['error', { vars: 'all' }],
     'prettier/prettier': [
       'warn',
       {
@@ -29,7 +29,8 @@ module.exports = {
         useTabs: false,
         singleQuote: true,
         printWidth: 100,
-        jsxSingleQuote: true
+        jsxSingleQuote: true,
+        bracketSpacing: true
       }
     ]
   }
