@@ -19,8 +19,8 @@
  * @format
  */
 
-import React from 'react';
-import type { PropsWithChildren } from 'react';
+import SplashScreen from 'react-native-splash-screen';
+import { useEffect, type PropsWithChildren } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -72,6 +72,9 @@ function Section({ children, title }: SectionProps): JSX.Element {
 }
 
 function App(): JSX.Element {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
