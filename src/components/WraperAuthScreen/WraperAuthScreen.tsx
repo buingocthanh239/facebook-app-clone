@@ -7,10 +7,12 @@ export type WrapperAuthScreenProps = PropsWithChildren<{
   paddingHorizontal?: number;
   paddingTop?: number;
   paddingBottom?: number;
+  spaceBetween?: boolean;
 }>;
 const defaultProps: WrapperAuthScreenProps = {
   paddingHorizontal: 20,
-  paddingBottom: 8
+  paddingBottom: 8,
+  spaceBetween: false
 };
 function WrapperAuthScreen(props: WrapperAuthScreenProps): JSX.Element {
   const insets = useSafeAreaInsets();
@@ -28,7 +30,8 @@ function WrapperAuthScreen(props: WrapperAuthScreenProps): JSX.Element {
           paddingLeft: insets.left + (props.paddingHorizontal ?? 0),
           paddingRight: insets.right + (props.paddingHorizontal ?? 0),
           flex: 1,
-          justifyContent: 'space-between'
+          justifyContent: props.spaceBetween ? 'space-between' : 'flex-start',
+          gap: 10
         }}
       >
         {props.children}

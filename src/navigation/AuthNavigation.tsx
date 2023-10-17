@@ -19,7 +19,7 @@ function AuthNavigation() {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
-        header: () => <BaseHeader title='' />
+        header: () => <BaseHeader />
       }}
     >
       <Stack.Screen name='HomeAuth' options={{ headerShown: false }} component={HomeAuth} />
@@ -27,7 +27,7 @@ function AuthNavigation() {
       <Stack.Group>
         <Stack.Screen name='FirstScreen' component={FirstScreen} />
         <Stack.Screen name='NameScreen' component={NameScreen} />
-        <Stack.Screen name='BirthDayScreen' component={BirthDayScreen} />
+        <Stack.Screen name='BirthdayScreen' component={BirthDayScreen} />
         <Stack.Screen name='GenderScreen' component={GenderScreen} />
         <Stack.Screen name='EmailScreen' component={EmailScreen} />
         <Stack.Screen name='PasswordScreen' component={PasswordScreen} />

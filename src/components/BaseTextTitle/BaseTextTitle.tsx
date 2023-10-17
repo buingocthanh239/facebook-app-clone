@@ -1,24 +1,27 @@
-import { TextProps, ViewProps } from 'react-native';
+import { TextProps, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 interface TitleProps {
   fontSize?: number;
+  color?: string;
 }
 export type BaseTextTitleProps = TextProps & TitleProps;
 const defaultProps: BaseTextTitleProps = {
-  fontSize: 12
+  fontSize: 14
 };
-function BaseTextTitle(props: TextProps) {
+function BaseTextTitle(props: BaseTextTitleProps) {
   return (
-    <WrapperTextTitle style={props.style}>
-      <Title onPress={props.onPress}>{props.children}</Title>
-    </WrapperTextTitle>
+    <TouchableOpacity style={props.style} activeOpacity={0.6}>
+      <Title onPress={props.onPress} fontSize={props.fontSize} color={props.color}>
+        {props.children}
+      </Title>
+    </TouchableOpacity>
   );
 }
 BaseTextTitle.defaultProps = defaultProps;
-const WrapperTextTitle = styled.View<ViewProps>``;
 const Title = styled.Text<BaseTextTitleProps>`
   font-weight: bold;
-  font-size: 14px;
+  font-size: ${props => props.fontSize}px;
   text-align: center;
+  color: ${props => props.color ?? ''};
 `;
 export default BaseTextTitle;

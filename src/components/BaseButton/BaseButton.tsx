@@ -8,6 +8,7 @@ export interface BaseButtonProps {
   borderRadius?: number;
   borderColor?: string;
   borderWidth?: number;
+  isUseTextOutlineColor?: boolean;
 }
 
 export interface CustomTouchProps {
@@ -25,7 +26,8 @@ const defaultProps: WraperButtonProp = {
   width: 300,
   height: 40,
   borderRadius: 100,
-  borderWidth: 1.5
+  borderWidth: 1.5,
+  isUseTextOutlineColor: false
 };
 
 function BaseButton(props: WraperButtonProp): JSX.Element {
@@ -35,7 +37,11 @@ function BaseButton(props: WraperButtonProp): JSX.Element {
         loading={props.loading}
         buttonColor={props.mode === 'contained' ? props.buttonColor : ''}
         disabled={props.disabled}
-        textColor={props.mode === 'outlined' ? color.primary : props.textColor}
+        textColor={
+          props.mode === 'outlined' && !props.isUseTextOutlineColor
+            ? color.primary
+            : props.textColor
+        }
         mode={props.mode}
         onPress={props.onPress}
         style={[

@@ -1,14 +1,32 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Text } from 'react-native-paper';
 import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import BaseInputText from 'src/components/BaseInputText';
+import BaseButton from 'src/components/BaseButton';
+import BaseTextTitle from 'src/components/BaseTextTitle';
+import { color } from 'src/common/constants/color';
+import { useNavigation } from '@react-navigation/native';
 
-function SignInScreen() {
+function NameScreen() {
+  const naviagtion = useNavigation();
   return (
-    <WraperAuthScreen>
-      <View>
-        <Text>Sign In screen</Text>
+    <WraperAuthScreen spaceBetween>
+      <View style={{ flex: 1 }}>
+        <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
+          Bạn tên gì?
+        </Text>
+        <Text variant='bodyMedium'>Nhập tên bạn sử dụng trong đời thực.</Text>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+          <BaseInputText mode='outlined' label='Họ' />
+          <BaseInputText mode='outlined' label='Tên' />
+        </View>
+        <BaseButton onPress={() => naviagtion.navigate('BirthdayScreen' as never)}>Tiếp</BaseButton>
       </View>
+      <BaseTextTitle color={color.primary} onPress={() => naviagtion.navigate('Login' as never)}>
+        Bạn đã có tài khoản ư?
+      </BaseTextTitle>
     </WraperAuthScreen>
   );
 }
 
-export default SignInScreen;
+export default NameScreen;
