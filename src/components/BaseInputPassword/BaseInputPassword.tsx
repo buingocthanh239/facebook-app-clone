@@ -30,9 +30,9 @@ function BaseInputPassword(props: BaseInputProps) {
         right={
           !hiddenEyeIcon ? (
             hidden ? (
-              <TextInput.Icon icon='eye' onPress={onPressEyeIcon} />
+              <TextInput.Icon icon={require('../../assets/hide.png')} onPress={onPressEyeIcon} />
             ) : (
-              <TextInput.Icon icon='eye-off' onPress={onPressEyeIcon} />
+              <TextInput.Icon icon={require('../../assets/view.png')} onPress={onPressEyeIcon} />
             )
           ) : (
             ''
