@@ -22,6 +22,6 @@ const Title = styled.Text<BaseTextTitleProps>`
   font-weight: bold;
   font-size: ${props => props.fontSize}px;
   text-align: center;
-  color: ${props => props.color ?? ''};
+  ${props => (props.color ? `color: ${props.color}` : '')};
 `;
 export default BaseTextTitle;
