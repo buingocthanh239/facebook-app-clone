@@ -11,14 +11,14 @@ function NameScreen() {
   const naviagtion = useNavigation();
   return (
     <WraperAuthScreen spaceBetween>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, flexDirection: 'column', gap: 10 }}>
         <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
           Bạn tên gì?
         </Text>
         <Text variant='bodyMedium'>Nhập tên bạn sử dụng trong đời thực.</Text>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <BaseInputText mode='outlined' label='Họ' />
-          <BaseInputText mode='outlined' label='Tên' />
+        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <BaseInputText mode='outlined' label='Họ' style={{ width: 165 }} />
+          <BaseInputText mode='outlined' label='Tên' style={{ width: 165 }} />
         </View>
         <BaseButton onPress={() => naviagtion.navigate('BirthdayScreen' as never)}>Tiếp</BaseButton>
       </View>
