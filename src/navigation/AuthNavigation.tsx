@@ -13,6 +13,7 @@ import {
   SaveInfoAccountScreen,
   BirthDayScreen
 } from 'src/screens/auth/SignIn';
+
 const Stack = createNativeStackNavigator();
 function AuthNavigation() {
   return (
