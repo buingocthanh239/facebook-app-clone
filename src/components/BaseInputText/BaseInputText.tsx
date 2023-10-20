@@ -54,7 +54,7 @@ function BaseInputText(props: BaseInputProps): JSX.Element {
         keyboardType={props.keyboardType}
         autoFocus={props.autoFocus}
         outlineStyle={{ borderWidth: 1.5, borderRadius: 8 }}
-        style={props.style}
+        style={[props.style, { height: 54 }]}
       />
       {errorText ? <TextError>{errorText}</TextError> : ''}
     </View>

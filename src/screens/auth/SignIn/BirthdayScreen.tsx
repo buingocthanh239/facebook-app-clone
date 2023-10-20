@@ -5,11 +5,13 @@ import DatePicker from 'react-native-date-picker';
 import WrapperAuthScreen from 'src/components/WraperAuthScreen';
 import { color } from 'src/common/constants/color';
 import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 
 function DatePickerScreen() {
   const [date, setDate] = useState(new Date('2000-1-1'));
   const [error, setError] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
+  const naviagtion = useNavigation();
   const getAge = (DOB: Date) => {
     const today = new Date();
     const birthDate = new Date(DOB);
@@ -33,7 +35,7 @@ function DatePickerScreen() {
     };
     validateDate(date);
   }, [date]);
-  const handleSubmit = () => {};
+  const handleSubmit = () => naviagtion.navigate('GenderScreen' as never);
   return (
     <WrapperAuthScreen>
       <Text variant='titleLarge' style={styles.title}>

@@ -24,7 +24,7 @@ const defaultProps: WraperButtonProp = {
   buttonColor: color.primary,
   textColor: color.white,
   width: 300,
-  height: 40,
+  height: 44,
   borderRadius: 100,
   borderWidth: 1.5,
   isUseTextOutlineColor: false
