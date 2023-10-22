@@ -1,15 +1,18 @@
 import { Appbar, AppbarContentProps } from 'react-native-paper';
-// import { Platform } from 'react-native';
-// const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
+import { color } from 'src/common/constants/color';
+import LinearGradient from 'react-native-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 export type BaseHeaderProps = AppbarContentProps;
-function BaseHeader(props: BaseHeaderProps) {
+function BaseHeader() {
+  const navigation = useNavigation();
   return (
-    <Appbar.Header style={{ height: 50 }}>
-      <Appbar.BackAction onPress={() => {}} />
-      <Appbar.Content title={props.title} />
-      {/* <Appbar.Action icon='magnify' onPress={() => {}} />
-      <Appbar.Action icon={MORE_ICON} onPress={() => {}} /> */}
-    </Appbar.Header>
+    <LinearGradient
+      colors={color.linearBackgroundColor}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
+      <Appbar.BackAction onPress={() => navigation.goBack()} />
+    </LinearGradient>
   );
 }
 

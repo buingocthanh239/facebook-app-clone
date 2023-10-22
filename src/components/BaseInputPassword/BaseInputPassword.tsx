@@ -12,7 +12,7 @@ const defaultProps: BaseInputProps = {
   outlineColor: color.outlineColor
 };
 function BaseInputPassword(props: BaseInputProps) {
-  const [hidden, setHidden] = useState(false);
+  const [hidden, setHidden] = useState(true);
   const [hiddenEyeIcon, setHiddenEyeIcon] = useState(true);
   const { errorText } = props;
   const onPressEyeIcon = () => setHidden(!hidden);
@@ -30,9 +30,9 @@ function BaseInputPassword(props: BaseInputProps) {
         right={
           !hiddenEyeIcon ? (
             hidden ? (
-              <TextInput.Icon icon={require('../../assets/hide.png')} onPress={onPressEyeIcon} />
+              <TextInput.Icon icon='eye-off' onPress={onPressEyeIcon} />
             ) : (
-              <TextInput.Icon icon={require('../../assets/view.png')} onPress={onPressEyeIcon} />
+              <TextInput.Icon icon='eye' onPress={onPressEyeIcon} />
             )
           ) : (
             ''
@@ -50,7 +50,7 @@ function BaseInputPassword(props: BaseInputProps) {
         value={props.value}
         error={errorText ? true : false}
         outlineStyle={{ borderWidth: 1.5, borderRadius: 8 }}
-        style={props.style}
+        style={[props.style, { height: 54 }]}
         autoFocus={props.autoFocus}
         secureTextEntry={hidden}
         onFocus={() => setHiddenEyeIcon(false)}

@@ -1,5 +1,5 @@
 import BaseButton from 'src/components/BaseButton';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BaseInputPassword from 'src/components/BaseInputPassword';
 import BaseInputEmail from 'src/components/BaseInputEmail';
 import BaseTextTitle from 'src/components/BaseTextTitle';
@@ -11,26 +11,21 @@ import { useNavigation } from '@react-navigation/native';
 function LoginScreen() {
   const navigation = useNavigation();
   return (
-    <WraperAuthScreen>
-      <View style={{ alignSelf: 'center', flex: 1, flexDirection: 'column-reverse' }}>
+    <WraperAuthScreen spaceBetween>
+      <View style={styles.logo}>
         <Avatar.Image source={require('src/assets/logo.png')} size={55} />
       </View>
-      <View style={{ flex: 3, justifyContent: 'center' }}>
+      <View style={styles.formGroup}>
         <BaseInputEmail label='Số di động hoặc email' mode='outlined' />
-        <BaseInputPassword
-          label='Mật khẩu'
-          mode='outlined'
-          style={{ marginBottom: 10, marginTop: 8 }}
-        />
+        <BaseInputPassword label='Mật khẩu' mode='outlined' />
         <BaseButton width={350}>Đăng nhập</BaseButton>
-        <BaseTextTitle style={{ marginTop: 10 }}>Bạn quên mật khẩu ư?</BaseTextTitle>
+        <BaseTextTitle>Bạn quên mật khẩu ư?</BaseTextTitle>
       </View>
-      <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+      <View style={styles.bottom}>
         <BaseButton
           width={350}
           mode='outlined'
-          style={{ marginBottom: 8 }}
-          onPress={() => navigation.navigate('SignIn' as never)}
+          onPress={() => navigation.navigate('FirstScreen' as never)}
         >
           Tạo tài khoản mới
         </BaseButton>
@@ -39,5 +34,24 @@ function LoginScreen() {
     </WraperAuthScreen>
   );
 }
-
 export default LoginScreen;
+const styles = StyleSheet.create({
+  logo: {
+    alignSelf: 'center',
+    flex: 1,
+    flexDirection: 'column-reverse'
+  },
+  formGroup: {
+    flex: 3,
+    flexDirection: 'column',
+    gap: 8,
+    justifyContent: 'center'
+  },
+
+  bottom: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    gap: 4
+  }
+});
