@@ -2,7 +2,7 @@ import WraperAuthScreen from 'src/components/WraperAuthScreen';
 import BaseButton from 'src/components/BaseButton';
 import BaseMetaLogo from 'src/components/BaseMetaLogo';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import Account from './component/Account';
@@ -15,10 +15,10 @@ function HomeAuthScreen() {
   ];
   return (
     <WraperAuthScreen spaceBetween>
-      <View style={{ alignSelf: 'center', flex: 1, flexDirection: 'column-reverse' }}>
+      <View style={styles.facebookLogo}>
         <Avatar.Image source={require('src/assets/logo.png')} size={50} />
       </View>
-      <View style={{ flex: 3, marginTop: 64, gap: 10 }}>
+      <View style={styles.accountGroup}>
         {accounts.map((account, index) => (
           <Account name={account.name} imageUrl={account.imageUrl} key={index} />
         ))}
@@ -37,7 +37,7 @@ function HomeAuthScreen() {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={{ flex: 1, justifyContent: 'flex-end', gap: 4, marginBottom: 10 }}>
+      <View style={styles.bottomButtonGroup}>
         <BaseButton
           onPress={() => navigation.navigate('Login' as never)}
           mode='outlined'
@@ -62,3 +62,22 @@ function HomeAuthScreen() {
 }
 
 export default HomeAuthScreen;
+
+const styles = StyleSheet.create({
+  facebookLogo: {
+    alignSelf: 'center',
+    flex: 1,
+    flexDirection: 'column-reverse'
+  },
+  accountGroup: {
+    flex: 3,
+    marginTop: 64,
+    gap: 10
+  },
+  bottomButtonGroup: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    gap: 4,
+    marginBottom: 10
+  }
+});
