@@ -1,26 +1,48 @@
+import { View } from 'react-native';
+import { FieldValue, useForm } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
+import { Avatar } from 'react-native-paper';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import BaseButton from 'src/components/BaseButton';
-import { View, StyleSheet } from 'react-native';
 import BaseInputPassword from 'src/components/BaseInputPassword';
 import BaseInputEmail from 'src/components/BaseInputEmail';
 import BaseTextTitle from 'src/components/BaseTextTitle';
-import { Avatar } from 'react-native-paper';
 import BaseMetaLogo from 'src/components/BaseMetaLogo';
 import WraperAuthScreen from 'src/components/WraperAuthScreen';
-import { useNavigation } from '@react-navigation/native';
-
+import BaseForm from 'src/components/BaseForm';
+import styles from './styles';
+import { ILoginData } from 'src/interfaces/auth.interface';
+import { loginFormSchema } from 'src/validation/login.validate';
 function LoginScreen() {
   const navigation = useNavigation();
+  const methods = useForm({ resolver: yupResolver(loginFormSchema) });
+  const { handleSubmit } = methods;
+  const onSubmit = (data: FieldValue<ILoginData>) => {
+    console.log(data);
+  };
   return (
     <WraperAuthScreen spaceBetween>
       <View style={styles.logo}>
         <Avatar.Image source={require('src/assets/logo.png')} size={55} />
       </View>
-      <View style={styles.formGroup}>
-        <BaseInputEmail label='Số di động hoặc email' mode='outlined' />
-        <BaseInputPassword label='Mật khẩu' mode='outlined' />
-        <BaseButton width={350}>Đăng nhập</BaseButton>
-        <BaseTextTitle>Bạn quên mật khẩu ư?</BaseTextTitle>
-      </View>
+
+      <BaseForm methods={methods}>
+        <View style={styles.formGroup}>
+          <BaseInputEmail
+            label='Số di động hoặc email'
+            mode='outlined'
+            name='email'
+            rules={{ required: 'email is required' }}
+          />
+          <BaseInputPassword label='Mật khẩu' mode='outlined' name='password' />
+          <BaseButton width={350} onPress={handleSubmit(onSubmit)}>
+            Đăng nhập
+          </BaseButton>
+          <BaseTextTitle>Bạn quên mật khẩu ư?</BaseTextTitle>
+        </View>
+      </BaseForm>
+
       <View style={styles.bottom}>
         <BaseButton
           width={350}
@@ -35,23 +57,3 @@ function LoginScreen() {
   );
 }
 export default LoginScreen;
-const styles = StyleSheet.create({
-  logo: {
-    alignSelf: 'center',
-    flex: 1,
-    flexDirection: 'column-reverse'
-  },
-  formGroup: {
-    flex: 3,
-    flexDirection: 'column',
-    gap: 8,
-    justifyContent: 'center'
-  },
-
-  bottom: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    gap: 4
-  }
-});
