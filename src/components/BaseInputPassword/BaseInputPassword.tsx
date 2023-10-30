@@ -4,8 +4,10 @@ import { FC, PropsWithChildren, useState } from 'react';
 import styled from 'styled-components/native';
 import { color } from 'src/common/constants/color';
 import { BaseInputProps, LableProps } from '../BaseInputText/BaseInputText';
+import { useController } from 'react-hook-form';
 
 const defaultProps: BaseInputProps = {
+  name: '',
   hideLabel: false,
   required: false,
   activeOutlineColor: color.activeOutlineColor,
@@ -14,49 +16,51 @@ const defaultProps: BaseInputProps = {
 function BaseInputPassword(props: BaseInputProps) {
   const [hidden, setHidden] = useState(true);
   const [hiddenEyeIcon, setHiddenEyeIcon] = useState(true);
-  const { errorText } = props;
+  const { name, rules, defaultValue, label, required, hideLabel, control, ...inputProps } = props;
+  const { field, fieldState } = useController({
+    name: name as string,
+    rules,
+    control,
+    defaultValue
+  });
   const onPressEyeIcon = () => setHidden(!hidden);
   return (
     <View>
-      {props.hideLabel && props.label ? (
-        <Label error={!!errorText}>
-          {props.label}
-          {props.required && props.hideLabel ? <RequiredIcon> *</RequiredIcon> : ''}
+      {hideLabel && label && (
+        <Label error={fieldState.invalid}>
+          {label}
+          {required && hideLabel && <RequiredIcon> *</RequiredIcon>}
         </Label>
-      ) : (
-        ''
       )}
       <TextInput
+        {...inputProps}
+        {...field}
         right={
-          !hiddenEyeIcon ? (
-            hidden ? (
-              <TextInput.Icon icon='eye-off' onPress={onPressEyeIcon} />
-            ) : (
-              <TextInput.Icon icon='eye' onPress={onPressEyeIcon} />
-            )
+          !hiddenEyeIcon &&
+          (hidden ? (
+            <TextInput.Icon
+              icon='eye-off'
+              onPress={onPressEyeIcon}
+              color={(fieldState.invalid && color.error) as string}
+            />
           ) : (
-            ''
-          )
+            <TextInput.Icon
+              icon='eye'
+              onPress={onPressEyeIcon}
+              color={(fieldState.invalid && color.error) as string}
+            />
+          ))
         }
-        label={!props.hideLabel ? props.label : ''}
-        mode={props.mode}
-        placeholder={props.placeholder}
-        onChangeText={props.onChangeText}
-        cursorColor={props.cursorColor}
-        outlineColor={props.outlineColor}
-        activeOutlineColor={props.activeOutlineColor}
-        textColor={props.textColor}
-        numberOfLines={props.numberOfLines}
-        value={props.value}
-        error={errorText ? true : false}
+        label={!hideLabel ? label : ''}
+        onChangeText={field.onChange}
+        error={fieldState.invalid}
         outlineStyle={{ borderWidth: 1.5, borderRadius: 8 }}
         style={[props.style, { height: 54 }]}
-        autoFocus={props.autoFocus}
         secureTextEntry={hidden}
         onFocus={() => setHiddenEyeIcon(false)}
         onBlur={() => setHiddenEyeIcon(true)}
       />
-      {errorText ? <TextError>{errorText}</TextError> : ''}
+      {fieldState.invalid && <TextError>{fieldState.error?.message}</TextError>}
     </View>
   );
 }

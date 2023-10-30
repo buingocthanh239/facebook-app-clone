@@ -1,6 +1,6 @@
 export const color = {
   primary: '#1977F3',
-  error: 'red',
+  error: 'rgb(186, 26, 26)',
   white: '#FFFFFF',
   borderColor: '#CDD2D8',
   textColor: '#1c2b32',

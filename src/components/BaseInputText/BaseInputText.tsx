@@ -3,8 +3,8 @@ import { View } from 'react-native';
 import { FC, PropsWithChildren } from 'react';
 import styled from 'styled-components/native';
 import { color } from 'src/common/constants/color';
+import { useController, UseControllerProps } from 'react-hook-form';
 interface InputTextProps {
-  errorText?: string;
   hideLabel?: boolean;
   required?: boolean;
 }
@@ -13,69 +13,59 @@ export interface LableProps {
 }
 
 const defaultProps: BaseInputProps = {
+  name: '',
   hideLabel: false,
   required: false,
   activeOutlineColor: color.activeOutlineColor,
   outlineColor: color.outlineColor,
   selectionColor: color.outlineColor
 };
-export type BaseInputProps = InputTextProps & TextInputProps;
+export type BaseInputProps = InputTextProps & TextInputProps & UseControllerProps;
 function BaseInputText(props: BaseInputProps): JSX.Element {
-  const { errorText } = props;
+  const { name, rules, defaultValue, label, required, hideLabel, control, ...inputProps } = props;
+  const { field, fieldState } = useController({
+    name: name as string,
+    rules,
+    control,
+    defaultValue
+  });
   return (
     <View>
-      {props.hideLabel && props.label ? (
-        <Label error={!!errorText}>
-          {props.label}
-          {props.required && props.hideLabel ? <RequiredIcon> *</RequiredIcon> : ''}
+      {hideLabel && label && (
+        <Label error={fieldState.invalid}>
+          {label}
+          {required && hideLabel && <RequiredIcon> *</RequiredIcon>}
         </Label>
-      ) : (
-        ''
       )}
       <TextInput
-        left={props.left}
-        right={props.right}
-        label={!props.hideLabel ? props.label : ''}
-        disabled={props.disabled}
-        mode={props.mode}
-        placeholder={props.placeholder}
-        onChangeText={props.onChangeText}
-        selectionColor={props.selectionColor}
-        cursorColor={props.cursorColor}
-        underlineColor={props.underlineColor}
-        activeUnderlineColor={props.activeUnderlineColor}
-        outlineColor={props.outlineColor}
-        activeOutlineColor={props.activeOutlineColor}
-        textColor={props.textColor}
-        multiline={props.multiline}
-        numberOfLines={props.numberOfLines}
-        value={props.value}
-        error={errorText ? true : false}
-        keyboardType={props.keyboardType}
-        autoFocus={props.autoFocus}
+        {...inputProps}
+        {...field}
+        label={!props.hideLabel ? label : ''}
+        onChangeText={field.onChange}
+        error={fieldState.invalid}
         outlineStyle={{ borderWidth: 1.5, borderRadius: 8 }}
         style={[props.style, { height: 54 }]}
       />
-      {errorText ? <TextError>{errorText}</TextError> : ''}
+      {fieldState.invalid && <TextError>{fieldState.error?.message}</TextError>}
     </View>
   );
 }
 BaseInputText.defaultProps = defaultProps;
 const TextError = styled.Text`
   color: ${color.error};
-  padding-top: 4dp;
-  font-size: 14dp;
-  padding-left: 8dp;
+  padding-top: 4px;
+  font-size: 14px;
+  padding-left: 8px;
 `;
 const Label: FC<PropsWithChildren<LableProps>> = styled.Text`
   color: ${props => (props.error ? color.error : color.primary)};
-  padding-bottom: 8dp;
-  font-size: 16dp;
-  padding-left: 12dp;
+  padding-bottom: 8px;
+  font-size: 16px;
+  padding-left: 12px;
   font-weight: bold;
 `;
 const RequiredIcon = styled.Text`
   color: ${color.error};
-  padding-left: 4dp;
+  padding-left: 4px;
 `;
 export default BaseInputText;
