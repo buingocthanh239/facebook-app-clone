@@ -1,11 +1,16 @@
 import { Text } from 'react-native-paper';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+
 import WraperAuthScreen from 'src/components/WraperAuthScreen';
 import BaseButton from 'src/components/BaseButton';
-import { useNavigation } from '@react-navigation/native';
 
 function ConfirmPolicyScreen() {
-  const naviagion = useNavigation();
-  const handleSubmit = () => naviagion.navigate('VerifyOTPScreen' as never);
+  const naviagion: NavigationProp<AuthNavigationType, 'VerifyOTPScreen'> = useNavigation();
+  const route: RouteProp<AuthNavigationType, 'ConfirmPolicyScreen'> = useRoute();
+  const handleSubmit = () => {
+    console.log(route.params); // call api send data to sign in account
+    naviagion.navigate('VerifyOTPScreen');
+  };
   return (
     <WraperAuthScreen>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>

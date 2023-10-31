@@ -12,8 +12,7 @@ export interface LableProps {
   error: boolean;
 }
 
-const defaultProps: BaseInputProps = {
-  name: '',
+const defaultProps: Omit<BaseInputProps, 'name'> = {
   hideLabel: false,
   required: false,
   activeOutlineColor: color.activeOutlineColor,
@@ -24,7 +23,7 @@ export type BaseInputProps = InputTextProps & TextInputProps & UseControllerProp
 function BaseInputText(props: BaseInputProps): JSX.Element {
   const { name, rules, defaultValue, label, required, hideLabel, control, ...inputProps } = props;
   const { field, fieldState } = useController({
-    name: name as string,
+    name,
     rules,
     control,
     defaultValue

@@ -1,13 +1,27 @@
 import { Text } from 'react-native-paper';
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import { useForm } from 'react-hook-form';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import BaseButton from 'src/components/BaseButton';
 import BaseInputEmail from 'src/components/BaseInputEmail';
 import { color } from 'src/common/constants/color';
-import { useNavigation } from '@react-navigation/native';
+import BaseForm from 'src/components/BaseForm';
+import { IEmailScreenForm } from 'src/interfaces/auth.interface';
+import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import { emailFormSchema } from 'src/validation/signUp.validate';
 
 function EmailScreen() {
-  const navigation = useNavigation();
-  const handleSubmit = () => navigation.navigate('PasswordScreen' as never);
+  const methods = useForm({ resolver: yupResolver(emailFormSchema) });
+  const { handleSubmit } = methods;
+  const navigation: NavigationProp<AuthNavigationType, 'PasswordScreen'> = useNavigation();
+  const route: RouteProp<AuthNavigationType, 'EmailScreen'> = useRoute();
+  const onPressNextButton = (data: IEmailScreenForm) => {
+    navigation.navigate('PasswordScreen', {
+      ...route.params,
+      ...data
+    });
+  };
   return (
     <WraperAuthScreen>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
@@ -17,11 +31,13 @@ function EmailScreen() {
         Nhập email có thể dùng để liên hệ với bạn. Thông tin này sẽ không hiển thị với ai khác trên
         trang cá nhân của bạn.
       </Text>
-      <BaseInputEmail mode='outlined' label='Email' />
+      <BaseForm methods={methods}>
+        <BaseInputEmail mode='outlined' label='Email' name='email' />
+      </BaseForm>
       <Text variant='bodySmall'>
         Bạn cũng sẽ nhận được email của chúng tôi và có thể chọn không nhận bất cứ lúc nào.
       </Text>
-      <BaseButton onPress={handleSubmit}>Tiếp</BaseButton>
+      <BaseButton onPress={handleSubmit(onPressNextButton)}>Tiếp</BaseButton>
       <BaseButton
         mode='outlined'
         borderColor={color.outlineColor}

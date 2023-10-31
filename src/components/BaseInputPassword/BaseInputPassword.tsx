@@ -6,8 +6,7 @@ import { color } from 'src/common/constants/color';
 import { BaseInputProps, LableProps } from '../BaseInputText/BaseInputText';
 import { useController } from 'react-hook-form';
 
-const defaultProps: BaseInputProps = {
-  name: '',
+const defaultProps: Omit<BaseInputProps, 'name'> = {
   hideLabel: false,
   required: false,
   activeOutlineColor: color.activeOutlineColor,
