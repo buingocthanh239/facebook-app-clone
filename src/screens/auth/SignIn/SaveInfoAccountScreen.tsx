@@ -1,4 +1,5 @@
 import { Text } from 'react-native-paper';
+
 import BaseButton from 'src/components/BaseButton';
 import WraperAuthScreen from 'src/components/WraperAuthScreen';
 import { color } from 'src/common/constants/color';

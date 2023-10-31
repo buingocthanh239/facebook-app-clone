@@ -1,12 +1,26 @@
 import { Text } from 'react-native-paper';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import WraperAuthScreen from 'src/components/WraperAuthScreen';
 import BaseInputPassword from 'src/components/BaseInputPassword';
 import BaseButton from 'src/components/BaseButton';
-import { useNavigation } from '@react-navigation/native';
+import BaseForm from 'src/components/BaseForm';
+import { IPasswordScreenForm } from 'src/interfaces/auth.interface';
+import { passwordFormSchema } from 'src/validation/signUp.validate';
 
 function PasswordScreen() {
-  const navigation = useNavigation();
-  const handleSubmit = () => navigation.navigate('ConfirmPolicyScreen' as never);
+  const navigation: NavigationProp<AuthNavigationType, 'ConfirmPolicyScreen'> = useNavigation();
+  const route: RouteProp<AuthNavigationType, 'PasswordScreen'> = useRoute();
+  const methods = useForm({ resolver: yupResolver(passwordFormSchema) });
+  const { handleSubmit } = methods;
+  const onPressNextButton = (data: IPasswordScreenForm) => {
+    navigation.navigate('ConfirmPolicyScreen', {
+      ...route.params,
+      ...data
+    });
+  };
   return (
     <WraperAuthScreen>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
@@ -17,8 +31,10 @@ function PasswordScreen() {
         {'\n'}
         Bạn nên chọn mật khẩu thật khó đoán.
       </Text>
-      <BaseInputPassword mode='outlined' label='Mật khẩu' />
-      <BaseButton onPress={handleSubmit}>Tiếp</BaseButton>
+      <BaseForm methods={methods}>
+        <BaseInputPassword mode='outlined' label='Mật khẩu' name='password' />
+      </BaseForm>
+      <BaseButton onPress={handleSubmit(onPressNextButton)}>Tiếp</BaseButton>
     </WraperAuthScreen>
   );
 }

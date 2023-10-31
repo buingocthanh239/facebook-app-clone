@@ -1,18 +1,31 @@
 import { Text } from 'react-native-paper';
+import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/core';
+import { ViewProps } from 'react-native';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import WraperAuthScreen from 'src/components/WraperAuthScreen';
 import BaseButton from 'src/components/BaseButton';
-import { useNavigation } from '@react-navigation/core';
-import { useState } from 'react';
 import styled from 'styled-components/native';
 import GenderRadioGroup from 'src/components/GenderRadioGroup';
-import { ViewProps } from 'react-native';
 import { color } from 'src/common/constants/color';
+import BaseForm from 'src/components/BaseForm';
+import { IGenderScreenForm } from 'src/interfaces/auth.interface';
+import { genderFormShema } from 'src/validation/signUp.validate';
 
 function GenderScreen() {
-  const navigation = useNavigation();
-  const [gender, setGender] = useState('');
-  const onChangeGender = (value: string) => setGender(value);
-  const handleSubmit = () => navigation.navigate('EmailScreen' as never);
+  const navigation: NavigationProp<AuthNavigationType, 'EmailScreen'> = useNavigation();
+  const route: RouteProp<AuthNavigationType, 'GenderScreen'> = useRoute();
+
+  const methods = useForm({ resolver: yupResolver(genderFormShema) });
+  const { handleSubmit } = methods;
+  const onPressNextButton = (data: IGenderScreenForm) => {
+    navigation.navigate('EmailScreen', {
+      ...route.params,
+      ...data
+    });
+  };
   return (
     <WraperAuthScreen>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
@@ -21,10 +34,12 @@ function GenderScreen() {
       <Text variant='bodyMedium'>
         Bạn có thể thay đổi người nhìn thấy giới tính của mình trên trang cá nhân vào lúc khác.
       </Text>
-      <WrapperGenderOption>
-        <GenderRadioGroup value={gender} onValueChange={onChangeGender} />
-      </WrapperGenderOption>
-      <BaseButton onPress={handleSubmit}>Tiếp</BaseButton>
+      <BaseForm methods={methods}>
+        <WrapperGenderOption>
+          <GenderRadioGroup name='gender' />
+        </WrapperGenderOption>
+      </BaseForm>
+      <BaseButton onPress={handleSubmit(onPressNextButton)}>Tiếp</BaseButton>
     </WraperAuthScreen>
   );
 }

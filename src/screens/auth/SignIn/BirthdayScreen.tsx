@@ -1,17 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Text } from 'react-native-paper';
-import BaseButton from 'src/components/BaseButton';
 import DatePicker from 'react-native-date-picker';
-import WrapperAuthScreen from 'src/components/WraperAuthScreen';
-import { color } from 'src/common/constants/color';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
+
+import BaseButton from 'src/components/BaseButton';
+import WrapperAuthScreen from 'src/components/WraperAuthScreen';
+import { color } from 'src/common/constants/color';
+import { NavigationProp, RouteProp, useRoute } from '@react-navigation/native';
 
 function DatePickerScreen() {
   const [date, setDate] = useState(new Date('2000-1-1'));
   const [error, setError] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
-  const naviagtion = useNavigation();
+  const naviagtion: NavigationProp<AuthNavigationType, 'GenderScreen'> = useNavigation();
+  const route: RouteProp<AuthNavigationType, 'BirthdayScreen'> = useRoute();
+  const handleSubmit = () => {
+    naviagtion.navigate('GenderScreen', {
+      ...route.params,
+      dob: date
+    });
+  };
   const getAge = (DOB: Date) => {
     const today = new Date();
     const birthDate = new Date(DOB);
@@ -35,7 +44,6 @@ function DatePickerScreen() {
     };
     validateDate(date);
   }, [date]);
-  const handleSubmit = () => naviagtion.navigate('GenderScreen' as never);
   return (
     <WrapperAuthScreen>
       <Text variant='titleLarge' style={styles.title}>
