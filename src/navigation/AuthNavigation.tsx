@@ -2,6 +2,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BaseHeader from '../components/BaseHeader';
 import LoginScreen from 'src/screens/auth/Login';
 import HomeAuth from 'src/screens/auth/HomeAuth';
+import CameraScreen from 'src/screens/profile/Camera/CameraScreen';
+import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 import {
   ConfirmPolicyScreen,
   FirstScreen,
@@ -23,6 +25,8 @@ function AuthNavigation() {
         header: () => <BaseHeader />
       }}
     >
+      <Stack.Screen name='Profile' options={{ headerShown: false }} component={ProfileScreen} />
+      <Stack.Screen name='Camera' options={{ headerShown: false }} component={CameraScreen} />
       <Stack.Screen name='HomeAuth' options={{ headerShown: false }} component={HomeAuth} />
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Group>
