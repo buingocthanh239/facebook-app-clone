@@ -7,9 +7,11 @@ export interface OptionProp {
 }
 const OptionCard = (props: OptionProp) => {
   return (
-    <View style={styles.container}>
-      <Avatar.Icon size={16} icon={props.icon} />
-      <Text variant='labelMedium'>{props.title}</Text>
+    <View style={styles.cardContainer}>
+      <View style={styles.iconCard}>
+        <Avatar.Icon size={32} icon={props.icon} />
+      </View>
+      <Text style={styles.textCard}>{props.title}</Text>
     </View>
   );
 };
@@ -17,8 +19,21 @@ const OptionCard = (props: OptionProp) => {
 export default OptionCard;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  cardContainer: {
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center'
+  },
+  iconCard: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+    marginRight: 20
+  },
+  textCard: {
+    fontWeight: 'bold',
+    fontSize: 16
   }
 });

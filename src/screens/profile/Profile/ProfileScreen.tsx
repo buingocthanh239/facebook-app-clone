@@ -30,7 +30,7 @@ function ProfileScreen() {
       title: 'Chọn ảnh đại diện'
     }
   ];
-  const totalHeight = options.length * 50;
+  const totalHeight = options.length * 19;
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>

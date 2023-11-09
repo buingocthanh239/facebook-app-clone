@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   option: {
-    paddingVertical: 50
+    paddingVertical: 0
   }
 });
 export default styles;
