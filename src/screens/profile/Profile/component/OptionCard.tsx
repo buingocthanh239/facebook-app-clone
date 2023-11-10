@@ -1,5 +1,6 @@
 import { View, StyleSheet } from 'react-native';
-import { Avatar, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export interface OptionProp {
   icon: string;
@@ -9,7 +10,7 @@ const OptionCard = (props: OptionProp) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.iconCard}>
-        <Avatar.Icon size={32} icon={props.icon} />
+        <Icon name={props.icon} size={32} color='black' />
       </View>
       <Text style={styles.textCard}>{props.title}</Text>
     </View>

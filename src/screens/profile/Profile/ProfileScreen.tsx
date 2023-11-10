@@ -1,11 +1,11 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { IconButton, Avatar } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import { useState } from 'react';
 import styles from './styles';
 import FriendField from './component/FriendField';
 import OptionCard from './component/OptionCard';
 import Modal from 'react-native-modal';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 function ProfileScreen() {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -18,15 +18,15 @@ function ProfileScreen() {
   };
   const options = [
     {
-      icon: 'account',
+      icon: 'account-circle',
       title: 'Xem ảnh đại diện'
     },
     {
-      icon: 'upload',
+      icon: 'photo-library',
       title: 'Chọn ảnh đại diện'
     },
     {
-      icon: 'account',
+      icon: 'photo-library',
       title: 'Chọn ảnh đại diện'
     }
   ];
@@ -72,12 +72,12 @@ function ProfileScreen() {
       </View>
       <View style={styles.detailsContainer}>
         <View style={styles.detailRow}>
-          <Avatar.Icon icon={require('../../../assets/home.png')} size={20} />
+          <Icon name='home' size={20} color='black' />
           <Text style={styles.detailLabel}>Sống tại</Text>
           <Text style={styles.detailText}>Hà Nội</Text>
         </View>
         <View style={styles.detailRow}>
-          <Avatar.Icon icon={require('../../../assets/locate.png')} size={20} />
+          <Icon name='map-marker' size={20} color='black' />
           <Text style={styles.detailLabel}>Đến từ</Text>
           <Text style={styles.detailText}>Kim Bảng - Hà Nam</Text>
         </View>
@@ -98,9 +98,11 @@ function ProfileScreen() {
       >
         <View style={styles.modalContent}>
           {options.map((option, index) => (
-            <View key={index} style={[styles.option, { height: totalHeight }]}>
-              <OptionCard icon={option.icon} title={option.title} />
-            </View>
+            <TouchableOpacity key={index} onPress={() => console.log(`Selected: ${option.title}`)}>
+              <View style={[styles.option, { height: totalHeight }]}>
+                <OptionCard icon={option.icon} title={option.title} />
+              </View>
+            </TouchableOpacity>
           ))}
         </View>
       </Modal>
