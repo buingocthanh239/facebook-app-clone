@@ -6,5 +6,7 @@ export const color = {
   textColor: '#1c2b32',
   outlineColor: '#ced2db',
   activeOutlineColor: '#6a7787',
-  linearBackgroundColor: ['#fef9f3', '#fdf2f8', '#eef7fe']
+  linearBackgroundColor: ['#fef9f3', '#fdf2f8', '#eef7fe'],
+  iconButtonBackgroundColor: '#f1f2f6',
+  iconButtonColor: 'black'
 };

@@ -1,13 +1,30 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from 'src/screens/Home';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import {
+  HomeTab,
+  VideoTab,
+  NotificationTab,
+  FriendTab,
+  OtherOptionTab,
+  MyTabBar
+} from 'src/screens/tab-bar';
 
-const stack = createNativeStackNavigator();
+const tab = createMaterialTopTabNavigator();
 
 function TabNavigation() {
   return (
-    <stack.Navigator>
-      <stack.Screen name='home' component={Home} />
-    </stack.Navigator>
+    <tab.Navigator
+      tabBar={props => <MyTabBar {...props} />}
+      screenOptions={{
+        tabBarShowIcon: true,
+        tabBarShowLabel: false
+      }}
+    >
+      <tab.Screen name='Home' component={HomeTab} />
+      <tab.Screen name='Video' component={VideoTab} />
+      <tab.Screen name='Friend' component={FriendTab} />
+      <tab.Screen name='Notification' component={NotificationTab} />
+      <tab.Screen name='OtherOption' component={OtherOptionTab} />
+    </tab.Navigator>
   );
 }
 
