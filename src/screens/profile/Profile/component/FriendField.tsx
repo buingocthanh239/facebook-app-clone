@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import FriendCard from './FriendCard';
+import { color } from 'src/common/constants/color';
 
 const FriendField = () => {
-  const avatarUrl =
-    'https://scontent-hkg4-2.xx.fbcdn.net/v/t39.30808-6/344771274_635656204564021_5313788662963468311_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHOKImvTwCiDzliOSGGKL_NJufFjy4-vqEm58WPLj6-oQxnd0EhiFoOlqZgBSwhBo7iM378XRvIqQlK56Ma37ZB&_nc_ohc=K4ScATsuiHEAX_1B_qb&_nc_ht=scontent-hkg4-2.xx&oh=00_AfAuHerakFRh3arkj1z45hYat85uuJcLKPAJhG44RYdmMQ&oe=6550AD99';
+  const avatarUrl = 'https://placekitten.com/200/200';
   const friends = [
     {
       avatarUrl: avatarUrl,
@@ -46,12 +46,17 @@ const FriendField = () => {
       username: 'Ngô Hải Văn'
     }
   ];
-  const totalFriend = 1000;
+  const totalFriend = 1523;
   return (
     <View style={styles.container}>
-      <View style={styles.totalFriend}>
-        <Text>Bạn bè</Text>
-        <Text>{totalFriend.toLocaleString()} người bạn</Text>
+      <View style={styles.headerFriendField}>
+        <View style={styles.totalFriend}>
+          <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'black' }}>Bạn bè</Text>
+          <Text style={{ fontSize: 14 }}>{totalFriend.toLocaleString()} người bạn</Text>
+        </View>
+        <TouchableOpacity style={styles.searchFriend} onPress={() => console.log('Tìm bạn bè')}>
+          <Text style={{ fontSize: 14, color: color.primary }}>Tìm bạn bè</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.row}>
         <FriendCard avatarUrl={friends[0].avatarUrl} username={friends[0].username} />
@@ -63,6 +68,13 @@ const FriendField = () => {
         <FriendCard avatarUrl={friends[4].avatarUrl} username={friends[4].username} />
         <FriendCard avatarUrl={friends[5].avatarUrl} username={friends[5].username} />
       </View>
+      <TouchableOpacity style={styles.allFriendBtn}>
+        <Text
+          style={{ color: color.textColor, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}
+        >
+          Xem tất cả bạn bè
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -75,11 +87,25 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 20
+    marginBottom: 10
   },
   totalFriend: {
     marginLeft: 5,
-    marginBottom: 20
+    marginBottom: 20,
+    marginRight: 8
+  },
+  headerFriendField: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  searchFriend: {
+    padding: 8
+  },
+  allFriendBtn: {
+    marginHorizontal: 10,
+    backgroundColor: '#E9F1FE',
+    padding: 10,
+    borderRadius: 7
   }
 });
 
