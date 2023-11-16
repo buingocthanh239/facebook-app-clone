@@ -55,7 +55,7 @@ const FriendField = () => {
           <Text style={{ fontSize: 14 }}>{totalFriend.toLocaleString()} người bạn</Text>
         </View>
         <TouchableOpacity style={styles.searchFriend} onPress={() => console.log('Tìm bạn bè')}>
-          <Text style={{ fontSize: 14, color: color.primary }}>Tìm bạn bè</Text>
+          <Text style={{ fontSize: 16, color: color.primary }}>Tìm bạn bè</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.row}>

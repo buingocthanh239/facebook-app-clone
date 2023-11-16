@@ -6,17 +6,26 @@ import FriendField from './component/FriendField';
 import OptionCard from './component/OptionCard';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import CreatePostCard from '../../../components/CreatePostCard/CreatePostCard';
 function ProfileScreen() {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalAvatarVisible, setModalAvatarVisible] = useState(false);
+  const [modalCoverVisible, setModalCoverVisible] = useState(false);
 
-  const showModal = () => {
-    setModalVisible(true);
+  const showModalAvatar = () => {
+    setModalAvatarVisible(true);
   };
 
-  const hideModal = () => {
-    setModalVisible(false);
+  const hideModalAvatar = () => {
+    setModalAvatarVisible(false);
   };
-  const options = [
+  const showModalCover = () => {
+    setModalCoverVisible(true);
+  };
+
+  const hideModalCover = () => {
+    setModalCoverVisible(false);
+  };
+  const optionsAvatar = [
     {
       icon: 'account-circle',
       title: 'Xem ảnh đại diện'
@@ -24,40 +33,48 @@ function ProfileScreen() {
     {
       icon: 'photo-library',
       title: 'Chọn ảnh đại diện'
+    }
+  ];
+  const optionsCover = [
+    {
+      icon: 'account-circle',
+      title: 'Xem ảnh bìa'
     },
     {
       icon: 'photo-library',
-      title: 'Chọn ảnh đại diện'
+      title: 'Chọn ảnh bìa'
     }
   ];
-  const totalHeight = options.length * 19;
+  const totalHeight = 2 * 25;
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Image style={styles.coverPhoto} source={require('../../../assets/cover.jpg')} />
+        <TouchableOpacity style={styles.coverPhoto} onPress={showModalCover}>
+          <Image style={styles.coverPhoto} source={require('../../../assets/cover.jpg')} />
+        </TouchableOpacity>
         <View style={styles.cameraIconWrapper}>
-          <TouchableOpacity style={styles.cameraIcon} onPress={showModal}>
+          <TouchableOpacity style={styles.cameraIcon} onPress={showModalCover}>
             <IconButton
               icon='camera'
               mode='contained'
               iconColor='black'
               containerColor='#E6E6EF'
               size={28}
-              onPress={showModal}
+              onPress={showModalCover}
             />
           </TouchableOpacity>
         </View>
-        <View style={styles.avatarWrapper}>
+        <TouchableOpacity style={styles.avatarWrapper} onPress={showModalAvatar}>
           <Image style={styles.avatar} source={{ uri: 'https://placekitten.com/200/200' }} />
-        </View>
-        <TouchableOpacity style={styles.cameraIconAvatar} onPress={showModal}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cameraIconAvatar} onPress={showModalAvatar}>
           <IconButton
             icon='camera'
             mode='contained'
             iconColor='black'
             containerColor='#E6E6EF'
             size={32}
-            onPress={showModal}
+            onPress={showModalAvatar}
           />
         </TouchableOpacity>
         <View style={styles.infomation}>
@@ -88,16 +105,40 @@ function ProfileScreen() {
       <View style={styles.section}>
         <FriendField></FriendField>
       </View>
+      <View style={styles.section}>
+        <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'black', marginLeft: 20 }}>
+          Bài viết
+        </Text>
+        <CreatePostCard avatar='https://placekitten.com/200/200' />
+      </View>
       <Modal
-        isVisible={modalVisible}
+        isVisible={modalAvatarVisible}
         animationIn='slideInUp'
         animationOut='slideOutDown'
         backdropOpacity={0.5}
-        onBackdropPress={hideModal}
+        onBackdropPress={hideModalAvatar}
         style={styles.modal}
       >
         <View style={styles.modalContent}>
-          {options.map((option, index) => (
+          {optionsAvatar.map((option, index) => (
+            <TouchableOpacity key={index} onPress={() => console.log(`Selected: ${option.title}`)}>
+              <View style={[styles.option, { height: totalHeight }]}>
+                <OptionCard icon={option.icon} title={option.title} />
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </Modal>
+      <Modal
+        isVisible={modalCoverVisible}
+        animationIn='slideInUp'
+        animationOut='slideOutDown'
+        backdropOpacity={0.5}
+        onBackdropPress={hideModalCover}
+        style={styles.modal}
+      >
+        <View style={styles.modalContent}>
+          {optionsCover.map((option, index) => (
             <TouchableOpacity key={index} onPress={() => console.log(`Selected: ${option.title}`)}>
               <View style={[styles.option, { height: totalHeight }]}>
                 <OptionCard icon={option.icon} title={option.title} />
