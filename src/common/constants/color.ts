@@ -2,6 +2,7 @@ export const color = {
   primary: '#1977F3',
   error: 'rgb(186, 26, 26)',
   white: '#FFFFFF',
+  green: 'green',
   borderColor: '#CDD2D8',
   textColor: '#1c2b32',
   outlineColor: '#ced2db',
