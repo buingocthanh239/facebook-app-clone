@@ -9,14 +9,14 @@ export interface CreatePostCardProps {
 const CreatePostCard = (props: CreatePostCardProps) => {
   return (
     <View style={styles.containerCreatePost}>
-      <TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.8}>
         <Image source={{ uri: props.avatar }} style={styles.avatar} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.input}>
+      <TouchableOpacity style={styles.input} activeOpacity={0.7}>
         <Text style={{ color: color.textColor, fontSize: 16 }}>Bạn đang nghĩ gì?</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.iconContainer}>
-        <Icon name='image-multiple' size={24} color='#45BD62'></Icon>
+        <Icon name='image-multiple' size={24} color={color.green}></Icon>
       </TouchableOpacity>
     </View>
   );

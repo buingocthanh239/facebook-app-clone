@@ -68,7 +68,7 @@ const FriendField = () => {
         <FriendCard avatarUrl={friends[4].avatarUrl} username={friends[4].username} />
         <FriendCard avatarUrl={friends[5].avatarUrl} username={friends[5].username} />
       </View>
-      <TouchableOpacity style={styles.allFriendBtn}>
+      <TouchableOpacity style={styles.allFriendBtn} activeOpacity={0.7}>
         <Text
           style={{ color: color.textColor, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}
         >

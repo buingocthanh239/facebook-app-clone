@@ -108,16 +108,16 @@ function EditProfile() {
           <Text style={{ fontSize: 18, color: color.primary }}>Chỉnh sửa</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.wrapAvatar}>
+      <TouchableOpacity style={styles.wrapAvatar} activeOpacity={0.8}>
         <Image source={{ uri: cover }} style={styles.cover}></Image>
       </TouchableOpacity>
       <View style={styles.wrapText}>
         <Text style={{ fontSize: 20, fontWeight: 'bold', color: color.textColor }}>Tiểu sử</Text>
-        <TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.8}>
           <Text style={{ fontSize: 18, color: color.primary }}>Thêm</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.wrapAvatar}>
+      <TouchableOpacity style={styles.wrapAvatar} activeOpacity={0.8}>
         <Text style={{ fontSize: 18 }}>Mô tả bản thân...</Text>
       </TouchableOpacity>
     </View>

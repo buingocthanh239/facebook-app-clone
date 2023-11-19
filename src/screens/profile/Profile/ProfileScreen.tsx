@@ -7,6 +7,7 @@ import OptionCard from './component/OptionCard';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CreatePostCard from '../../../components/CreatePostCard/CreatePostCard';
+import { color } from 'src/common/constants/color';
 function ProfileScreen() {
   const [modalAvatarVisible, setModalAvatarVisible] = useState(false);
   const [modalCoverVisible, setModalCoverVisible] = useState(false);
@@ -49,11 +50,11 @@ function ProfileScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.coverPhoto} onPress={showModalCover}>
+        <TouchableOpacity style={styles.coverPhoto} onPress={showModalCover} activeOpacity={0.8}>
           <Image style={styles.coverPhoto} source={require('../../../assets/cover.jpg')} />
         </TouchableOpacity>
         <View style={styles.cameraIconWrapper}>
-          <TouchableOpacity style={styles.cameraIcon} onPress={showModalCover}>
+          <TouchableOpacity style={styles.cameraIcon} onPress={showModalCover} activeOpacity={0.8}>
             <IconButton
               icon='camera'
               mode='contained'
@@ -64,14 +65,22 @@ function ProfileScreen() {
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.avatarWrapper} onPress={showModalAvatar}>
+        <TouchableOpacity
+          style={styles.avatarWrapper}
+          onPress={showModalAvatar}
+          activeOpacity={0.8}
+        >
           <Image style={styles.avatar} source={{ uri: 'https://placekitten.com/200/200' }} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cameraIconAvatar} onPress={showModalAvatar}>
+        <TouchableOpacity
+          style={styles.cameraIconAvatar}
+          onPress={showModalAvatar}
+          activeOpacity={0.8}
+        >
           <IconButton
             icon='camera'
             mode='contained'
-            iconColor='black'
+            iconColor={color.textColor}
             containerColor='#E6E6EF'
             size={32}
             onPress={showModalAvatar}
@@ -83,7 +92,7 @@ function ProfileScreen() {
         </View>
       </View>
       <View style={styles.section}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.button}>
           <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
@@ -99,7 +108,7 @@ function ProfileScreen() {
           <Text style={styles.detailText}>Kim Bảng - Hà Nam</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.editPublicButton}>
+      <TouchableOpacity activeOpacity={0.8} style={styles.editPublicButton}>
         <Text style={styles.editPublicButtonText}>Chỉnh sửa chi tiết công khai</Text>
       </TouchableOpacity>
       <View style={styles.section}>
@@ -121,7 +130,11 @@ function ProfileScreen() {
       >
         <View style={styles.modalContent}>
           {optionsAvatar.map((option, index) => (
-            <TouchableOpacity key={index} onPress={() => console.log(`Selected: ${option.title}`)}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              key={index}
+              onPress={() => console.log(`Selected: ${option.title}`)}
+            >
               <View style={[styles.option, { height: totalHeight }]}>
                 <OptionCard icon={option.icon} title={option.title} />
               </View>
@@ -139,7 +152,11 @@ function ProfileScreen() {
       >
         <View style={styles.modalContent}>
           {optionsCover.map((option, index) => (
-            <TouchableOpacity key={index} onPress={() => console.log(`Selected: ${option.title}`)}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              key={index}
+              onPress={() => console.log(`Selected: ${option.title}`)}
+            >
               <View style={[styles.option, { height: totalHeight }]}>
                 <OptionCard icon={option.icon} title={option.title} />
               </View>

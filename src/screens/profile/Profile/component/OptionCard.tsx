@@ -1,6 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { color } from 'src/common/constants/color';
 
 export interface OptionProp {
   icon: string;
@@ -10,7 +11,7 @@ const OptionCard = (props: OptionProp) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.iconCard}>
-        <Icon name={props.icon} size={32} color='black' />
+        <Icon name={props.icon} size={32} color={color.textColor} />
       </View>
       <Text style={styles.textCard}>{props.title}</Text>
     </View>
