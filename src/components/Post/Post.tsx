@@ -7,7 +7,7 @@ import FontAwesomeICon from 'react-native-vector-icons/FontAwesome';
 import { color } from 'src/common/constants/color';
 import globalStyles from 'src/common/styles/globalStyles';
 import { useEffect, useState } from 'react';
-const MAX_LENGTH_CONTENT = 10;
+const MAX_LENGTH_CONTENT = 500;
 
 // define props
 export interface PostProps {
