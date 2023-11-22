@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
 import BaseButton from 'src/components/BaseButton';
-import WrapperAuthScreen from 'src/components/WraperAuthScreen';
+import WrapperAuthScreen from 'src/components/WraperScreen';
 import { color } from 'src/common/constants/color';
 import { NavigationProp, RouteProp, useRoute } from '@react-navigation/native';
 
@@ -45,7 +45,7 @@ function DatePickerScreen() {
     validateDate(date);
   }, [date]);
   return (
-    <WrapperAuthScreen>
+    <WrapperAuthScreen linnerGradient>
       <Text variant='titleLarge' style={styles.title}>
         Sinh nhật của bạn khi nào?
       </Text>

@@ -1,4 +1,4 @@
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperScreen from 'src/components/WraperScreen';
 import BaseButton from 'src/components/BaseButton';
 import BaseMetaLogo from 'src/components/BaseMetaLogo';
 import { useNavigation } from '@react-navigation/native';
@@ -14,7 +14,7 @@ function HomeAuthScreen() {
     { name: 'Bùi Ngọc Thành', imageUrl: '' }
   ];
   return (
-    <WraperAuthScreen spaceBetween>
+    <WraperScreen spaceBetween linnerGradient>
       <View style={styles.facebookLogo}>
         <Avatar.Image source={require('src/assets/logo.png')} size={50} />
       </View>
@@ -57,7 +57,7 @@ function HomeAuthScreen() {
         </BaseButton>
         <BaseMetaLogo />
       </View>
-    </WraperAuthScreen>
+    </WraperScreen>
   );
 }
 

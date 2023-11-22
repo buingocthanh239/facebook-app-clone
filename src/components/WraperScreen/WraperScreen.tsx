@@ -3,20 +3,22 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { color } from 'src/common/constants/color';
 import { View } from 'react-native';
-export type WrapperAuthScreenProps = PropsWithChildren<{
+export type WrapperScreenProps = PropsWithChildren<{
   paddingHorizontal?: number;
   paddingTop?: number;
   paddingBottom?: number;
   spaceBetween?: boolean;
+  linnerGradient?: boolean;
 }>;
-const defaultProps: WrapperAuthScreenProps = {
+const defaultProps: WrapperScreenProps = {
   paddingHorizontal: 20,
   paddingBottom: 8,
-  spaceBetween: false
+  spaceBetween: false,
+  linnerGradient: false
 };
-function WrapperAuthScreen(props: WrapperAuthScreenProps): JSX.Element {
+function WrapperScreen(props: WrapperScreenProps): JSX.Element {
   const insets = useSafeAreaInsets();
-  return (
+  return props.linnerGradient ? (
     <LinearGradient
       colors={color.linearBackgroundColor}
       style={{ flex: 1 }}
@@ -37,7 +39,20 @@ function WrapperAuthScreen(props: WrapperAuthScreenProps): JSX.Element {
         {props.children}
       </View>
     </LinearGradient>
+  ) : (
+    <View
+      style={{
+        paddingTop: insets.top + (props.paddingTop ?? 0),
+        paddingBottom: insets.bottom + (props.paddingBottom ?? 0),
+        paddingLeft: insets.left + (props.paddingHorizontal ?? 0),
+        paddingRight: insets.right + (props.paddingHorizontal ?? 0),
+        flex: 1,
+        justifyContent: props.spaceBetween ? 'space-between' : 'flex-start'
+      }}
+    >
+      {props.children}
+    </View>
   );
 }
-WrapperAuthScreen.defaultProps = defaultProps;
-export default WrapperAuthScreen;
+WrapperScreen.defaultProps = defaultProps;
+export default WrapperScreen;

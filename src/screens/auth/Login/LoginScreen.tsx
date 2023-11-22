@@ -9,7 +9,7 @@ import BaseInputPassword from 'src/components/BaseInputPassword';
 import BaseInputEmail from 'src/components/BaseInputEmail';
 import BaseTextTitle from 'src/components/BaseTextTitle';
 import BaseMetaLogo from 'src/components/BaseMetaLogo';
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperAuthScreen from 'src/components/WraperScreen';
 import BaseForm from 'src/components/BaseForm';
 import styles from './styles';
 import { ILoginData } from 'src/interfaces/auth.interface';
@@ -22,7 +22,7 @@ function LoginScreen() {
     console.log(data);
   };
   return (
-    <WraperAuthScreen spaceBetween>
+    <WraperAuthScreen spaceBetween linnerGradient>
       <View style={styles.logo}>
         <Avatar.Image source={require('src/assets/logo.png')} size={55} />
       </View>

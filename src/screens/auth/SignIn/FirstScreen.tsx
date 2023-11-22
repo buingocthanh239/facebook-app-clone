@@ -1,6 +1,6 @@
 import { Text } from 'react-native-paper';
 import { Image } from 'react-native';
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperAuthScreen from 'src/components/WraperScreen';
 import BaseButton from 'src/components/BaseButton';
 import { color } from 'src/common/constants/color';
 import { useNavigation } from '@react-navigation/native';
@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 function FirstScreen() {
   const navigation = useNavigation();
   return (
-    <WraperAuthScreen>
+    <WraperAuthScreen linnerGradient>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
         Tham gia Facebook
       </Text>

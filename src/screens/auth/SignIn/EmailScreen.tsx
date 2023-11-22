@@ -8,7 +8,7 @@ import BaseInputEmail from 'src/components/BaseInputEmail';
 import { color } from 'src/common/constants/color';
 import BaseForm from 'src/components/BaseForm';
 import { IEmailScreenForm } from 'src/interfaces/auth.interface';
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperAuthScreen from 'src/components/WraperScreen';
 import { emailFormSchema } from 'src/validation/signUp.validate';
 
 function EmailScreen() {
@@ -23,7 +23,7 @@ function EmailScreen() {
     });
   };
   return (
-    <WraperAuthScreen>
+    <WraperAuthScreen linnerGradient>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
         Email của bạn là gì?
       </Text>

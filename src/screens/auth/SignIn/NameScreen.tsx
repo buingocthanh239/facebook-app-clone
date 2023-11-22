@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperAuthScreen from 'src/components/WraperScreen';
 import BaseInputText from 'src/components/BaseInputText';
 import BaseButton from 'src/components/BaseButton';
 import BaseTextTitle from 'src/components/BaseTextTitle';
@@ -21,7 +21,7 @@ function NameScreen() {
     naviagtion.navigate('BirthdayScreen', data);
   };
   return (
-    <WraperAuthScreen spaceBetween>
+    <WraperAuthScreen spaceBetween linnerGradient>
       <View style={{ flex: 1, flexDirection: 'column', gap: 10 }}>
         <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
           Bạn tên gì?

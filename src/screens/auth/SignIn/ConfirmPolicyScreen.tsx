@@ -1,7 +1,7 @@
 import { Text } from 'react-native-paper';
 import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperAuthScreen from 'src/components/WraperScreen';
 import BaseButton from 'src/components/BaseButton';
 
 function ConfirmPolicyScreen() {
@@ -12,7 +12,7 @@ function ConfirmPolicyScreen() {
     naviagion.navigate('VerifyOTPScreen');
   };
   return (
-    <WraperAuthScreen>
+    <WraperAuthScreen linnerGradient>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
         Đồng ý với điều khoản và chính sách của Fakebook
       </Text>

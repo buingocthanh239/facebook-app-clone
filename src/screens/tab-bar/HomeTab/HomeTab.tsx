@@ -23,8 +23,15 @@ function HomeTab() {
       ownerName: 'Bùi Ngọc Thành',
       createdAt: '9',
       friendComments: ['Bùi Ngọc Thành', 'Bùi Ngọc Thành', 'Bùi Ngọc Thành'],
-      content: 'jgkldjgdklgjdklgjkldfgjflkdgjfkl',
-      imageUrl: ['https://picsum.photos/700', 'https://picsum.photos/700']
+      content: 'hsdjkfhdfkjdhdsjfhdksfhdj',
+      imageUrl: [
+        'https://picsum.photos/700',
+        'https://picsum.photos/700',
+        'https://picsum.photos/700',
+        'https://picsum.photos/700',
+        'https://picsum.photos/700',
+        'https://picsum.photos/700'
+      ]
     },
     {
       id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',

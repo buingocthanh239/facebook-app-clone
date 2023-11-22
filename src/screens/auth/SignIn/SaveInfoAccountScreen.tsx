@@ -1,12 +1,12 @@
 import { Text } from 'react-native-paper';
 
 import BaseButton from 'src/components/BaseButton';
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperAuthScreen from 'src/components/WraperScreen';
 import { color } from 'src/common/constants/color';
 
 function SaveInfoAccountScreen() {
   return (
-    <WraperAuthScreen>
+    <WraperAuthScreen linnerGradient>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
         Lưu thông tin đăng nhập?
       </Text>

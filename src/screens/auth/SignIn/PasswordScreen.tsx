@@ -3,7 +3,7 @@ import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navig
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperAuthScreen from 'src/components/WraperScreen';
 import BaseInputPassword from 'src/components/BaseInputPassword';
 import BaseButton from 'src/components/BaseButton';
 import BaseForm from 'src/components/BaseForm';
@@ -22,7 +22,7 @@ function PasswordScreen() {
     });
   };
   return (
-    <WraperAuthScreen>
+    <WraperAuthScreen linnerGradient>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
         Tạo mật khẩu
       </Text>
