@@ -13,6 +13,7 @@ import {
   SaveInfoAccountScreen,
   BirthDayScreen
 } from 'src/screens/auth/SignIn';
+import CreatePostScreen from 'src/screens/post/CreatePostScreen';
 
 const Stack = createNativeStackNavigator();
 function AuthNavigation() {
@@ -23,6 +24,11 @@ function AuthNavigation() {
         header: () => <BaseHeader />
       }}
     >
+      <Stack.Screen
+        name='CreatePostScreen'
+        options={{ headerShown: false }}
+        component={CreatePostScreen}
+      />
       <Stack.Screen name='HomeAuth' options={{ headerShown: false }} component={HomeAuth} />
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Group>

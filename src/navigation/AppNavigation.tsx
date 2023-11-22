@@ -37,6 +37,11 @@ function AppNavigation() {
     // initialRouteName='AuthNavigation'
     >
       <Stack.Screen
+        name='AuthNavigation'
+        options={{ headerShown: false }}
+        component={AuthNavigation}
+      />
+      <Stack.Screen
         name='TabNavigation'
         options={{ header: () => <Header /> }}
         component={TabNavigationWrapper}
@@ -52,11 +57,6 @@ function AppNavigation() {
 
       <Stack.Screen name='Profile' options={{ headerShown: false }} component={ProfileScreen} />
       <Stack.Screen name='EditProfile' options={{ headerShown: false }} component={EditProfile} />
-      <Stack.Screen
-        name='AuthNavigation'
-        options={{ headerShown: false }}
-        component={AuthNavigation}
-      />
     </Stack.Navigator>
   );
 }

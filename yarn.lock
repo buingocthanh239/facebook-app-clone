@@ -2267,21 +2267,6 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-native-vector-icons@^6.4.17":
-  version "6.4.17"
-  resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.17.tgz#78a96737b9045af792923619f4e895460362ca44"
-  integrity sha512-pE5vmuKA9BgbrWmri+LVLYmhwLCJ1gKerpXU6qrXFehLqY/sJv1VdvkUul9UaVseKJ3XhhG2LWg3kF1xQD2EGA==
-  dependencies:
-    "@types/react" "*"
-    "@types/react-native" "^0.70"
-
-"@types/react-native@^0.70":
-  version "0.70.17"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.70.17.tgz#68d345fa776c2485e826fb8a2708da6741191b2a"
-  integrity sha512-cCOHvk/KB0e+d8p8qaw27/Fuz3+NiIqDYhIkF0tFGO/OEOt700LXg1AX9jRlmtlY95hozJ+WjDJ0xw0a4O6z/Q==
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-native@^0.72.3":
   version "0.72.3"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.72.3.tgz#eb5726eb3ec6b79a10db7a295cc0346eb5e9331a"
@@ -7092,6 +7077,11 @@ react-native-image-picker@^7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-7.0.2.tgz#41eb49e7d808752ef448e26d256036470252936d"
   integrity sha512-2Y+TMzv2l32IikqYpj4WOqkYvv42SXkSvL9zAo0XdhA3Rbe3lc0Oz12KlR6M2bGh8RxXz5lUrs+9mxy/GpcLIg==
+
+react-native-keyboard-avoiding-view@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-keyboard-avoiding-view/-/react-native-keyboard-avoiding-view-1.0.0.tgz#3ce342caad0fb29d18a1b9581c147ceb551d2116"
+  integrity sha512-sOwhSCBEd8KgNlFWHYFo1tvOtJX3bl3xAyeR0qFFzR33BOezr3Uo0Og205NdS9mq4iPsDX3AjkXM0Jy1GhgZQg==
 
 react-native-keychain@^8.1.2:
   version "8.1.2"

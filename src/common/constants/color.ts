@@ -12,5 +12,6 @@ export const color = {
   iconButtonColor: 'black',
   sureface: 'rgb(255, 251, 255)',
   backgroundColor: '#f2f2f2',
-  isNotLookBg: '#e7f3ff'
+  isNotLookBg: '#e7f3ff',
+  opacity: '#EBF5FF'
 };
