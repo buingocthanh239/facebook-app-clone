@@ -1,5 +1,5 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { HomeTab, VideoTab, NotificationTab, FriendTab, OtherOptionTab } from 'src/screens/tab-bar';
+import { HomeTab, VideoTab, NotificationTab, FriendTab, SettingTab } from 'src/screens/tab-bar';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FontAwesomeIcon6 from 'react-native-vector-icons/FontAwesome6';
@@ -69,8 +69,8 @@ function TabNavigation() {
         }}
       />
       <tab.Screen
-        name='OtherOption'
-        component={OtherOptionTab}
+        name='Setting'
+        component={SettingTab}
         options={{
           tabBarIcon: ({ focused, color }) =>
             focused ? (
