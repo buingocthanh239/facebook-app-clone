@@ -22,3 +22,8 @@ type AuthNavigationType = {
   VerifyOTPScreen: undefined;
   SaveInfoAccountScreen: undefined;
 };
+
+type PropfileNavigationType = {
+  Profile: undefined;
+  EditProfile: undefined;
+};
