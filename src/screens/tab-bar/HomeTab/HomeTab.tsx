@@ -1,6 +1,7 @@
 import Post from 'src/components/Post';
 import NewPostCreate from './components/NewPostCreate/NewPostCreate';
 import { FlatList } from 'react-native';
+import { IVideo } from 'src/interfaces/common.interface';
 
 export interface IPost {
   id: string;
@@ -9,7 +10,7 @@ export interface IPost {
   createdAt: string;
   content?: string;
   imageUrl?: string[];
-  videoUrl?: string;
+  video?: IVideo;
   numberLikes?: number;
   numberComments?: number;
   numberShares?: number;
@@ -36,7 +37,13 @@ function HomeTab() {
     {
       id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
       ownerName: 'Bùi Ngọc Thành',
-      createdAt: '9'
+      createdAt: '9',
+      content: 'hsdjkfhdfkjdhdsjfhdksfhdj',
+      video: {
+        videoUri:
+          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        thumnail: 'https://i.picsum.photos/id/866/1600/900.jpg'
+      }
     },
     {
       id: '58694a0f-3da1-471f-bd96-145571e29d72',
@@ -57,7 +64,7 @@ function HomeTab() {
           content={item.content}
           imageUrl={item.imageUrl}
           ownerAvatar={item.ownerAvatar}
-          videoUrl={item.videoUrl}
+          video={item.video}
           numberComments={item.numberComments}
           numberLikes={item.numberLikes}
           numberShares={item.numberShares}

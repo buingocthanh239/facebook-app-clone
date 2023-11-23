@@ -8,6 +8,8 @@ import { color } from 'src/common/constants/color';
 import globalStyles from 'src/common/styles/globalStyles';
 import { useEffect, useState } from 'react';
 import GridImage from '../GridImages/GridImage';
+import { IVideo } from 'src/interfaces/common.interface';
+import BaseVideo from '../BaseVideo';
 const MAX_LENGTH_CONTENT = 500;
 
 // define props
@@ -17,7 +19,7 @@ export interface PostProps {
   createdAt: string;
   content?: string;
   imageUrl?: string[];
-  videoUrl?: string;
+  video?: IVideo;
   numberLikes?: number;
   numberComments?: number;
   numberShares?: number;
@@ -27,7 +29,7 @@ export interface PostProps {
 function Post(props: PostProps) {
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
-  const { friendComments, content, imageUrl } = props;
+  const { friendComments, content, imageUrl, video } = props;
   useEffect(() => {
     if (content) {
       setDisplayContent(content);
@@ -110,6 +112,9 @@ function Post(props: PostProps) {
           style={{ width: '100%', height: 300, marginBottom: 8 }}
         />
       )}
+      {video ? (
+        <BaseVideo video={{ uri: video.videoUri }} thumbnail={{ uri: video.thumnail }} />
+      ) : null}
       <Divider />
       {isInteract && (
         <>
