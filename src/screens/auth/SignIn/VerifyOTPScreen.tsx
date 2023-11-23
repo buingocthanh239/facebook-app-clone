@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperAuthScreen from 'src/components/WraperScreen';
 import BaseInputNumber from 'src/components/BaseInputNumber';
 import BaseButton from 'src/components/BaseButton';
 import { color } from 'src/common/constants/color';
@@ -21,7 +21,7 @@ function SignInScreen() {
   };
 
   return (
-    <WraperAuthScreen>
+    <WraperAuthScreen linnerGradient>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
         Nhập mã xác nhận
       </Text>

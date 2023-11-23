@@ -5,7 +5,7 @@ import { ViewProps } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import WraperAuthScreen from 'src/components/WraperAuthScreen';
+import WraperAuthScreen from 'src/components/WraperScreen';
 import BaseButton from 'src/components/BaseButton';
 import styled from 'styled-components/native';
 import GenderRadioGroup from 'src/components/GenderRadioGroup';
@@ -27,7 +27,7 @@ function GenderScreen() {
     });
   };
   return (
-    <WraperAuthScreen>
+    <WraperAuthScreen linnerGradient>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
         Bạn giới tính là gì?
       </Text>

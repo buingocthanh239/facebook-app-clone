@@ -1,4 +1,4 @@
-import { View, Image, TouchableHighlight, StyleSheet } from 'react-native';
+import { View, TouchableHighlight, StyleSheet } from 'react-native';
 import { Avatar, Card, IconButton, Text, Divider } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
@@ -7,6 +7,9 @@ import FontAwesomeICon from 'react-native-vector-icons/FontAwesome';
 import { color } from 'src/common/constants/color';
 import globalStyles from 'src/common/styles/globalStyles';
 import { useEffect, useState } from 'react';
+import GridImage from '../GridImages/GridImage';
+import { IVideo } from 'src/interfaces/common.interface';
+import BaseVideo from '../BaseVideo';
 const MAX_LENGTH_CONTENT = 500;
 
 // define props
@@ -16,7 +19,7 @@ export interface PostProps {
   createdAt: string;
   content?: string;
   imageUrl?: string[];
-  videoUrl?: string;
+  video?: IVideo;
   numberLikes?: number;
   numberComments?: number;
   numberShares?: number;
@@ -26,11 +29,7 @@ export interface PostProps {
 function Post(props: PostProps) {
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
-  const { friendComments, content, imageUrl } = props;
-  const isOneImage = imageUrl?.length === 1;
-  const isTwoImage = imageUrl?.length === 2;
-  // const isThreeImage = imageUrl?.length === 3;
-  // const isFourImage = imageUrl?.length === 4;
+  const { friendComments, content, imageUrl, video } = props;
   useEffect(() => {
     if (content) {
       setDisplayContent(content);
@@ -42,7 +41,7 @@ function Post(props: PostProps) {
     }
   }, [content]);
   const onPressContent = () => {
-    if (isShowFullContent) {
+    if (isShowFullContent && (content?.length as number) > MAX_LENGTH_CONTENT) {
       setIsShowFullContent(displayContent.length === MAX_LENGTH_CONTENT);
       setDisplayContent(content?.slice(0, MAX_LENGTH_CONTENT) as string);
     }
@@ -92,7 +91,7 @@ function Post(props: PostProps) {
         )}
       />
       {props?.content && (
-        <Card.Content>
+        <Card.Content style={{ marginBottom: 10 }}>
           <Text onPress={onPressContent}>
             {displayContent}
             {!isShowFullContent && (
@@ -106,34 +105,16 @@ function Post(props: PostProps) {
           </Text>
         </Card.Content>
       )}
-      {imageUrl?.length !== 0 && (
-        <View style={[styles.marginVertical, isTwoImage && globalStyles.flexRow]}>
-          {isOneImage && (
-            <Image
-              source={{
-                uri: 'https://scontent.fhan5-9.fna.fbcdn.net/v/t39.30808-6/402085654_844894067320431_7015984115871699296_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHR-gONjTsyk8T465DnZfGzvUUHACaazna9RQcAJprOdh9afvGnS8-t4ddaVLHGfQUcJhClWiHXrzso9e4VWuCW&_nc_ohc=Q-EIISuJ4yMAX-eUtsy&_nc_ht=scontent.fhan5-9.fna&oh=00_AfDHJDCLkNi_MBuS2KAaqYELm7IGgkkC0b8Gjx6tq-vznA&oe=655FA3E4'
-              }}
-              style={{ width: 400, height: 200, objectFit: 'fill' }}
-            />
-          )}
-          {isTwoImage && (
-            <>
-              <Image
-                source={{
-                  uri: 'https://scontent.fhan5-9.fna.fbcdn.net/v/t39.30808-6/402085654_844894067320431_7015984115871699296_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHR-gONjTsyk8T465DnZfGzvUUHACaazna9RQcAJprOdh9afvGnS8-t4ddaVLHGfQUcJhClWiHXrzso9e4VWuCW&_nc_ohc=Q-EIISuJ4yMAX-eUtsy&_nc_ht=scontent.fhan5-9.fna&oh=00_AfDHJDCLkNi_MBuS2KAaqYELm7IGgkkC0b8Gjx6tq-vznA&oe=655FA3E4'
-                }}
-                style={{ width: 200, height: 200, marginRight: 4, objectFit: 'fill' }}
-              />
-              <Image
-                source={{
-                  uri: 'https://scontent.fhan5-9.fna.fbcdn.net/v/t39.30808-6/402085654_844894067320431_7015984115871699296_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHR-gONjTsyk8T465DnZfGzvUUHACaazna9RQcAJprOdh9afvGnS8-t4ddaVLHGfQUcJhClWiHXrzso9e4VWuCW&_nc_ohc=Q-EIISuJ4yMAX-eUtsy&_nc_ht=scontent.fhan5-9.fna&oh=00_AfDHJDCLkNi_MBuS2KAaqYELm7IGgkkC0b8Gjx6tq-vznA&oe=655FA3E4'
-                }}
-                style={{ width: 200, height: 200, objectFit: 'fill' }}
-              />
-            </>
-          )}
-        </View>
+      {imageUrl?.length !== 0 && imageUrl && (
+        <GridImage
+          images={imageUrl as string[]}
+          onPress={() => console.log('image')}
+          style={{ width: '100%', height: 300, marginBottom: 8 }}
+        />
       )}
+      {video ? (
+        <BaseVideo video={{ uri: video.videoUri }} thumbnail={{ uri: video.thumnail }} />
+      ) : null}
       <Divider />
       {isInteract && (
         <>
