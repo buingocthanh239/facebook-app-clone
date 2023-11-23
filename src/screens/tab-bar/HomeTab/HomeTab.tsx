@@ -1,7 +1,8 @@
 import Post from 'src/components/Post';
 import NewPostCreate from './components/NewPostCreate/NewPostCreate';
-import { FlatList } from 'react-native';
 import { IVideo } from 'src/interfaces/common.interface';
+import { useState } from 'react';
+import BaseFlatList from 'src/components/BaseFlatList';
 
 export interface IPost {
   id: string;
@@ -18,7 +19,7 @@ export interface IPost {
 }
 
 function HomeTab() {
-  const data: IPost[] = [
+  const Data: IPost[] = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
       ownerName: 'Bùi Ngọc Thành',
@@ -52,8 +53,26 @@ function HomeTab() {
       createdAt: '9'
     }
   ];
+  const [data, setdata] = useState(Data);
+  const [refreshing, setrefreshing] = useState(false);
+  const onRefresh = async () => {
+    setrefreshing(true);
+    setTimeout(() => {
+      setdata(data => [
+        ...data,
+        {
+          id: '58694a0f-3da1-471f-bd96-145571e29d72' + Math.floor(Math.random() * 100),
+
+          ownerName: 'Bùi Ngọc Thành',
+          createdAt: '9'
+        }
+      ]);
+      setrefreshing(false);
+    }, 2000);
+  };
+
   return (
-    <FlatList
+    <BaseFlatList
       ListHeaderComponent={<NewPostCreate />}
       data={data}
       renderItem={({ item }) => (
@@ -71,6 +90,8 @@ function HomeTab() {
         />
       )}
       keyExtractor={item => item.id}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
     />
   );
 }
