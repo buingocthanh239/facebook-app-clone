@@ -57,11 +57,11 @@ const TextError = styled.Text`
   padding-left: 8px;
 `;
 const Label: FC<PropsWithChildren<LableProps>> = styled.Text`
-  color: ${props => (props.error ? color.error : color.primary)};
+  color: ${props => (props.error ? color.error : color.textColor)};
   padding-bottom: 8px;
-  font-size: 16px;
+  font-size: 14px;
   padding-left: 12px;
-  font-weight: bold;
+  font-weight: 500;
 `;
 const RequiredIcon = styled.Text`
   color: ${color.error};

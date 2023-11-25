@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, ScrollView, BackHandler } from 'react-native';
 import { Avatar, Card, Divider, IconButton, List, Text } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import { getAvatarUri } from 'src/utils/helper';
@@ -7,10 +7,38 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import globalStyles from 'src/common/styles/globalStyles';
 import TextTitle from './components/TextTitle';
 import ListItemCard from './components/ListItemCard';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
+interface ISettingAcordion {
+  title: string;
+  iconName: string;
+  onPress: () => any;
+}
 function SettingTab() {
+  const navigation: NavigationProp<SettingNavigationType> = useNavigation();
+  const onPressSettingItem = () => navigation.navigate('SettingScreen');
+  const onPressPrivacyItem = () => navigation.navigate('BlockFriendScreen');
+  const onPressNotificationItem = () => navigation.navigate('SettingNotification');
+  const onPressExit = () => BackHandler.exitApp();
+  const settingAccordion: ISettingAcordion[] = [
+    {
+      title: 'Cài đặt',
+      iconName: 'user-cog',
+      onPress: onPressSettingItem
+    },
+    {
+      title: 'Quyền riêng tư',
+      iconName: 'user-lock',
+      onPress: onPressPrivacyItem
+    },
+    {
+      title: 'Thông báo',
+      iconName: 'volume-up',
+      onPress: onPressNotificationItem
+    }
+  ];
   return (
-    <View>
+    <ScrollView>
       <View
         style={[
           globalStyles.flexRow,
@@ -72,13 +100,17 @@ function SettingTab() {
           title={<TextTitle>Cài đặt và quyền riêng tư</TextTitle>}
           left={props => <List.Icon {...props} icon='cog' />}
         >
-          <ListItemCard
-            title='Cài đặt'
-            left={<IconFont name='user-cog' color={color.textColor} size={20} />}
-          />
+          {settingAccordion.map((item, i) => (
+            <ListItemCard
+              key={i}
+              title={item.title}
+              left={<IconFont name={item.iconName} color={color.textColor} size={20} />}
+              onPress={item.onPress}
+            />
+          ))}
         </List.Accordion>
         <Divider />
-        <TouchableOpacity activeOpacity={0.6}>
+        <TouchableOpacity activeOpacity={0.6} onPress={onPressExit}>
           <List.Item
             title={<TextTitle>Thoát</TextTitle>}
             left={props => <List.Icon {...props} icon='exit-run' color={color.green} />}
@@ -92,7 +124,7 @@ function SettingTab() {
           />
         </TouchableOpacity>
       </List.Section>
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
