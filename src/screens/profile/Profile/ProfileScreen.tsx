@@ -8,9 +8,14 @@ import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CreatePostCard from '../../../components/CreatePostCard/CreatePostCard';
 import { color } from 'src/common/constants/color';
+import { NavigationProp, useNavigation } from '@react-navigation/core';
 function ProfileScreen() {
   const [modalAvatarVisible, setModalAvatarVisible] = useState(false);
   const [modalCoverVisible, setModalCoverVisible] = useState(false);
+
+  const navigation: NavigationProp<PropfileNavigationType, 'EditProfile'> = useNavigation();
+
+  const navigateEditProfileScreen = () => navigation.navigate('EditProfile');
 
   const showModalAvatar = () => {
     setModalAvatarVisible(true);
@@ -92,7 +97,11 @@ function ProfileScreen() {
         </View>
       </View>
       <View style={styles.section}>
-        <TouchableOpacity activeOpacity={0.8} style={styles.button}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.button}
+          onPress={navigateEditProfileScreen}
+        >
           <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
