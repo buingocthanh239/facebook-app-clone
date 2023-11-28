@@ -2,11 +2,11 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { color } from 'src/common/constants/color';
-
 export interface OptionProp {
   icon: string;
   color: string;
   title: string;
+  textColor?: string;
 }
 const OptionCard = (props: OptionProp) => {
   return (
@@ -14,7 +14,9 @@ const OptionCard = (props: OptionProp) => {
       <View style={styles.iconCard}>
         <Icon name={props.icon} size={32} color={props.color} />
       </View>
-      <Text style={styles.textCard}>{props.title}</Text>
+      <Text style={{ fontSize: 14, color: props.textColor ? props.textColor : color.textColor }}>
+        {props.title}
+      </Text>
     </View>
   );
 };
@@ -26,8 +28,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: color.borderBottom,
     paddingVertical: 7,
     paddingHorizontal: 5
   },
@@ -38,8 +38,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 20,
     marginHorizontal: 10
-  },
-  textCard: {
-    fontSize: 14
   }
 });
