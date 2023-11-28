@@ -3,6 +3,7 @@ export const color = {
   error: 'rgb(186, 26, 26)',
   white: '#FFFFFF',
   green: '#45BD62',
+  yellow: '#F7B928',
   borderColor: '#CDD2D8',
   textColor: '#1c2b32',
   outlineColor: '#ced2db',
@@ -12,5 +13,7 @@ export const color = {
   iconButtonColor: 'black',
   sureface: 'rgb(255, 251, 255)',
   backgroundColor: '#f2f2f2',
-  isNotLookBg: '#e7f3ff'
+  isNotLookBg: '#e7f3ff',
+  opacity: '#EBF5FF',
+  borderBottom: '#ddd'
 };

@@ -7078,6 +7078,11 @@ react-native-image-picker@^7.0.2:
   resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-7.0.2.tgz#41eb49e7d808752ef448e26d256036470252936d"
   integrity sha512-2Y+TMzv2l32IikqYpj4WOqkYvv42SXkSvL9zAo0XdhA3Rbe3lc0Oz12KlR6M2bGh8RxXz5lUrs+9mxy/GpcLIg==
 
+react-native-keyboard-avoiding-view@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-keyboard-avoiding-view/-/react-native-keyboard-avoiding-view-1.0.0.tgz#3ce342caad0fb29d18a1b9581c147ceb551d2116"
+  integrity sha512-sOwhSCBEd8KgNlFWHYFo1tvOtJX3bl3xAyeR0qFFzR33BOezr3Uo0Og205NdS9mq4iPsDX3AjkXM0Jy1GhgZQg==
+
 react-native-keychain@^8.1.2:
   version "8.1.2"
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-8.1.2.tgz#34291ae472878e5124d081211af5ede7d810e64f"
