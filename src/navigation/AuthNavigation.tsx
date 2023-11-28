@@ -14,6 +14,9 @@ import {
   BirthDayScreen
 } from 'src/screens/auth/SignIn';
 import CreatePostScreen from 'src/screens/post/CreatePostScreen';
+import AllFriendScreen from 'src/screens/tab-bar/FriendTab/AllFriendScreen';
+import SuggestionsScreen from 'src/screens/tab-bar/FriendTab/SuggestionsScreen/SuggestionsScreen';
+import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 function AuthNavigation() {
@@ -24,6 +27,18 @@ function AuthNavigation() {
         header: () => <BaseHeader />
       }}
     >
+      <Stack.Screen
+        name='EditProfile'
+        options={{ headerShown: false }}
+        component={SuggestionsScreen}
+      />
+
+      <Stack.Screen
+        name='AllFriendScreen'
+        options={{ headerShown: false }}
+        component={AllFriendScreen}
+      />
+      <Stack.Screen name='Profile' options={{ headerShown: false }} component={ProfileScreen} />
       <Stack.Screen
         name='CreatePostScreen'
         options={{ headerShown: false }}

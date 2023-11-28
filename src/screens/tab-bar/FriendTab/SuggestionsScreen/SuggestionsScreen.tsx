@@ -100,7 +100,8 @@ function SuggestionsScreen() {
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    marginBottom: 50
+    marginBottom: 50,
+    backgroundColor: 'white'
   },
   lineText: {
     flexDirection: 'row',
