@@ -15,7 +15,6 @@ import {
 import BaseModal from 'src/components/BaseModal';
 import { color } from 'src/common/constants/color';
 import { View } from 'react-native';
-
 function NotificationTab() {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [modalContent, setModalContent] = useState<INotification | null>(null);
