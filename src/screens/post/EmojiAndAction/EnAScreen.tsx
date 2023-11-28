@@ -1,12 +1,12 @@
 import { View } from 'react-native';
-import TopTapNavigation from './TopTabNavigation';
+import TopTab from './TopTab';
 
-const EnAScreen = () => {
+function EnAScreen() {
   return (
-    <View>
-      <TopTapNavigation />
+    <View style={{ flex: 1 }}>
+      <TopTab />
     </View>
   );
-};
+}
 
 export default EnAScreen;

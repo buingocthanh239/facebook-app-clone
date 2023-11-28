@@ -1,7 +1,12 @@
 import { Text } from 'react-native-paper';
+import { View } from 'react-native';
 
 function ActionTab() {
-  return <Text>ActionTab</Text>;
+  return (
+    <View>
+      <Text>Hành động</Text>
+    </View>
+  );
 }
 
 export default ActionTab;

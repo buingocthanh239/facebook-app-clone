@@ -1,25 +1,23 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { color } from 'src/common/constants/color';
 import EmojiTab from './EmojiTab';
 import ActionTab from './ActionTab';
-import { color } from 'src/common/constants/color';
 
 const Tab = createMaterialTopTabNavigator();
 
-function TopTapNavigation() {
+function TopTab() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarShowIcon: true,
-        tabBarShowLabel: false,
         tabBarActiveTintColor: color.primary,
-        tabBarContentContainerStyle: { backgroundColor: color.sureface },
+        tabBarContentContainerStyle: { backgroundColor: color.white },
         tabBarPressColor: color.borderColor
       }}
     >
-      <Tab.Screen name='Emoji' component={EmojiTab} />
-      <Tab.Screen name='Action' component={ActionTab} />
+      <Tab.Screen name='Cảm xúc' component={EmojiTab} />
+      <Tab.Screen name='Hành động' component={ActionTab} />
     </Tab.Navigator>
   );
 }
 
-export default TopTapNavigation;
+export default TopTab;
