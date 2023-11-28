@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,14 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
-  PermissionsAndroid
+  PermissionsAndroid,
+  BackHandler
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { color } from 'src/common/constants/color';
 import GridImage from 'src/components/GridImages/GridImage';
 import OptionCard from './component/OptionCard';
+import Modal from 'react-native-modal';
 import { MediaType, PhotoQuality, launchImageLibrary } from 'react-native-image-picker';
 
 const CreatePostScreen = () => {
@@ -31,6 +33,48 @@ const CreatePostScreen = () => {
       color: color.yellow
     }
   ];
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const showModal = () => {
+    setModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setModalVisible(false);
+  };
+
+  const optionsModal = [
+    {
+      icon: 'flag',
+      title: `Lưu làm bản nháp`,
+      color: color.textColor
+    },
+    {
+      icon: 'delete',
+      title: `Bỏ bài viết`,
+      color: color.textColor
+    },
+    {
+      icon: 'check',
+      title: `Tiếp tục chỉnh sửa`,
+      color: color.primary,
+      textColor: color.primary
+    }
+  ];
+  //Xử lý sử kiện button back của android
+  useEffect(() => {
+    const backAction = () => {
+      console.log('Back button pressed!');
+      showModal();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    // Xóa lắng nghe khi component bị hủy
+    return () => backHandler.remove();
+  }, []);
 
   const [listImage, setListImage] = useState(['']);
 
@@ -74,6 +118,7 @@ const CreatePostScreen = () => {
   const handleEnA = () => {
     console.log('Go to EnA Screen');
   };
+
   return (
     <View style={styles.container}>
       <ScrollView keyboardShouldPersistTaps='handled' style={{ marginBottom: 90 }}>
@@ -102,12 +147,69 @@ const CreatePostScreen = () => {
       <View style={styles.modelFooter}>
         {options.map((option, index) => {
           return (
-            <TouchableOpacity key={index} onPress={index === 0 ? openImagePicker : handleEnA}>
+            <TouchableOpacity
+              key={index}
+              onPress={index === 0 ? openImagePicker : handleEnA}
+              style={{ borderTopColor: color.borderBottom, borderTopWidth: 1 }}
+            >
               <OptionCard icon={option.icon} color={option.color} title={option.title} />
             </TouchableOpacity>
           );
         })}
       </View>
+      <Modal
+        isVisible={modalVisible}
+        animationIn='slideInUp'
+        animationOut='slideOutDown'
+        backdropOpacity={0.5}
+        onBackdropPress={hideModal}
+        style={styles.modal}
+      >
+        <View style={styles.modalContent}>
+          <View style={{ marginBottom: 10 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingBottom: 10,
+                marginLeft: 15
+              }}
+            >
+              <View style={{ alignContent: 'center' }}>
+                <Text style={{ fontWeight: '500', fontSize: 17, color: color.textColor }}>
+                  Bạn muốn hoàn thành bài viết của mình sau?
+                </Text>
+                <Text style={{ marginTop: 5, fontSize: 14 }}>
+                  Lưu làm bản nháp hoặc bạn có thể tiếp tục chỉnh sửa
+                </Text>
+              </View>
+            </View>
+          </View>
+          {optionsModal.map((option, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={
+                index === 0
+                  ? () => console.log('Save Post & Go to Home Page')
+                  : index === 1
+                  ? () => console.log('Go to Home Page')
+                  : index === 2
+                  ? hideModal
+                  : () => console.log('Lỗi!')
+              }
+            >
+              <View style={[styles.option, { height: 19 * 3 }]}>
+                <OptionCard
+                  icon={option.icon}
+                  title={option.title}
+                  color={option.color}
+                  textColor={option?.textColor}
+                />
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -170,6 +272,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    paddingTop: 20
+  },
+  option: {
+    paddingVertical: 0
   }
 });
 
