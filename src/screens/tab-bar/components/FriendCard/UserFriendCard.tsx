@@ -136,7 +136,8 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 16,
     fontWeight: 'bold',
-    paddingBottom: 3
+    paddingBottom: 3,
+    color: color.textColor
   },
   friendCount: {
     fontSize: 14,

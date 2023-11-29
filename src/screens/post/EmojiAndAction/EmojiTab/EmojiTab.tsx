@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   label: {
-    fontSize: 16
+    fontSize: 16,
+    color: color.textColor
   }
 });
 
