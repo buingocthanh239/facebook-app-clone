@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import BaseHeader from '../components/BaseHeader';
 import LoginScreen from 'src/screens/auth/Login';
 import HomeAuth from 'src/screens/auth/HomeAuth';
 import {
@@ -13,6 +12,7 @@ import {
   SaveInfoAccountScreen,
   BirthDayScreen
 } from 'src/screens/auth/SignIn';
+import { BaseHeader } from 'src/components/BaseHeader';
 
 const Stack = createNativeStackNavigator();
 function AuthNavigation() {

@@ -157,7 +157,6 @@ function AllFriendScreen() {
 }
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 50,
     backgroundColor: color.white
   },
   header: {

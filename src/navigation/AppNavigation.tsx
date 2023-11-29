@@ -20,6 +20,9 @@ import CreatePostScreen from 'src/screens/post/CreatePostScreen';
 import EnAScreen from 'src/screens/post/EmojiAndAction/EnAScreen';
 import { Button, Text } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
+import { HeaderWithSearch } from 'src/components/BaseHeader';
+import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
+import EditProfile from 'src/screens/profile/EditProfile';
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (
   <WraperScreen paddingBottom={0} paddingHorizontal={0}>
@@ -55,12 +58,12 @@ function AppNavigation() {
       <Stack.Screen
         name='SuggestionsScreen'
         component={SuggestionsScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: true, header: () => <HeaderWithSearch title='Gợi ý' /> }}
       />
       <Stack.Screen
         name='AllFriendScreen'
         component={AllFriendScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: true, header: () => <HeaderWithSearch title='Bạn bè' /> }}
       />
       <Stack.Screen
         name='AuthNavigation'
@@ -68,6 +71,13 @@ function AppNavigation() {
         component={AuthNavigation}
       />
       <Stack.Screen name='SettingSecurityLogin' component={SettingSecurityLogin} />
+
+      <Stack.Screen name='Profile' options={{ headerShown: false }} component={ProfileScreen} />
+      <Stack.Screen
+        name='EditProfile'
+        options={{ headerTitle: 'Chỉnh sửa trang cá nhân' }}
+        component={EditProfile}
+      />
       <Stack.Screen
         name='CreatePostScreen'
         component={CreatePostScreen}
