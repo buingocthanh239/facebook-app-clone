@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 13
+    paddingVertical: 8
   },
   avatarContainer: {
     marginRight: 16
@@ -126,7 +126,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: 'bold',
-    marginTop: 15
+    marginTop: 15,
+    color: color.textColor
   },
   usernameField: {
     flex: 1,

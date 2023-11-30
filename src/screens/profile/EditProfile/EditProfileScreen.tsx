@@ -125,9 +125,11 @@ function EditProfile() {
 }
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#EDEDED'
+    borderBottomColor: color.borderBottom,
+    backgroundColor: color.white
   },
   wrapTexta: {
     flexDirection: 'row',

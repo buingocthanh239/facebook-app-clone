@@ -10,12 +10,20 @@ function TopTab() {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: color.primary,
-        tabBarContentContainerStyle: { backgroundColor: color.white },
         tabBarPressColor: color.borderColor
       }}
     >
-      <Tab.Screen name='Cảm xúc' component={EmojiTab} />
-      <Tab.Screen name='Hành động' component={ActionTab} />
+      <Tab.Screen
+        name='EmojiTab'
+        component={EmojiTab}
+        options={{ tabBarLabel: 'Cảm xúc', tabBarLabelStyle: { fontWeight: 'bold' } }}
+      />
+
+      <Tab.Screen
+        name='ActionTab'
+        component={ActionTab}
+        options={{ tabBarLabel: 'Hành động', tabBarLabelStyle: { fontWeight: 'bold' } }}
+      />
     </Tab.Navigator>
   );
 }

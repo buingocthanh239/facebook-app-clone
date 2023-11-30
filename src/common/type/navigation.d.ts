@@ -38,3 +38,13 @@ type SettingNavigationType = {
   SettingSecurityLogin: undefined;
   SettingInfoName: undefined;
 };
+
+type FriendNavigationType = {
+  FriendTab: undefined;
+  SuggestionsScreen: undefined;
+  AllFriendScreen: undefined;
+};
+type CreatePostNavigationType = {
+  CreatePostScreen: undefined;
+  EnAScreen: undefined;
+};
