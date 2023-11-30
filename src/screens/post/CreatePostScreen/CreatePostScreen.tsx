@@ -17,8 +17,16 @@ import GridImage from 'src/components/GridImages/GridImage';
 import OptionCard from './component/OptionCard';
 import Modal from 'react-native-modal';
 import { MediaType, PhotoQuality, launchImageLibrary } from 'react-native-image-picker';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+
+// interface CreatePostScreenProps {
+//   avatar: string,
+//   username: string,
+
+// }
 
 const CreatePostScreen = () => {
+  const navigation: NavigationProp<CreatePostNavigationType> = useNavigation();
   const avatar = 'https://placekitten.com/200/200';
   const username = 'Ngô Hải Văn';
   const options = [
@@ -116,7 +124,7 @@ const CreatePostScreen = () => {
   };
 
   const handleEnA = () => {
-    console.log('Go to EnA Screen');
+    navigation.navigate('EnAScreen');
   };
 
   return (
@@ -135,7 +143,13 @@ const CreatePostScreen = () => {
           </View>
         </View>
 
-        <TextInput multiline placeholder='Nhập nội dung bài viết...' style={styles.input} />
+        <TextInput
+          multiline
+          placeholder={
+            listImage.length === 1 ? 'Bạn đang nghĩ gì...' : 'Hãy nói gì đó về các bức ảnh này...'
+          }
+          style={styles.input}
+        />
         <View>
           <GridImage
             images={listImage}
@@ -217,8 +231,8 @@ const CreatePostScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    marginBottom: 60
   },
   wrapMode: {
     flexDirection: 'row',
@@ -230,7 +244,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 16
   },
   avatarContainer: {
     marginRight: 12
@@ -251,10 +266,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   input: {
-    marginTop: 16,
-    padding: 8,
+    paddingHorizontal: 16,
     textAlignVertical: 'top',
-    maxHeight: 500
+    maxHeight: 500,
+    fontSize: 16
   },
   button: {
     marginTop: 16,

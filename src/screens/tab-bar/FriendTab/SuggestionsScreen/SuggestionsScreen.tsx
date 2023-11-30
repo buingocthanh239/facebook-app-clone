@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { color } from 'src/common/constants/color';
 import { SuggestFriendCard } from '../../components/FriendCard';
 
@@ -83,15 +83,12 @@ function SuggestionsScreen() {
       </View>
       {friends.map((friend, index) => {
         return (
-          <TouchableOpacity
-            key={index}
-            onPress={() => console.log(`Go to ${friend.username} page.`)}
-          >
+          <View key={index}>
             <SuggestFriendCard
               avatarSource={friend.avatarSource}
               username={friend.username}
             ></SuggestFriendCard>
-          </TouchableOpacity>
+          </View>
         );
       })}
     </ScrollView>
@@ -99,8 +96,6 @@ function SuggestionsScreen() {
 }
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
-    marginBottom: 50,
     backgroundColor: 'white'
   },
   lineText: {

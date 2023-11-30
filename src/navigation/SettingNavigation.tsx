@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import BaseHeader from 'src/components/BaseHeader';
+import { BaseHeader } from 'src/components/BaseHeader';
 import SettingScreen from 'src/screens/setting/SettingScreen';
 
 const Stack = createNativeStackNavigator();

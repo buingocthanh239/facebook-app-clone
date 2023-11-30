@@ -117,7 +117,7 @@ function AllFriendScreen() {
             showModal();
           }}
         >
-          <Text style={{ fontSize: 18, color: color.primary }}>Sắp xếp</Text>
+          <Text style={{ fontSize: 17, color: color.primary }}>Sắp xếp</Text>
         </TouchableOpacity>
       </View>
       {friends.map((friend, index) => {
@@ -157,8 +157,7 @@ function AllFriendScreen() {
 }
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
-    marginBottom: 50
+    backgroundColor: color.white
   },
   header: {
     borderBottomWidth: 1,
