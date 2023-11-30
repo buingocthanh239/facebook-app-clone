@@ -24,7 +24,7 @@ import { HeaderWithSearch } from 'src/components/BaseHeader';
 import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 import EditProfile from 'src/screens/profile/EditProfile';
 import { FriendTab } from 'src/screens/tab-bar';
-import Counter from 'src/screens/Counter';
+// import Counter from 'src/screens/Counter';
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (
   <WraperScreen paddingBottom={0} paddingHorizontal={0}>
@@ -45,12 +45,12 @@ function AppNavigation() {
     // }}
     // initialRouteName='AuthNavigation'
     >
-      <Stack.Screen name='Couter' component={Counter} />
-      <Stack.Screen
+      {/* <Stack.Screen name='Couter' component={Counter} /> */}
+      {/* <Stack.Screen
         name='AuthNavigation'
         options={{ headerShown: false }}
         component={AuthNavigation}
-      />
+      /> */}
       <Stack.Screen
         name='TabNavigation'
         options={{ header: () => <Header /> }}
