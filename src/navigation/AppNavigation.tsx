@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AuthNavigation from './AuthNavigation';
+// import AuthNavigation from './AuthNavigation';
 import TabNavigation from './TabNavigation';
 import Header from 'src/screens/tab-bar/components/Header';
 import WraperScreen from 'src/components/WraperScreen';
@@ -14,6 +14,9 @@ import {
   SettingPushNotification,
   SettingSecurityLogin
 } from 'src/screens/setting';
+// import { HomeTab, SettingTab } from 'src/screens/tab-bar';
+// import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
+import SearchTab from 'src/screens/tab-bar/SearchTab';
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (
   <WraperScreen paddingBottom={0} paddingHorizontal={0}>
@@ -34,11 +37,7 @@ function AppNavigation() {
     // }}
     // initialRouteName='AuthNavigation'
     >
-      <Stack.Screen
-        name='AuthNavigation'
-        options={{ headerShown: false }}
-        component={AuthNavigation}
-      />
+      <Stack.Screen name='AuthNavigation' options={{ headerShown: false }} component={SearchTab} />
       <Stack.Screen
         name='TabNavigation'
         options={{ header: () => <Header /> }}
