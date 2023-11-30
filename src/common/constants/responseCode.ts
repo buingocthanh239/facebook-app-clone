@@ -1,4 +1,4 @@
-export const SATUS_CODE_OK = 1000;
+export const CODE_OK = 1000;
 
 export const POST_NOT_EXISTED = 9992;
 export const POST_INVALID_POLICY = 1011;
