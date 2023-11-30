@@ -14,6 +14,7 @@ import {
   SettingPushNotification,
   SettingSecurityLogin
 } from 'src/screens/setting';
+import Counter from 'src/screens/Counter';
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (
   <WraperScreen paddingBottom={0} paddingHorizontal={0}>
@@ -34,6 +35,7 @@ function AppNavigation() {
     // }}
     // initialRouteName='AuthNavigation'
     >
+      <Stack.Screen name='Couter' component={Counter} />
       <Stack.Screen
         name='AuthNavigation'
         options={{ headerShown: false }}
