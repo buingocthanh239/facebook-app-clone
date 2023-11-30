@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { color } from 'src/common/constants/color';
 
 interface CardData {
@@ -72,11 +72,21 @@ const Card: React.FC<CardProps> = ({ item }) => (
 );
 
 const EmojiTab: React.FC = () => {
+  const handleChooseEmoji = (data: CardData) => {
+    console.log(data);
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={data}
-        renderItem={({ item }) => <Card item={item} />}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity onPress={() => handleChooseEmoji(item)} style={{ flex: 1 }}>
+              <Card item={item} />
+            </TouchableOpacity>
+          );
+        }}
         keyExtractor={item => item.id.toString()}
         numColumns={2}
       />
@@ -105,7 +115,8 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   label: {
-    fontSize: 16
+    fontSize: 16,
+    color: color.textColor
   }
 });
 

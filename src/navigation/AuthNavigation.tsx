@@ -1,8 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import BaseHeader from '../components/BaseHeader';
 import LoginScreen from 'src/screens/auth/Login';
 import HomeAuth from 'src/screens/auth/HomeAuth';
-import EditProfile from 'src/screens/profile/EditProfile';
 import {
   ConfirmPolicyScreen,
   FirstScreen,
@@ -14,7 +12,7 @@ import {
   SaveInfoAccountScreen,
   BirthDayScreen
 } from 'src/screens/auth/SignIn';
-// import CreatePostScreen from 'src/screens/post/CreatePostScreen';
+import { BaseHeader } from 'src/components/BaseHeader';
 
 const Stack = createNativeStackNavigator();
 function AuthNavigation() {
@@ -25,7 +23,6 @@ function AuthNavigation() {
         header: () => <BaseHeader />
       }}
     >
-      <Stack.Screen name='EditProfile' options={{ headerShown: false }} component={EditProfile} />
       <Stack.Screen name='HomeAuth' options={{ headerShown: false }} component={HomeAuth} />
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Group>

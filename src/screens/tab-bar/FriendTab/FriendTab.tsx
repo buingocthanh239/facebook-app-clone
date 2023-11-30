@@ -1,13 +1,17 @@
 import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-native';
 import RequestFriendCard from '../components/FriendCard/RequestFriendCard';
 import { color } from 'src/common/constants/color';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 function Friends() {
+  const navigation: NavigationProp<FriendNavigationType> = useNavigation();
+  const handleSuggestPress = () => navigation.navigate('SuggestionsScreen');
+  const handleFriendPress = () => navigation.navigate('AllFriendScreen');
   const totalRequestFriend = 251;
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontSize: 24, fontWeight: '700' }}>Bạn bè</Text>
+        <Text style={{ fontSize: 24, fontWeight: '700', color: color.textColor }}>Bạn bè</Text>
         <View style={styles.lineText}>
           <TouchableOpacity
             style={{
@@ -16,6 +20,7 @@ function Friends() {
               marginRight: 10,
               marginLeft: -5
             }}
+            onPress={handleSuggestPress}
           >
             <Text
               style={{
@@ -23,7 +28,8 @@ function Friends() {
                 fontWeight: 'bold',
                 textAlign: 'center',
                 paddingVertical: 7,
-                paddingHorizontal: 13
+                paddingHorizontal: 13,
+                color: color.textColor
               }}
             >
               Gợi ý
@@ -36,8 +42,10 @@ function Friends() {
                 fontWeight: 'bold',
                 textAlign: 'center',
                 paddingVertical: 7,
-                paddingHorizontal: 13
+                paddingHorizontal: 13,
+                color: color.textColor
               }}
+              onPress={handleFriendPress}
             >
               Bạn bè
             </Text>
@@ -45,8 +53,10 @@ function Friends() {
         </View>
       </View>
       <View style={styles.lineText}>
-        <Text style={{ fontWeight: 'bold', fontSize: 20, marginRight: 5 }}>Lời mời kết bạn</Text>
-        <Text style={{ fontWeight: 'bold', fontSize: 22, color: color.error }}>
+        <Text style={{ fontWeight: 'bold', fontSize: 20, marginRight: 5, color: color.textColor }}>
+          Lời mời kết bạn
+        </Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 21, color: color.error }}>
           {totalRequestFriend}
         </Text>
       </View>
@@ -66,12 +76,20 @@ function Friends() {
         username='Nguyễn Văn C'
         avatarSource='https://placekitten.com/500/200'
       ></RequestFriendCard>
+      <RequestFriendCard
+        username='Nguyễn Văn C'
+        avatarSource='https://placekitten.com/500/200'
+      ></RequestFriendCard>
+      <RequestFriendCard
+        username='Nguyễn Văn C'
+        avatarSource='https://placekitten.com/500/200'
+      ></RequestFriendCard>
     </ScrollView>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10
+    backgroundColor: color.white
   },
   header: {
     borderBottomWidth: 1,
@@ -84,7 +102,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     marginLeft: 15,
-    marginTop: 10
+    marginTop: 10,
+    marginBottom: 5
   }
 });
 

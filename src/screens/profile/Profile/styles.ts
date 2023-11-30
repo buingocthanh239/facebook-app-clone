@@ -6,8 +6,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   header: {
-    alignItems: 'center',
-    paddingTop: 20
+    alignItems: 'center'
   },
   avatar: {
     width: 200,
