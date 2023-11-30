@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import FriendCard from './FriendCard';
 import { color } from 'src/common/constants/color';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const FriendField = () => {
+  const navigation: NavigationProp<FriendNavigationType, 'FriendTab'> = useNavigation();
   const avatarUrl = 'https://placekitten.com/200/200';
   const friends = [
     {
@@ -54,7 +56,10 @@ const FriendField = () => {
           <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'black' }}>Bạn bè</Text>
           <Text style={{ fontSize: 14 }}>{totalFriend.toLocaleString()} người bạn</Text>
         </View>
-        <TouchableOpacity style={styles.searchFriend} onPress={() => console.log('Tìm bạn bè')}>
+        <TouchableOpacity
+          style={styles.searchFriend}
+          onPress={() => navigation.navigate('FriendTab')}
+        >
           <Text style={{ fontSize: 16, color: color.primary }}>Tìm bạn bè</Text>
         </TouchableOpacity>
       </View>

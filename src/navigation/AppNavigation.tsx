@@ -23,6 +23,7 @@ import { color } from 'src/common/constants/color';
 import { HeaderWithSearch } from 'src/components/BaseHeader';
 import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 import EditProfile from 'src/screens/profile/EditProfile';
+import { FriendTab } from 'src/screens/tab-bar';
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (
   <WraperScreen paddingBottom={0} paddingHorizontal={0}>
@@ -58,12 +59,18 @@ function AppNavigation() {
       <Stack.Screen
         name='SuggestionsScreen'
         component={SuggestionsScreen}
-        options={{ headerShown: true, header: () => <HeaderWithSearch title='Gợi ý' /> }}
+        options={{
+          headerShown: true,
+          header: () => <HeaderWithSearch title='Gợi ý' titleIsCenter={false} />
+        }}
       />
       <Stack.Screen
         name='AllFriendScreen'
         component={AllFriendScreen}
-        options={{ headerShown: true, header: () => <HeaderWithSearch title='Bạn bè' /> }}
+        options={{
+          headerShown: true,
+          header: () => <HeaderWithSearch title='Bạn bè' titleIsCenter={false} />
+        }}
       />
       <Stack.Screen
         name='AuthNavigation'
@@ -71,8 +78,11 @@ function AppNavigation() {
         component={AuthNavigation}
       />
       <Stack.Screen name='SettingSecurityLogin' component={SettingSecurityLogin} />
-
-      <Stack.Screen name='Profile' options={{ headerShown: false }} component={ProfileScreen} />
+      <Stack.Screen
+        name='Profile'
+        options={{ header: () => <HeaderWithSearch title='Ngô Hải Văn' titleIsCenter={true} /> }}
+        component={ProfileScreen}
+      />
       <Stack.Screen
         name='EditProfile'
         options={{ headerTitle: 'Chỉnh sửa trang cá nhân' }}
@@ -108,6 +118,11 @@ function AppNavigation() {
             </Text>
           )
         }}
+      />
+      <Stack.Screen
+        name='FriendTab'
+        component={FriendTab}
+        options={{ header: () => <HeaderWithSearch title='Bạn bè' titleIsCenter={true} /> }}
       />
     </Stack.Navigator>
   );

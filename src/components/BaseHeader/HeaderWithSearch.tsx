@@ -6,9 +6,10 @@ import { color } from 'src/common/constants/color';
 
 interface HeaderWithSearchProps {
   title: string;
+  titleIsCenter: boolean;
 }
 
-const HeaderWithSearch: React.FC<HeaderWithSearchProps> = ({ title }) => {
+const HeaderWithSearch: React.FC<HeaderWithSearchProps> = ({ title, titleIsCenter }) => {
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -28,27 +29,44 @@ const HeaderWithSearch: React.FC<HeaderWithSearchProps> = ({ title }) => {
         padding: 10,
         paddingBottom: 15,
         borderBottomColor: color.borderBottom,
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        paddingHorizontal: 20
       }}
     >
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: 10,
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-        <TouchableOpacity onPress={handleBackPress}>
-          <Icon name='arrow-left' size={22} color='black' />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontWeight: '500', marginLeft: 25, color: color.textColor }}>
-          {title}
-        </Text>
-      </View>
-      <TouchableOpacity onPress={handleSearchPress}>
-        <Icon name='search' size={24} color='black' />
-      </TouchableOpacity>
+      {titleIsCenter === true ? (
+        <>
+          <TouchableOpacity onPress={handleBackPress}>
+            <Icon name='arrow-left' size={22} color='black' />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 20, fontWeight: '500', color: color.textColor }}>{title}</Text>
+          <TouchableOpacity onPress={handleSearchPress} style={{ paddingLeft: 0 }}>
+            <Icon name='search' size={24} color='black' />
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingHorizontal: 10,
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}
+          >
+            <TouchableOpacity onPress={handleBackPress}>
+              <Icon name='arrow-left' size={22} color='black' />
+            </TouchableOpacity>
+            <Text
+              style={{ fontSize: 20, fontWeight: '500', marginLeft: 25, color: color.textColor }}
+            >
+              {title}
+            </Text>
+          </View>
+          <TouchableOpacity onPress={handleSearchPress}>
+            <Icon name='search' size={24} color='black' />
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };

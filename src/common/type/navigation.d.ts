@@ -40,7 +40,7 @@ type SettingNavigationType = {
 };
 
 type FriendNavigationType = {
-  FriendScreen: undefined;
+  FriendTab: undefined;
   SuggestionsScreen: undefined;
   AllFriendScreen: undefined;
 };
