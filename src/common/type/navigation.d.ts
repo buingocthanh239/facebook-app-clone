@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 type AppNavigationType = {
   AuthNavigation: undefined;
+  TabNavigation: undefined;
 };
 
 type AuthNavigationType = {
