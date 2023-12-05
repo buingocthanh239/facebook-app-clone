@@ -5,6 +5,7 @@ import {
   type IGetListResponse
 } from 'src/interfaces/common.interface';
 import { trimData } from 'src/utils/helper';
+import axiosInstance from './axiosInstance';
 
 interface IServiceOption {
   baseUrl: string;
@@ -73,3 +74,10 @@ export class ApiService {
     return this.client.delete<R, R>(this.deleteUrl + '/' + id);
   }
 }
+
+export const postMethodApi = async function <P, T>(
+  client: string,
+  data?: P
+): Promise<IBodyResponse<T>> {
+  return await axiosInstance.post(client, data);
+};

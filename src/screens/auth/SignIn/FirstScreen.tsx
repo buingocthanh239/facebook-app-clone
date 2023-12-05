@@ -22,6 +22,7 @@ function FirstScreen() {
         borderColor={color.outlineColor}
         textColor={color.textColor}
         isUseTextOutlineColor
+        onPress={() => navigation.navigate('Login' as never)}
       >
         Tôi có tài khoản rồi
       </BaseButton>

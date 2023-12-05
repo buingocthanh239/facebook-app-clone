@@ -19,7 +19,7 @@ type AuthNavigationType = {
     email: string;
     password: string;
   };
-  VerifyOTPScreen: undefined;
+  VerifyOTPScreen: { verifyCode: string; email: string };
   SaveInfoAccountScreen: undefined;
 };
 
