@@ -3,6 +3,26 @@ import { Gender } from 'src/common/enum/commom';
 export interface ILoginData {
   email: string;
   password: string;
+  uuid?: string;
+}
+
+export interface ISignUpData {
+  email: string;
+  password: string;
+  name: string;
+  dob: Date;
+  phone: string;
+  gender: Gender;
+  uuid?: string;
+}
+
+export interface ICheckVerifyCodeBody {
+  code_verify: string;
+  email: string;
+}
+
+export interface ICheckVerifyCode {
+  verify_code: string;
 }
 
 export interface INameScreenForm {

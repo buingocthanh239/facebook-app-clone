@@ -7,6 +7,7 @@ import axios, {
 } from 'axios';
 import { API_BASE } from '@env';
 import dayjs from 'src/utils/dayjs';
+import { getTokenFromKeychain } from 'src/utils/kechain';
 
 const options: AxiosRequestConfig = {
   headers: {
@@ -19,13 +20,14 @@ const options: AxiosRequestConfig = {
 const axiosInstance = axios.create(options);
 
 axiosInstance.interceptors.request.use(async (config: any) => {
+  const token = await getTokenFromKeychain();
   Object.assign(config, {
     headers: {
       ...config.headers,
       'X-Timezone': dayjs().format('Z'),
       'X-Timezone-Name': dayjs.tz.guess(),
-      'Content-Type': 'application/json'
-      //Authorization: `Bearer ${keycloakService?.getToken() || ''}`
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token ?? ''}`
     }
   });
   return config;

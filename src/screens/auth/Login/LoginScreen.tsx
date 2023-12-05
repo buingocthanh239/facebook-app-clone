@@ -1,8 +1,10 @@
 import { View } from 'react-native';
-import { FieldValue, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { getUniqueId } from 'react-native-device-info';
+import BaseModalError from 'src/components/BaseModalError';
 
 import BaseButton from 'src/components/BaseButton';
 import BaseInputPassword from 'src/components/BaseInputPassword';
@@ -14,12 +16,26 @@ import BaseForm from 'src/components/BaseForm';
 import styles from './styles';
 import { ILoginData } from 'src/interfaces/auth.interface';
 import { loginFormSchema } from 'src/validation/login.validate';
+import { deleteErrorMessage, login, selectAuth } from 'src/redux/slices/authSlice';
+import { useAppSelector, useAppDispatch } from 'src/redux';
+
 function LoginScreen() {
   const navigation = useNavigation();
   const methods = useForm({ resolver: yupResolver(loginFormSchema) });
-  const { handleSubmit } = methods;
-  const onSubmit = (data: FieldValue<ILoginData>) => {
-    console.log(data);
+
+  const auth = useAppSelector(selectAuth);
+  const dispatch = useAppDispatch();
+
+  const { handleSubmit, setValue } = methods;
+
+  const onSubmit = async (data: ILoginData) => {
+    const uuid = await getUniqueId();
+    dispatch(login({ ...data, uuid }));
+  };
+
+  const onBackdropPress = () => {
+    dispatch(deleteErrorMessage());
+    setValue('password', '');
   };
   return (
     <WraperAuthScreen spaceBetween linnerGradient>
@@ -36,13 +52,12 @@ function LoginScreen() {
             rules={{ required: 'email is required' }}
           />
           <BaseInputPassword label='Mật khẩu' mode='outlined' name='password' />
-          <BaseButton width={350} onPress={handleSubmit(onSubmit)}>
+          <BaseButton width={350} onPress={handleSubmit(onSubmit)} loading={auth.isLoading}>
             Đăng nhập
           </BaseButton>
           <BaseTextTitle>Bạn quên mật khẩu ư?</BaseTextTitle>
         </View>
       </BaseForm>
-
       <View style={styles.bottom}>
         <BaseButton
           width={350}
@@ -53,6 +68,11 @@ function LoginScreen() {
         </BaseButton>
         <BaseMetaLogo />
       </View>
+      <BaseModalError
+        isVisible={!!auth.error}
+        onBackdropPress={onBackdropPress}
+        title={auth.error as string}
+      />
     </WraperAuthScreen>
   );
 }

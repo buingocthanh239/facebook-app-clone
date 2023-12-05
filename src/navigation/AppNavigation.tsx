@@ -24,6 +24,8 @@ import { HeaderWithSearch } from 'src/components/BaseHeader';
 import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 import EditProfile from 'src/screens/profile/EditProfile';
 import { FriendTab } from 'src/screens/tab-bar';
+import { useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
 // import Counter from 'src/screens/Counter';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
 const Stack = createNativeStackNavigator();
@@ -39,6 +41,7 @@ const TabNavigationWrapper = () => (
 // );
 
 function AppNavigation() {
+  const auth = useAppSelector(selectAuth);
   return (
     <Stack.Navigator
     // screenOptions={{
@@ -46,97 +49,100 @@ function AppNavigation() {
     // }}
     // initialRouteName='AuthNavigation'
     >
-      {/* <Stack.Screen name='Couter' component={Counter} /> */}
-      {/* <Stack.Screen
-        name='AuthNavigation'
-        options={{ headerShown: false }}
-        component={AuthNavigation}
-      /> */}
-      <Stack.Screen
-        name='TabNavigation'
-        options={{ header: () => <Header /> }}
-        component={TabNavigationWrapper}
-      />
-      <Stack.Screen name='SettingScreen' component={SettingScreen} />
-      <Stack.Screen name='BlockFriendScreen' component={BlockFriendScreen} />
-      <Stack.Screen name='SettingInfo' component={SettingInfo} />
-      <Stack.Screen name='SettingInfoName' component={SettingInfoName} />
-      <Stack.Screen name='SettingNotification' component={SettingNotification} />
-      <Stack.Screen name='SettingPassword' component={SettingPassword} />
-      <Stack.Screen name='SettingPushNotification' component={SettingPushNotification} />
-      <Stack.Screen
-        name='SuggestionsScreen'
-        component={SuggestionsScreen}
-        options={{
-          headerShown: true,
-          header: () => <HeaderWithSearch title='Gợi ý' titleIsCenter={false} />
-        }}
-      />
-      <Stack.Screen
-        name='AllFriendScreen'
-        component={AllFriendScreen}
-        options={{
-          headerShown: true,
-          header: () => <HeaderWithSearch title='Bạn bè' titleIsCenter={false} />
-        }}
-      />
-      <Stack.Screen
-        name='AuthNavigation'
-        options={{ headerShown: false }}
-        component={AuthNavigation}
-      />
-      <Stack.Screen name='SettingSecurityLogin' component={SettingSecurityLogin} />
-      <Stack.Screen
-        name='Profile'
-        options={{ header: () => <HeaderWithSearch title='Ngô Hải Văn' titleIsCenter={true} /> }}
-        component={ProfileScreen}
-      />
-      <Stack.Screen
-        name='EditProfile'
-        options={{ headerTitle: 'Chỉnh sửa trang cá nhân' }}
-        component={EditProfile}
-      />
-      <Stack.Screen
-        name='CreatePostScreen'
-        component={CreatePostScreen}
-        options={{
-          headerTitle: () => (
-            <Text style={{ fontSize: 18, marginLeft: -15, fontWeight: '500' }}>Tạo bài viết</Text>
-          ),
-          headerRight: () => (
-            <Button
-              onPress={() => {
-                alert('Đăng bài viết!');
-              }}
-              labelStyle={{ color: 'white' }}
-              style={{ borderRadius: 4, backgroundColor: color.primary }}
-            >
-              Đăng
-            </Button>
-          )
-        }}
-      />
-      <Stack.Screen
-        name='EnAScreen'
-        component={EnAScreen}
-        options={{
-          headerTitle: () => (
-            <Text style={{ fontSize: 18, marginLeft: -15, fontWeight: '500' }}>
-              Bạn đang cảm thấy thế nào?
-            </Text>
-          )
-        }}
-      />
-      <Stack.Screen
-        name='FriendTab'
-        component={FriendTab}
-        options={{ header: () => <HeaderWithSearch title='Bạn bè' titleIsCenter={true} /> }}
-      />
-      <Stack.Screen
-        name='NotFoundScreen'
-        component={NotFoundScreen}
-        options={{ headerTitle: 'Không tìm thấy nội dung' }}
-      />
+      {auth.isAuthenticated ? (
+        <>
+          <Stack.Screen
+            name='TabNavigation'
+            options={{ header: () => <Header /> }}
+            component={TabNavigationWrapper}
+          />
+          <Stack.Screen name='SettingScreen' component={SettingScreen} />
+          <Stack.Screen name='BlockFriendScreen' component={BlockFriendScreen} />
+          <Stack.Screen name='SettingInfo' component={SettingInfo} />
+          <Stack.Screen name='SettingInfoName' component={SettingInfoName} />
+          <Stack.Screen name='SettingNotification' component={SettingNotification} />
+          <Stack.Screen name='SettingPassword' component={SettingPassword} />
+          <Stack.Screen name='SettingPushNotification' component={SettingPushNotification} />
+          <Stack.Screen
+            name='SuggestionsScreen'
+            component={SuggestionsScreen}
+            options={{
+              headerShown: true,
+              header: () => <HeaderWithSearch title='Gợi ý' titleIsCenter={false} />
+            }}
+          />
+          <Stack.Screen
+            name='AllFriendScreen'
+            component={AllFriendScreen}
+            options={{
+              headerShown: true,
+              header: () => <HeaderWithSearch title='Bạn bè' titleIsCenter={false} />
+            }}
+          />
+          <Stack.Screen name='SettingSecurityLogin' component={SettingSecurityLogin} />
+          <Stack.Screen
+            name='Profile'
+            options={{
+              header: () => <HeaderWithSearch title='Ngô Hải Văn' titleIsCenter={true} />
+            }}
+            component={ProfileScreen}
+          />
+          <Stack.Screen
+            name='EditProfile'
+            options={{ headerTitle: 'Chỉnh sửa trang cá nhân' }}
+            component={EditProfile}
+          />
+          <Stack.Screen
+            name='CreatePostScreen'
+            component={CreatePostScreen}
+            options={{
+              headerTitle: () => (
+                <Text style={{ fontSize: 18, marginLeft: -15, fontWeight: '500' }}>
+                  Tạo bài viết
+                </Text>
+              ),
+              headerRight: () => (
+                <Button
+                  onPress={() => {
+                    alert('Đăng bài viết!');
+                  }}
+                  labelStyle={{ color: 'white' }}
+                  style={{ borderRadius: 4, backgroundColor: color.primary }}
+                >
+                  Đăng
+                </Button>
+              )
+            }}
+          />
+          <Stack.Screen
+            name='EnAScreen'
+            component={EnAScreen}
+            options={{
+              headerTitle: () => (
+                <Text style={{ fontSize: 18, marginLeft: -15, fontWeight: '500' }}>
+                  Bạn đang cảm thấy thế nào?
+                </Text>
+              )
+            }}
+          />
+          <Stack.Screen
+            name='FriendTab'
+            component={FriendTab}
+            options={{ header: () => <HeaderWithSearch title='Bạn bè' titleIsCenter={true} /> }}
+          />
+          <Stack.Screen
+            name='NotFoundScreen'
+            component={NotFoundScreen}
+            options={{ headerTitle: 'Không tìm thấy nội dung' }}
+          />
+        </>
+      ) : (
+        <Stack.Screen
+          name='AuthNavigation'
+          options={{ headerShown: false }}
+          component={AuthNavigation}
+        />
+      )}
     </Stack.Navigator>
   );
 }

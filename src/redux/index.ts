@@ -11,12 +11,12 @@ import {
   REGISTER
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import rootReducer from './reducers/index';
+import rootReducer from './slices/index';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['counter']
+  whitelist: ['auth']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
