@@ -19,17 +19,19 @@ import Modal from 'react-native-modal';
 import { MediaType, PhotoQuality, launchImageLibrary } from 'react-native-image-picker';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 
-// interface CreatePostScreenProps {
-//   avatar: string,
-//   username: string,
+const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
+  const selectedItem = route?.params?.selectedItem;
 
-// }
-
-const CreatePostScreen = () => {
   const navigation: NavigationProp<CreatePostNavigationType> = useNavigation();
   const avatar = 'https://placekitten.com/200/200';
   const username = 'Ngô Hải Văn';
-  const options = [
+  interface IOption {
+    icon: string;
+    title: string;
+    color: string;
+    textColor?: string;
+  }
+  const options: IOption[] = [
     {
       icon: 'insert-photo',
       title: 'Ảnh/video',
@@ -52,7 +54,7 @@ const CreatePostScreen = () => {
     setModalVisible(false);
   };
 
-  const optionsModal = [
+  const optionsModal: IOption[] = [
     {
       icon: 'flag',
       title: `Lưu làm bản nháp`,
@@ -135,9 +137,26 @@ const CreatePostScreen = () => {
             <Image source={{ uri: avatar }} style={styles.avatar} />
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.username}>{username}</Text>
+            <View style={{ flexDirection: 'row', marginRight: 80, marginBottom: 5 }}>
+              <Text style={styles.username}>
+                {username}{' '}
+                {selectedItem ? (
+                  !selectedItem?.label.startsWith('Đang') ? (
+                    <Text style={styles.username}>
+                      - Đang {selectedItem.emoji} cảm thấy {selectedItem.label.toLowerCase()}
+                    </Text>
+                  ) : (
+                    <Text style={styles.username}>
+                      - Đang {selectedItem.emoji} {selectedItem.label.slice(5)}
+                    </Text>
+                  )
+                ) : (
+                  <Text></Text>
+                )}
+              </Text>
+            </View>
             <View style={styles.wrapMode}>
-              <Icon name='earth-asia' size={16} color={color.primary}></Icon>
+              <Icon name='earth-asia' size={16} color={color.primary} style={{ padding: 5 }}></Icon>
               <Text style={styles.userMode}>Công khai</Text>
             </View>
           </View>
@@ -235,12 +254,13 @@ const styles = StyleSheet.create({
     marginBottom: 60
   },
   wrapMode: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    width: 100,
     backgroundColor: color.opacity,
     borderRadius: 5,
-    padding: 3
+    padding: 0
   },
   header: {
     flexDirection: 'row',
@@ -263,7 +283,8 @@ const styles = StyleSheet.create({
   },
   userMode: {
     color: color.primary,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    alignContent: 'center'
   },
   input: {
     paddingHorizontal: 16,

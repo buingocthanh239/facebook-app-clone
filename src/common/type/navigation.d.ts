@@ -46,6 +46,8 @@ type FriendNavigationType = {
   AllFriendScreen: undefined;
 };
 type CreatePostNavigationType = {
-  CreatePostScreen: undefined;
+  CreatePostScreen: { selectedItem: CardData } | undefined;
   EnAScreen: undefined;
 };
+
+type CreatePostScreenProps = NativeStackScreenProps<CreatePostNavigationType, 'CreatePostScreen'>;

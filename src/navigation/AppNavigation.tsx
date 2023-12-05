@@ -53,11 +53,6 @@ function AppNavigation() {
         component={AuthNavigation}
       /> */}
       <Stack.Screen
-        name='NotFoundScreen'
-        component={NotFoundScreen}
-        options={{ headerTitle: 'Không tìm thấy nội dung' }}
-      />
-      <Stack.Screen
         name='TabNavigation'
         options={{ header: () => <Header /> }}
         component={TabNavigationWrapper}
@@ -136,6 +131,11 @@ function AppNavigation() {
         name='FriendTab'
         component={FriendTab}
         options={{ header: () => <HeaderWithSearch title='Bạn bè' titleIsCenter={true} /> }}
+      />
+      <Stack.Screen
+        name='NotFoundScreen'
+        component={NotFoundScreen}
+        options={{ headerTitle: 'Không tìm thấy nội dung' }}
       />
     </Stack.Navigator>
   );
