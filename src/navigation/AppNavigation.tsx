@@ -25,6 +25,7 @@ import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 import EditProfile from 'src/screens/profile/EditProfile';
 import { FriendTab } from 'src/screens/tab-bar';
 // import Counter from 'src/screens/Counter';
+import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (
   <WraperScreen paddingBottom={0} paddingHorizontal={0}>
@@ -130,6 +131,11 @@ function AppNavigation() {
         name='FriendTab'
         component={FriendTab}
         options={{ header: () => <HeaderWithSearch title='Bạn bè' titleIsCenter={true} /> }}
+      />
+      <Stack.Screen
+        name='NotFoundScreen'
+        component={NotFoundScreen}
+        options={{ headerTitle: 'Không tìm thấy nội dung' }}
       />
     </Stack.Navigator>
   );
