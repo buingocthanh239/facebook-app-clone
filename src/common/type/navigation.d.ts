@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 type AppNavigationType = {
   AuthNavigation: undefined;
+  TabNavigation: undefined;
 };
 
 type AuthNavigationType = {
@@ -45,6 +46,8 @@ type FriendNavigationType = {
   AllFriendScreen: undefined;
 };
 type CreatePostNavigationType = {
-  CreatePostScreen: undefined;
+  CreatePostScreen: { selectedItem: CardData } | undefined;
   EnAScreen: undefined;
 };
+
+type CreatePostScreenProps = NativeStackScreenProps<CreatePostNavigationType, 'CreatePostScreen'>;

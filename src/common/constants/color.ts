@@ -15,5 +15,7 @@ export const color = {
   backgroundColor: '#f2f2f2',
   isNotLookBg: '#e7f3ff',
   opacity: '#EBF5FF',
-  borderBottom: '#ddd'
+  borderBottom: '#ddd',
+  errorText: '#5D1E07',
+  errorBackground: '#FFECE8'
 };
