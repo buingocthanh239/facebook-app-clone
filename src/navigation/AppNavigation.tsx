@@ -24,6 +24,8 @@ import { HeaderWithSearch } from 'src/components/BaseHeader';
 import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 import EditProfile from 'src/screens/profile/EditProfile';
 import { FriendTab } from 'src/screens/tab-bar';
+import AuthNavigation from './AuthNavigation';
+import SearchTab from 'src/screens/tab-bar/SearchTab';
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (
   <WraperScreen paddingBottom={0} paddingHorizontal={0}>
@@ -48,6 +50,13 @@ function AppNavigation() {
         name='TabNavigation'
         options={{ header: () => <Header /> }}
         component={TabNavigationWrapper}
+      />
+      <Stack.Screen
+        name='SearchTab'
+        options={{
+          headerShown: false
+        }}
+        component={SearchTab}
       />
       <Stack.Screen name='SettingScreen' component={SettingScreen} />
       <Stack.Screen name='BlockFriendScreen' component={BlockFriendScreen} />

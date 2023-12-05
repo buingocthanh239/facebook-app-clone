@@ -3,8 +3,7 @@ import { IconButton, Searchbar } from 'react-native-paper';
 import { useState } from 'react';
 import styles from './styles';
 import ListSearchResult from './compoment/ListSearchResult';
-
-import CommentTab from '../Comment/CommentTab';
+import CommentTab from '../Comment/CommentModal';
 
 function SearchTab() {
   // const [modalCoverVisible, setModalCoverVisible] = useState(false);
@@ -36,27 +35,18 @@ function SearchTab() {
         />
         <TouchableOpacity style={styles.searchheader} activeOpacity={0.8}>
           <Searchbar
-            // placeholder="Tìm kiếm"
+            placeholder='Tìm kiếm'
             onChangeText={onChangeSearch}
             value={searchQuery}
             style={styles.searchInput}
-            clearIcon='cancel'
             icon={undefined}
           />
         </TouchableOpacity>
-        <IconButton
-          icon='keyboard-backspace'
-          mode='contained'
-          iconColor='#4b4c4f'
-          containerColor='#fff'
-          size={26}
-          // onPress={showModalCover}
-        />
       </View>
 
       <View style={styles.section}>
         <TouchableOpacity
-          activeOpacity={0.8}
+          activeOpacity={0.7}
           style={styles.nearlyall}
           // onPress={navigateEditProfileScreen}
         >

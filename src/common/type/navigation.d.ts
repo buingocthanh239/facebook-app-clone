@@ -48,3 +48,6 @@ type CreatePostNavigationType = {
   CreatePostScreen: undefined;
   EnAScreen: undefined;
 };
+type SearchNavigationType = {
+  SearchTab: undefined;
+};

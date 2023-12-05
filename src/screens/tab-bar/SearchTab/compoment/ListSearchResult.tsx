@@ -59,8 +59,8 @@ const ListSearchResult = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.allFriendBtn} activeOpacity={0.7}>
-        {ListSearchResult.map(item => (
+      {ListSearchResult.map(item => (
+        <TouchableOpacity key={item.id} style={styles.allFriendBtn} activeOpacity={0.7}>
           <View key={item.id} style={styles.ListSearchResult}>
             <View style={styles.ListSearchResultText}>
               <Image
@@ -74,7 +74,7 @@ const ListSearchResult = () => {
               <Text style={styles.username}>{item.username}</Text>
             </View>
             <IconButton
-              icon='keyboard-backspace'
+              icon='close'
               mode='contained'
               iconColor='#4b4c4f'
               containerColor='#fff'
@@ -82,8 +82,8 @@ const ListSearchResult = () => {
               // onPress={showModalCover}
             />
           </View>
-        ))}
-      </TouchableOpacity>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };

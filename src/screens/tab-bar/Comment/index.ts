@@ -1,1 +1,1 @@
-export { default } from './CommentTab';
+export { default } from './CommentModal';

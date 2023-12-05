@@ -11,11 +11,8 @@ const styles = StyleSheet.create({
   searchInput: {
     height: 34,
     zIndex: 0,
-    width: 240,
-    // paddingLeft: 12,
-    // paddingRight:12,
-    border: 'none',
-    borderRadius: 50
+    width: 285,
+    border: 'none'
 
     // marginLeft:0,
   },

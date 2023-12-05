@@ -2,7 +2,10 @@ import { Appbar, IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconFont from 'react-native-vector-icons/FontAwesome6';
+import { NavigationProp, useNavigation } from '@react-navigation/core';
 function Header() {
+  const navigation: NavigationProp<SearchNavigationType> = useNavigation();
+  const navigaSearchTab = () => navigation.navigate('SearchTab');
   return (
     <Appbar.Header>
       <Appbar.Content
@@ -22,6 +25,7 @@ function Header() {
         icon={() => <Icon name='search' color={color.iconButtonColor} size={20} />}
         containerColor={color.iconButtonBackgroundColor}
         size={25}
+        onPress={navigaSearchTab}
       />
       <IconButton
         mode='contained'
