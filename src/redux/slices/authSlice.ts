@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ILoginData } from 'src/interfaces/auth.interface';
 import { IBodyResponse, IErrorData, IUser } from 'src/interfaces/common.interface';
-import { ILoginResponseData, loginApi } from 'src/services/auth.services';
+import { ILoginResponseData, loginApi, logoutApi } from 'src/services/auth.services';
 import { RootState } from '..';
 import { saveTokenIntoKeychain } from 'src/utils/kechain';
+import { resetGenericPassword } from 'react-native-keychain';
 
 interface IAuthState {
   isLoading: boolean;
@@ -36,6 +37,15 @@ export const login = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk('auth/logout', async () => {
+  try {
+    await logoutApi();
+    await resetGenericPassword();
+  } catch (err) {
+    return;
+  }
+});
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -56,11 +66,35 @@ const authSlice = createSlice({
     build.addCase(login.pending, state => {
       state.isLoading = true;
     });
+
+    //logout
+    build.addCase(logout.fulfilled, state => {
+      state.isLoading = false;
+      state.isAuthenticated = false;
+      state.user = null;
+    });
+
+    build.addCase(logout.rejected, state => {
+      state.isLoading = false;
+      state.isAuthenticated = false;
+      state.user = null;
+    });
+
+    build.addCase(logout.pending, state => {
+      state.isLoading = true;
+    });
   },
   reducers: {
-    deleteErrorMessage: state => ({ ...state, error: null })
+    deleteErrorMessage: state => ({ ...state, error: null }),
+    reset: state => ({
+      ...state,
+      isAuthenticated: false,
+      user: null,
+      error: null,
+      isLoading: false
+    })
   }
 });
 export const selectAuth = (state: RootState) => state.auth;
-export const { deleteErrorMessage } = authSlice.actions;
+export const { deleteErrorMessage, reset } = authSlice.actions;
 export default authSlice.reducer;

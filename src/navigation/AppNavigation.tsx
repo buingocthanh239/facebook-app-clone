@@ -24,10 +24,12 @@ import { HeaderWithSearch } from 'src/components/BaseHeader';
 import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 import EditProfile from 'src/screens/profile/EditProfile';
 import { FriendTab } from 'src/screens/tab-bar';
-import { useAppSelector } from 'src/redux';
-import { selectAuth } from 'src/redux/slices/authSlice';
-// import Counter from 'src/screens/Counter';
+import { useAppDispatch, useAppSelector } from 'src/redux';
+import { reset, selectAuth } from 'src/redux/slices/authSlice';
+import { useEffect } from 'react';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
+import { getTokenFromKeychain } from 'src/utils/kechain';
+
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (
   <WraperScreen paddingBottom={0} paddingHorizontal={0}>
@@ -42,13 +44,21 @@ const TabNavigationWrapper = () => (
 
 function AppNavigation() {
   const auth = useAppSelector(selectAuth);
+  const dispatch = useAppDispatch();
+
+  const getToken = async () => {
+    const token = await getTokenFromKeychain();
+    if (!token) {
+      dispatch(reset());
+    }
+    return token;
+  };
+  useEffect(() => {
+    getToken();
+  }, [getToken]);
+
   return (
-    <Stack.Navigator
-    // screenOptions={{
-    //   headerShown: false
-    // }}
-    // initialRouteName='AuthNavigation'
-    >
+    <Stack.Navigator>
       {auth.isAuthenticated ? (
         <>
           <Stack.Screen
