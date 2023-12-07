@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import GridImage from '../GridImages/GridImage';
 import { IVideo } from 'src/interfaces/common.interface';
 import BaseVideo from '../BaseVideo';
+import ReportModal from './ReportModal';
 const MAX_LENGTH_CONTENT = 500;
 
 // define props
@@ -50,6 +51,16 @@ function Post(props: PostProps) {
     setIsShowFullContent(true);
     setDisplayContent(content as string);
   };
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const showModal = () => {
+    setModalVisible(true);
+  };
+  const hideModal = () => {
+    setModalVisible(false);
+  };
+
   const isInteract: boolean = !!props.numberComments || !!props.numberLikes || !!props.numberShares;
   const AvatarSource = props.ownerAvatar
     ? { url: props.ownerAvatar }
@@ -85,7 +96,7 @@ function Post(props: PostProps) {
         left={props => <Avatar.Image {...props} source={AvatarSource} />}
         right={props => (
           <View style={globalStyles.flexRow}>
-            <IconButton {...props} icon='dots-horizontal' onPress={() => {}} />
+            <IconButton {...props} icon='dots-horizontal' onPress={showModal} />
             <IconButton {...props} icon='close-thick' onPress={() => {}} />
           </View>
         )}
@@ -168,6 +179,7 @@ function Post(props: PostProps) {
           </>
         </TouchableHighlight>
       </View>
+      <ReportModal isVisible={modalVisible} onBackdropPress={hideModal} />
     </View>
   );
 }
