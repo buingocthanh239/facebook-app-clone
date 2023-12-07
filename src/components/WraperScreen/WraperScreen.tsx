@@ -47,7 +47,8 @@ function WrapperScreen(props: WrapperScreenProps): JSX.Element {
         paddingLeft: insets.left + (props.paddingHorizontal ?? 0),
         paddingRight: insets.right + (props.paddingHorizontal ?? 0),
         flex: 1,
-        justifyContent: props.spaceBetween ? 'space-between' : 'flex-start'
+        justifyContent: props.spaceBetween ? 'space-between' : 'flex-start',
+        gap: 10
       }}
     >
       {props.children}
