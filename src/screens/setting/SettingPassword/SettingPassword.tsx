@@ -1,5 +1,5 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { FieldValue, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { TouchableOpacity, View } from 'react-native';
 import { color } from 'src/common/constants/color';
 import BaseButton from 'src/components/BaseButton';
@@ -8,11 +8,25 @@ import BaseInputPassword from 'src/components/BaseInputPassword';
 import { Text } from 'react-native-paper';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
+import BaseModalError from 'src/components/BaseModalError';
+import { changPasswordApi } from 'src/services/auth.services';
+import { useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
+import { saveTokenIntoKeychain } from 'src/utils/kechain';
+
+const SUCCESS_MESSAGE: string = 'Thành công';
 
 const changPasswordSchema = yup.object({
-  currPassword: yup.string().min(6).required(),
-  newPassword: yup.string().min(6).required(),
-  confirmNewPassword: yup.string().min(6).required()
+  currPassword: yup
+    .string()
+    .min(6, 'Mật khẩu ít nhất 6 kí tự')
+    .required('Vui lòng nhập mật khẩu hiện tại'),
+  newPassword: yup.string().min(6, 'Mật khẩu ít nhất 6 kí tự').required('Vui lòng nhập mật khẩu'),
+  confirmNewPassword: yup
+    .string()
+    .oneOf([yup.ref('newPassword')], 'Mật khẩu không khớp')
+    .required('Vui lòng xác nhận lại mật khẩu')
 });
 
 interface IChangePassword {
@@ -22,12 +36,42 @@ interface IChangePassword {
 }
 
 function SettingPassword() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [alertText, setAlertText] = useState<string>('');
+
   const navigation: NavigationProp<SettingNavigationType> = useNavigation();
+  const auth = useAppSelector(selectAuth);
+
   const onPressCancelButton = () => navigation.goBack();
   const methods = useForm({ resolver: yupResolver(changPasswordSchema) });
   const { handleSubmit } = methods;
-  const onSubmit = (data: FieldValue<IChangePassword>) => {
-    console.log(data);
+  const onSubmit = async (data: IChangePassword) => {
+    try {
+      setIsLoading(true);
+      const res = await changPasswordApi({
+        password: data.currPassword,
+        new_password: data.newPassword
+      });
+      if (!res.success) {
+        setAlertText(res.message);
+        return;
+      }
+      await saveTokenIntoKeychain(auth.user?.id as string, res.data.token);
+      setAlertText(SUCCESS_MESSAGE);
+    } catch (err) {
+      console.log(err);
+      setAlertText('Vui lòng kiểm tra kết nối internet');
+    }
+  };
+
+  const onBackdropPressModal = () => {
+    if (alertText === SUCCESS_MESSAGE) {
+      setAlertText('');
+      setIsLoading(false);
+      return navigation.goBack();
+    }
+    setAlertText('');
+    setIsLoading(false);
   };
   return (
     <>
@@ -63,6 +107,7 @@ function SettingPassword() {
             style={{ marginTop: 20 }}
             onPress={handleSubmit(onSubmit)}
             borderRadius={8}
+            loading={isLoading}
           >
             Lưu thay đổi
           </BaseButton>
@@ -85,6 +130,11 @@ function SettingPassword() {
           </TouchableOpacity>
         </View>
       </BaseForm>
+      <BaseModalError
+        title={alertText}
+        isVisible={!!alertText}
+        onBackdropPress={onBackdropPressModal}
+      />
     </>
   );
 }

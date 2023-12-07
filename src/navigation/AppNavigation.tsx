@@ -26,7 +26,7 @@ import EditProfile from 'src/screens/profile/EditProfile';
 import { FriendTab } from 'src/screens/tab-bar';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
-// import Counter from 'src/screens/Counter';
+// import { useEffect } from 'react';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
 import SearchTab from 'src/screens/tab-bar/SearchTab';
 import AuthNavigation from './AuthNavigation';
@@ -44,13 +44,21 @@ const TabNavigationWrapper = () => (
 
 function AppNavigation() {
   const auth = useAppSelector(selectAuth);
+  // const dispatch = useAppDispatch();
+
+  // useEffect(() => {
+  //   const getToken = async () => {
+  //     const token = await getTokenFromKeychain();
+  //     if (!token) {
+  //       dispatch(reset());
+  //     }
+  //     return token;
+  //   };
+  //   getToken();
+  // }, []);
+
   return (
-    <Stack.Navigator
-    // screenOptions={{
-    //   headerShown: false
-    // }}
-    // initialRouteName='AuthNavigation'
-    >
+    <Stack.Navigator>
       {auth.isAuthenticated ? (
         <>
           <Stack.Screen
