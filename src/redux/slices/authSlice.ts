@@ -30,7 +30,7 @@ export const login = createAsyncThunk(
       }
       const { token, ...remainData } = res.data;
       await saveTokenIntoKeychain(remainData.id, token);
-      return remainData;
+      return { ...remainData, email: data.email };
     } catch (err) {
       return rejectWithValue({ message: 'sever availability' });
     }

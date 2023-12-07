@@ -18,5 +18,5 @@ export const passwordFormSchema = yup.object({
 });
 
 export const otpFormSchema = yup.object({
-  otpCode: yup.string().required()
+  otpCode: yup.string().min(6, 'Vui lòng nhập đủ mã OTP').required('Vui lòng nhập mã OTP')
 });
