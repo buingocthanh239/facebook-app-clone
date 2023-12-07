@@ -4,6 +4,7 @@ export const color = {
   white: '#FFFFFF',
   green: '#45BD62',
   yellow: '#F7B928',
+  black: '#000',
   borderColor: '#CDD2D8',
   textColor: '#1c2b32',
   outlineColor: '#ced2db',
@@ -17,5 +18,10 @@ export const color = {
   opacity: '#EBF5FF',
   borderBottom: '#ddd',
   errorText: '#5D1E07',
-  errorBackground: '#FFECE8'
+  errorBackground: '#FFECE8',
+  likeIcon: '#02ADFC',
+  heartIcon: '#FF74AE',
+  textLike: '#65676b',
+  laughtIcon: '#FFF298',
+  Comment: 'rgba(240,242,245,1.0)'
 };

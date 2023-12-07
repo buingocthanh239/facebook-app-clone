@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AuthNavigation from './AuthNavigation';
+// import AuthNavigation from './AuthNavigation';
 import TabNavigation from './TabNavigation';
 import Header from 'src/screens/tab-bar/components/Header';
 import WraperScreen from 'src/components/WraperScreen';
@@ -29,6 +29,8 @@ import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 // import { useEffect } from 'react';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
+import SearchScreen from 'src/screens/search/SearchScreen';
+import AuthNavigation from './AuthNavigation';
 //import { AccountStatus } from 'src/common/enum/commom';
 // import { getTokenFromKeychain } from 'src/utils/kechain';
 
@@ -82,6 +84,7 @@ function AppNavigation() {
             <Stack.Screen name='SettingNotification' component={SettingNotification} />
             <Stack.Screen name='SettingPassword' component={SettingPassword} />
             <Stack.Screen name='SettingPushNotification' component={SettingPushNotification} />
+            <Stack.Screen name='SearchScreen' component={SearchScreen} />
             <Stack.Screen
               name='SuggestionsScreen'
               component={SuggestionsScreen}

@@ -57,3 +57,6 @@ type CreatePostNavigationType = {
 };
 
 type CreatePostScreenProps = NativeStackScreenProps<CreatePostNavigationType, 'CreatePostScreen'>;
+type SearchNavigationType = {
+  SearchScreen: undefined;
+};

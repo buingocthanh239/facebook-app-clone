@@ -3,4 +3,5 @@
         "source.fixAll.tslint": true,
         "source.fixAll.eslint": true
       },
+      "java.compile.nullAnalysis.mode": "automatic",
 }
