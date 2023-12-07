@@ -28,7 +28,7 @@ import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 // import { useEffect } from 'react';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
-import SearchTab from 'src/screens/tab-bar/SearchTab';
+import SearchTab from 'src/screens/search/SearchScreen';
 import AuthNavigation from './AuthNavigation';
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (

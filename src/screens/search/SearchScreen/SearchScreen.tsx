@@ -3,9 +3,9 @@ import { IconButton, Searchbar } from 'react-native-paper';
 import { useState } from 'react';
 import styles from './styles';
 import ListSearchResult from './compoment/ListSearchResult';
-import CommentTab from '../Comment/CommentModal';
+import CommentTab from '../../../components/Post/components/Comment/CommentModal';
 
-function SearchTab() {
+function SearchScreen() {
   // const [modalCoverVisible, setModalCoverVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [openModal, setOpenModal] = useState(false);
@@ -71,4 +71,4 @@ function SearchTab() {
   );
 }
 
-export default SearchTab;
+export default SearchScreen;

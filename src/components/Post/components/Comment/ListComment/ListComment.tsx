@@ -1,6 +1,6 @@
 import BaseFlatList from 'src/components/BaseFlatList';
-import HeaderItemComment from './compoment/HeaderItemComment';
-import CommentItem from './compoment/ItemComment/CommentItem';
+import HeaderItemComment from './components/HeaderItemComment';
+import CommentItem from './components/ItemComment/CommentItem';
 
 export interface IListComments {
   listComments: {

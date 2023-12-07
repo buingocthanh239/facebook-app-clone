@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SearchTab from 'src/screens/tab-bar/SearchTab';
+import SearchTab from 'src/screens/search/SearchScreen';
 
 const Stack = createNativeStackNavigator();
 function SearchNavigation() {
