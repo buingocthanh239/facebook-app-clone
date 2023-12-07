@@ -52,15 +52,15 @@ const authSlice = createSlice({
   extraReducers: build => {
     build.addCase(login.rejected, (state, action) => {
       const payload = action.payload as IBodyResponse<ILoginResponseData>;
-      state.isLoading = false;
       state.isAuthenticated = false;
       state.error = payload?.message;
+      state.isLoading = false;
     });
 
     build.addCase(login.fulfilled, (state, action) => {
-      state.isLoading = false;
       state.isAuthenticated = true;
       state.user = action.payload as IUser;
+      state.isLoading = false;
     });
 
     build.addCase(login.pending, state => {

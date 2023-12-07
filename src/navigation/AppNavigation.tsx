@@ -24,11 +24,11 @@ import { HeaderWithSearch } from 'src/components/BaseHeader';
 import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 import EditProfile from 'src/screens/profile/EditProfile';
 import { FriendTab } from 'src/screens/tab-bar';
-import { useAppDispatch, useAppSelector } from 'src/redux';
-import { reset, selectAuth } from 'src/redux/slices/authSlice';
-import { useEffect } from 'react';
+import { useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
+// import { useEffect } from 'react';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
-import { getTokenFromKeychain } from 'src/utils/kechain';
+// import { getTokenFromKeychain } from 'src/utils/kechain';
 
 const Stack = createNativeStackNavigator();
 const TabNavigationWrapper = () => (
@@ -44,18 +44,18 @@ const TabNavigationWrapper = () => (
 
 function AppNavigation() {
   const auth = useAppSelector(selectAuth);
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
-  const getToken = async () => {
-    const token = await getTokenFromKeychain();
-    if (!token) {
-      dispatch(reset());
-    }
-    return token;
-  };
-  useEffect(() => {
-    getToken();
-  }, [getToken]);
+  // useEffect(() => {
+  //   const getToken = async () => {
+  //     const token = await getTokenFromKeychain();
+  //     if (!token) {
+  //       dispatch(reset());
+  //     }
+  //     return token;
+  //   };
+  //   getToken();
+  // }, []);
 
   return (
     <Stack.Navigator>

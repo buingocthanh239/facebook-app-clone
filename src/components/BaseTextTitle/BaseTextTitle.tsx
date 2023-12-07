@@ -4,13 +4,14 @@ interface TitleProps {
   fontSize?: number;
   color?: string;
 }
-export type BaseTextTitleProps = TextProps & TitleProps;
+export type BaseTextTitleProps = TextProps & TitleProps & { onPress?: () => any };
 const defaultProps: BaseTextTitleProps = {
   fontSize: 14
 };
 function BaseTextTitle(props: BaseTextTitleProps) {
+  const { onPress } = props;
   return (
-    <TouchableOpacity style={props.style} activeOpacity={0.6}>
+    <TouchableOpacity style={props.style} activeOpacity={0.6} onPress={onPress ?? (() => {})}>
       <Title onPress={props.onPress} fontSize={props.fontSize} color={props.color}>
         {props.children}
       </Title>

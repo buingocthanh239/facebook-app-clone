@@ -38,7 +38,7 @@ function VerifyOTPScreen() {
       navigation.navigate('SaveInfoAccountScreen');
       setIsLoading(false);
     } catch (err) {
-      setTextError('server availability');
+      setTextError('Dịch vụ chưa sẵn sàng');
     }
   };
 

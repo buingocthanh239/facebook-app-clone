@@ -37,6 +37,8 @@ function LoginScreen() {
     dispatch(deleteErrorMessage());
     setValue('password', '');
   };
+
+  const onNavigateForgotPasswordScreen = () => navigation.navigate('ForgotPasswordScreen' as never);
   return (
     <WraperAuthScreen spaceBetween linnerGradient>
       <View style={styles.logo}>
@@ -55,7 +57,9 @@ function LoginScreen() {
           <BaseButton width={350} onPress={handleSubmit(onSubmit)} loading={auth.isLoading}>
             Đăng nhập
           </BaseButton>
-          <BaseTextTitle>Bạn quên mật khẩu ư?</BaseTextTitle>
+          <BaseTextTitle onPress={onNavigateForgotPasswordScreen}>
+            Bạn quên mật khẩu ư?
+          </BaseTextTitle>
         </View>
       </BaseForm>
       <View style={styles.bottom}>
