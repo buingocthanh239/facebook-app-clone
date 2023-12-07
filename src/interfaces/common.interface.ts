@@ -30,6 +30,17 @@ export interface IUser {
   avatar: string;
   active: string;
   coin: string;
+  email: string;
+  description: string;
+  cover_image: string;
+  link: string;
+  address: string;
+  city: string;
+  country: string;
+  listing: string;
+  is_friend: string;
+  online: string;
+  created: Date;
 }
 
 export interface ICommonGetListQuery {

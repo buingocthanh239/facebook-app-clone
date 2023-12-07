@@ -25,6 +25,11 @@ type AuthNavigationType = {
   ForgetPasswordScreen: undefined;
 };
 
+type PendingSignupType = {
+  VerifyOTPAfterLogin: undefined;
+  ChangeProfileAfterSign: undefined;
+};
+
 type PropfileNavigationType = {
   Profile: undefined;
   EditProfile: undefined;
@@ -53,5 +58,5 @@ type CreatePostNavigationType = {
 
 type CreatePostScreenProps = NativeStackScreenProps<CreatePostNavigationType, 'CreatePostScreen'>;
 type SearchNavigationType = {
-  SearchTab: undefined;
+  SearchScreen: undefined;
 };

@@ -5,7 +5,7 @@ import IconFont from 'react-native-vector-icons/FontAwesome6';
 import { NavigationProp, useNavigation } from '@react-navigation/core';
 function Header() {
   const navigation: NavigationProp<SearchNavigationType> = useNavigation();
-  const navigaSearchTab = () => navigation.navigate('SearchTab');
+  const navigaSearchTab = () => navigation.navigate('SearchScreen');
   return (
     <Appbar.Header>
       <Appbar.Content

@@ -1,22 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { color } from 'src/common/constants/color';
 const styles = StyleSheet.create({
-  searchheader: {
-    height: 34,
-    zIndex: 1
-    // marginTop: 0,
-
-    // width: 360,
-  },
-  searchInput: {
-    height: 34,
-    zIndex: 0,
-    width: 285,
-    border: 'none'
-
-    // marginLeft:0,
-  },
-
   container: {
     flex: 1,
     backgroundColor: 'white'
@@ -51,9 +35,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderTopWidth: 1,
-    borderTopColor: '#ddd'
+    justifyContent: 'space-between'
   },
   nearlyall: {
     marginTop: 10
