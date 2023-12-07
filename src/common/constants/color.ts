@@ -17,6 +17,8 @@ export const color = {
   isNotLookBg: '#e7f3ff',
   opacity: '#EBF5FF',
   borderBottom: '#ddd',
+  errorText: '#5D1E07',
+  errorBackground: '#FFECE8',
   likeIcon: '#02ADFC',
   heartIcon: '#FF74AE',
   textLike: '#65676b',

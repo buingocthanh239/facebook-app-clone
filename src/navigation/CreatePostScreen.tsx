@@ -7,7 +7,10 @@ const Stack = createNativeStackNavigator();
 const CreatePostNavigation = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='CreatePostScreen' component={CreatePostScreen} />
+      <Stack.Screen
+        name='CreatePostScreen'
+        component={CreatePostScreen as React.ComponentType<CreatePostScreenProps>}
+      />
     </Stack.Navigator>
   );
 };

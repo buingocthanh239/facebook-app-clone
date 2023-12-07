@@ -1,14 +1,19 @@
 import { type AxiosResponse } from 'axios';
 import { HttpStatus, OrderDirection } from 'src/common/constants';
+import { ReponseCode } from 'src/common/enum/reponseCode';
+
+export interface IErrorData {
+  message: string;
+  error: string;
+  statuCode: HttpStatus;
+}
 
 export interface IBodyResponse<T> extends AxiosResponse {
   success: boolean;
-  isRequestError?: boolean;
-  code: HttpStatus;
+  code: ReponseCode;
   message: string;
   data: T;
-  errors?: { key: string; message: string; errorCode: HttpStatus }[];
-  statusCode: HttpStatus;
+  error?: IErrorData | IErrorData[] | string;
 }
 
 export interface ICommonListQuery {
@@ -20,19 +25,11 @@ export interface ICommonListQuery {
 }
 
 export interface IUser {
-  email: string;
-}
-
-export interface ILoginResponse {
-  accessToken: {
-    token: string;
-    expiresIn: number;
-  };
-  refreshToken: {
-    token: string;
-    expiresIn: number;
-  };
-  profile: IUser;
+  id: string;
+  username: string;
+  avatar: string;
+  active: string;
+  coin: string;
 }
 
 export interface ICommonGetListQuery {

@@ -6,9 +6,9 @@ import { NavigationProp, useNavigation } from '@react-navigation/core';
 
 function NewPostCreate() {
   const navigation: NavigationProp<PropfileNavigationType, 'Profile'> = useNavigation();
-  const navigation2: NavigationProp<CreatePostNavigationType> = useNavigation();
+  const navigation2: NavigationProp<CreatePostNavigationType, 'CreatePostScreen'> = useNavigation();
   const navigaProfileScreen = () => navigation.navigate('Profile');
-  const handleNavigateCreatePost = () => navigation2.navigate('CreatePostScreen');
+  const handleNavigateCreatePost = () => navigation2.navigate('CreatePostScreen', {});
   return (
     <View style={styles.wrapperCreatePost}>
       <TouchableOpacity activeOpacity={0.8} onPress={navigaProfileScreen}>
