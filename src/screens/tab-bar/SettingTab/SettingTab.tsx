@@ -8,6 +8,9 @@ import globalStyles from 'src/common/styles/globalStyles';
 import TextTitle from './components/TextTitle';
 import ListItemCard from './components/ListItemCard';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useAppDispatch, useAppSelector } from 'src/redux';
+import { logout, selectAuth } from 'src/redux/slices/authSlice';
+import BaseModalLoading from 'src/components/BaseModalLoading/BaseModalLoading';
 
 interface ISettingAcordion {
   title: string;
@@ -16,10 +19,15 @@ interface ISettingAcordion {
 }
 function SettingTab() {
   const navigation: NavigationProp<SettingNavigationType> = useNavigation();
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector(selectAuth);
   const onPressSettingItem = () => navigation.navigate('SettingScreen');
   const onPressPrivacyItem = () => navigation.navigate('BlockFriendScreen');
   const onPressNotificationItem = () => navigation.navigate('SettingNotification');
   const onPressExit = () => BackHandler.exitApp();
+  const onPressLogout = () => {
+    dispatch(logout());
+  };
   const settingAccordion: ISettingAcordion[] = [
     {
       title: 'Cài đặt',
@@ -117,13 +125,14 @@ function SettingTab() {
           />
         </TouchableOpacity>
         <Divider />
-        <TouchableOpacity activeOpacity={0.6}>
+        <TouchableOpacity activeOpacity={0.6} onPress={onPressLogout}>
           <List.Item
             title={<TextTitle>Đăng xuất</TextTitle>}
             left={props => <List.Icon {...props} icon='logout' color={color.textColor} />}
           />
         </TouchableOpacity>
       </List.Section>
+      <BaseModalLoading isVisible={auth.isLoading} />
     </ScrollView>
   );
 }

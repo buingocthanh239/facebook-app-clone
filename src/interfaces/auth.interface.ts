@@ -21,6 +21,17 @@ export interface ICheckVerifyCodeBody {
   email: string;
 }
 
+export interface IChangePasswordBody {
+  password: string;
+  new_password: string;
+}
+
+export interface IResetPasswordBody {
+  email: string;
+  password: string;
+  code: string;
+}
+
 export interface ICheckVerifyCode {
   verify_code: string;
 }

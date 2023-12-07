@@ -7,7 +7,7 @@ import axios, {
 } from 'axios';
 import { API_BASE } from '@env';
 import dayjs from 'src/utils/dayjs';
-import { getTokenFromKeychain } from 'src/utils/kechain';
+import { getTokenFromKeychain, deleteTokenFromKeychain } from 'src/utils/kechain';
 
 const options: AxiosRequestConfig = {
   headers: {
@@ -63,6 +63,10 @@ axiosInstance.interceptors.response.use(
           ...((error?.response?.data as object) || {}),
           success: false
         };
+
+        if (error.response.data.code == '9998') {
+          await deleteTokenFromKeychain();
+        }
       }
 
       return error.response.data as IBodyResponse<unknown>;

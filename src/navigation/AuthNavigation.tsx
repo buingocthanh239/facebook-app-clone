@@ -13,6 +13,7 @@ import {
   BirthDayScreen
 } from 'src/screens/auth/SignIn';
 import { BaseHeader } from 'src/components/BaseHeader';
+import ForgetPassword from 'src/screens/auth/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
 function AuthNavigation() {
@@ -36,6 +37,7 @@ function AuthNavigation() {
         <Stack.Screen name='VerifyOTPScreen' component={VerifyOTPScreen} />
         <Stack.Screen name='SaveInfoAccountScreen' component={SaveInfoAccountScreen} />
       </Stack.Group>
+      <Stack.Screen name='ForgotPasswordScreen' component={ForgetPassword} />
     </Stack.Navigator>
   );
 }
