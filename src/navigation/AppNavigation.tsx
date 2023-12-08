@@ -32,7 +32,7 @@ import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
 import SearchScreen from 'src/screens/search/SearchScreen';
 import AuthNavigation from './AuthNavigation';
 //import { AccountStatus } from 'src/common/enum/commom';
-import ChangeInfoAfterSignUpScreen from 'src/screens/profile/ChangeInfoAfterSignUp/ChangeInfoAfterSignUp';
+import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp';
 // import { getTokenFromKeychain } from 'src/utils/kechain';
 
 const Stack = createNativeStackNavigator();
@@ -70,14 +70,15 @@ function AppNavigation() {
             name='VerifyOTPAfterSignup'
             component={VerifyOTPAfterLogin}
             options={{ headerShown: false }}
-            />
+          />
+        ) : auth.user?.active === '-1' ? (
+          <Stack.Screen
+            name='ChangeInfoAfterSignup'
+            options={{ headerShown: false }}
+            component={ChangeInfoAfterSignUpScreen}
+          />
         ) : (
           <>
-            <Stack.Screen
-              name='ChangeInfoAfterSignup'
-              options={{ headerShown: false }}
-              component={ChangeInfoAfterSignUpScreen}
-            />
             <Stack.Screen
               name='TabNavigation'
               options={{ header: () => <Header /> }}
