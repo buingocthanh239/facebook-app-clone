@@ -2,12 +2,40 @@ import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-nati
 import RequestFriendCard from '../components/FriendCard/RequestFriendCard';
 import { color } from 'src/common/constants/color';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import { IGetRequestedFriends, IRequestedFriends } from 'src/interfaces/friends.interface';
+import { getRequestedFriendsApi } from 'src/services/friends.services';
 
 function Friends() {
   const navigation: NavigationProp<FriendNavigationType> = useNavigation();
   const handleSuggestPress = () => navigation.navigate('SuggestionsScreen');
   const handleFriendPress = () => navigation.navigate('AllFriendScreen');
-  const totalRequestFriend = 251;
+
+  const [totalRequestFriend, setTotalRequestFriend] = useState(0);
+  const [listRequestFriend, setListRequestFriend] = useState<IRequestedFriends[]>([]);
+
+  useEffect(() => {
+    const data: IGetRequestedFriends = {
+      index: '0',
+      count: '5'
+    };
+    const fetchData = async (data: IGetRequestedFriends) => {
+      try {
+        console.log('data:');
+        console.log(data);
+        const result = await getRequestedFriendsApi(data);
+        console.log(result);
+        setTotalRequestFriend(result.data.total);
+        setListRequestFriend(result.data.requests);
+        console.log(result.data.requests);
+        return result;
+      } catch (error) {
+        return console.log({ message: 'sever availability' });
+      }
+    };
+
+    fetchData(data).catch(console.error);
+  }, []);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -60,30 +88,18 @@ function Friends() {
           {totalRequestFriend}
         </Text>
       </View>
-      <RequestFriendCard
-        username='Ngô Hải Văn'
-        avatarSource='https://placekitten.com/200/200'
-      ></RequestFriendCard>
-      <RequestFriendCard
-        username='Nguyễn Văn A'
-        avatarSource='https://placekitten.com/300/200'
-      ></RequestFriendCard>
-      <RequestFriendCard
-        username='Nguyễn Văn B'
-        avatarSource='https://placekitten.com/400/200'
-      ></RequestFriendCard>
-      <RequestFriendCard
-        username='Nguyễn Văn C'
-        avatarSource='https://placekitten.com/500/200'
-      ></RequestFriendCard>
-      <RequestFriendCard
-        username='Nguyễn Văn C'
-        avatarSource='https://placekitten.com/500/200'
-      ></RequestFriendCard>
-      <RequestFriendCard
-        username='Nguyễn Văn C'
-        avatarSource='https://placekitten.com/500/200'
-      ></RequestFriendCard>
+      <View>
+        {listRequestFriend.map((item, index) => (
+          <RequestFriendCard
+            key={index}
+            id={item.id}
+            username={item.username}
+            avatarSource={item.avatar}
+            same_friends={item.same_friends}
+            created={item.created}
+          />
+        ))}
+      </View>
     </ScrollView>
   );
 }
