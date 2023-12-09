@@ -1,19 +1,22 @@
-import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { color } from 'src/common/constants/color';
 import { UserFriendCard } from '../../components/FriendCard';
 import Modal from 'react-native-modal';
 import { useEffect, useState } from 'react';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
 import { IGetUserFriends, IUserFriends } from 'src/interfaces/friends.interface';
-import { getUserFriends } from 'src/services/friends.services';
+import { getUserFriendsApi } from 'src/services/friends.services';
 import { useSelector } from 'react-redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
+import BaseFlatList from 'src/components/BaseFlatList';
 
 function AllFriendScreen() {
   const [totalFriend, setTotalFriend] = useState(0);
   const formattedNumberTotalFriend = totalFriend.toLocaleString();
 
   const [listFriends, setListFriends] = useState<IUserFriends[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   const [modalVisible, setModalVisible] = useState(false);
   const createdFriendAt = (created: string) => {
     const createdDate = new Date(created);
@@ -26,18 +29,23 @@ function AllFriendScreen() {
   const userSelector = useSelector(selectAuth);
   const user_id = userSelector.user?.id;
 
+  const onRefresh = () => {
+    setRefreshing(true);
+  };
+
   useEffect(() => {
     const data: IGetUserFriends = {
       index: '0',
-      count: '5',
+      count: '100',
       user_id: !user_id ? '' : user_id
     };
     const fetchData = async (data: IGetUserFriends) => {
       try {
-        const result = await getUserFriends(data);
+        const result = await getUserFriendsApi(data);
         console.log(result);
         setTotalFriend(result.data.total);
         setListFriends(result.data.friends);
+        setRefreshing(false);
         return result;
       } catch (error) {
         return console.log({ message: 'sever availability' });
@@ -45,7 +53,7 @@ function AllFriendScreen() {
     };
 
     fetchData(data).catch(console.error);
-  }, []);
+  }, [refreshing]);
 
   const showModal = () => {
     setModalVisible(true);
@@ -69,13 +77,10 @@ function AllFriendScreen() {
       title: `Bạn bè lâu năm nhất trước tiên`
     }
   ];
+  const ITEM_HEIGHT = 20;
 
   return (
-    <ScrollView
-      style={styles.container}
-      keyboardShouldPersistTaps='handled'
-      contentContainerStyle={{ flexGrow: 1 }}
-    >
+    <View style={styles.container}>
       <View style={styles.lineText}>
         <Text style={{ fontWeight: '800', fontSize: 20, color: color.textColor }}>
           {formattedNumberTotalFriend} bạn bè
@@ -89,22 +94,28 @@ function AllFriendScreen() {
           <Text style={{ fontSize: 17, color: color.primary }}>Sắp xếp</Text>
         </TouchableOpacity>
       </View>
-      {listFriends.map((friend, index) => {
-        return (
-          <TouchableOpacity
-            key={index}
-            onPress={() => console.log(`Go to ${friend.username} page.`)}
-          >
+      <BaseFlatList
+        data={listFriends}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => console.log(`Go to ${item.username} page.`)}>
             <UserFriendCard
-              id={friend.id}
-              created={createdFriendAt(friend.created)}
-              avatarSource={friend.avatar}
-              username={friend.username}
-              same_friends={friend.same_friends}
+              id={item.id}
+              created={createdFriendAt(item.created)}
+              avatarSource={item.avatar}
+              username={item.username}
+              same_friends={item.same_friends}
             ></UserFriendCard>
           </TouchableOpacity>
-        );
-      })}
+        )}
+        keyExtractor={item => item.id}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
+        getItemLayout={(data, index) => ({
+          length: ITEM_HEIGHT,
+          offset: ITEM_HEIGHT * index,
+          index
+        })}
+      />
       <Modal
         isVisible={modalVisible}
         animationIn='slideInUp'
@@ -123,11 +134,12 @@ function AllFriendScreen() {
           ))}
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: color.white
   },
   header: {

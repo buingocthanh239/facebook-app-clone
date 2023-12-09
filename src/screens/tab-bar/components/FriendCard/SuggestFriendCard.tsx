@@ -3,14 +3,24 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { color } from 'src/common/constants/color';
 
 interface SuggestFriendCardProps {
+  id: string;
   username: string;
   avatarSource: string;
+  same_friends: string;
+  created: string;
 }
 
-const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({ username, avatarSource }) => {
+const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
+  id,
+  username,
+  avatarSource,
+  same_friends,
+  created
+}) => {
   const [status, setStatus] = useState('');
   const onPressAddFriend = () => {
     setStatus('AddFriend');
+    console.log(`&id=${id} &created=${created}`);
   };
   const onPressDelete = () => {
     setStatus('Delete');
@@ -24,10 +34,18 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({ username, avatarS
       {status === '' ? (
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
-            <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            {avatarSource && avatarSource !== '' ? (
+              <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            ) : (
+              <Image
+                source={require('../../../../assets/avatar-default.png')}
+                style={styles.avatar}
+              />
+            )}
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.username}>{username}</Text>
+            {parseInt(same_friends) < 1 ? <></> : <Text>{`${same_friends} bạn chung`}</Text>}
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.acceptButton} onPress={onPressAddFriend}>
                 <Text style={[styles.buttonText, { color: 'white' }]}>Thêm bạn bè</Text>
@@ -41,7 +59,14 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({ username, avatarS
       ) : status === 'AddFriend' ? (
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
-            <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            {avatarSource && avatarSource !== '' ? (
+              <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            ) : (
+              <Image
+                source={require('../../../../assets/avatar-default.png')}
+                style={styles.avatar}
+              />
+            )}
           </View>
           <View style={styles.infoContainer}>
             <View>
@@ -56,7 +81,14 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({ username, avatarS
       ) : status === 'Cancle' ? (
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
-            <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            {avatarSource && avatarSource !== '' ? (
+              <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            ) : (
+              <Image
+                source={require('../../../../assets/avatar-default.png')}
+                style={styles.avatar}
+              />
+            )}
           </View>
           <View style={styles.infoContainer}>
             <View>

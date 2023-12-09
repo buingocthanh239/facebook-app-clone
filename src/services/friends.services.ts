@@ -9,9 +9,18 @@ export const getRequestedFriendsApi = async (
   return postMethodApi(FriendApi.GET_REQUESTED_FRIENDS, data);
 };
 
-export const getUserFriends = async (data: IGetRequestedFriends): Promise<IBodyResponse<any>> => {
+export const getUserFriendsApi = async (
+  data: IGetRequestedFriends
+): Promise<IBodyResponse<any>> => {
   return postMethodApi(FriendApi.GET_USER_FRIENDS, data);
 };
+
+export const getSuggestedFriendsApi = async (
+  data: IGetRequestedFriends
+): Promise<IBodyResponse<any>> => {
+  return postMethodApi(FriendApi.GET_SUGGESTED_FRIENDS, data);
+};
+
 export const setAcceptFriendApi = async (data: ISetAcceptFriend): Promise<IBodyResponse<any>> => {
   return postMethodApi(FriendApi.SET_ACCEPT_FRIEND, data);
 };

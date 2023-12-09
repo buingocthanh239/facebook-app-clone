@@ -1,101 +1,79 @@
-import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { color } from 'src/common/constants/color';
 import { SuggestFriendCard } from '../../components/FriendCard';
+import { useEffect, useState } from 'react';
+import { IGetSuggestedFriends, ISuggestedFriends } from 'src/interfaces/friends.interface';
+import { getSuggestedFriendsApi } from 'src/services/friends.services';
+import BaseFlatList from 'src/components/BaseFlatList';
 
 function SuggestionsScreen() {
-  const friends = [
-    {
-      username: 'Ngô Hải Văn',
-      avatarSource: 'https://placekitten.com/300/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải A',
-      avatarSource: 'https://placekitten.com/200/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải B',
-      avatarSource: 'https://placekitten.com/400/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải C',
-      avatarSource: 'https://placekitten.com/500/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải D',
-      avatarSource: 'https://placekitten.com/200/300',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải E',
-      avatarSource: 'https://placekitten.com/200/400',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải F',
-      avatarSource: 'https://placekitten.com/200/500',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải G',
-      avatarSource: 'https://placekitten.com/600/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải H',
-      avatarSource: 'https://placekitten.com/900/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải I',
-      avatarSource: 'https://placekitten.com/1000/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải K',
-      avatarSource: 'https://placekitten.com/200/260',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải L',
-      avatarSource: 'https://placekitten.com/200/210',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải M',
-      avatarSource: 'https://placekitten.com/200/220',
-      mutualFriend: 200
+  const [listSuggestedFriend, setListSuggestedFriend] = useState<ISuggestedFriends[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [index, setIndex] = useState(0);
+  const ITEM_HEIGHT = 10;
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    if (index + 20 > 80) {
+      setIndex(Math.random() * 10);
     }
-  ];
+    setIndex(index => index + Math.random() * 10 + 10);
+  };
+
+  useEffect(() => {
+    const data: IGetSuggestedFriends = {
+      index: index.toString(),
+      count: '20'
+    };
+    const fetchData = async (data: IGetSuggestedFriends) => {
+      try {
+        const result = await getSuggestedFriendsApi(data);
+        console.log(result);
+        setListSuggestedFriend(result.data);
+        setRefreshing(false);
+        return result;
+      } catch (error) {
+        return console.log({ message: 'sever availability' });
+      }
+    };
+
+    fetchData(data).catch(console.error);
+  }, [refreshing]);
   return (
-    <ScrollView
-      style={styles.container}
-      keyboardShouldPersistTaps='handled'
-      contentContainerStyle={{ flexGrow: 1 }}
-    >
-      <View style={styles.lineText}>
-        <Text style={{ fontWeight: '800', fontSize: 20, color: color.textColor }}>
-          Những người bạn có thể biết
-        </Text>
-      </View>
-      {friends.map((friend, index) => {
-        return (
-          <View key={index}>
-            <SuggestFriendCard
-              avatarSource={friend.avatarSource}
-              username={friend.username}
-            ></SuggestFriendCard>
+    <View style={styles.container}>
+      <BaseFlatList
+        ListHeaderComponent={() => (
+          <View style={styles.lineText}>
+            <Text style={{ fontWeight: '800', fontSize: 20, color: color.textColor }}>
+              Những người bạn có thể biết
+            </Text>
           </View>
-        );
-      })}
-    </ScrollView>
+        )}
+        data={listSuggestedFriend}
+        renderItem={({ item }) => (
+          <SuggestFriendCard
+            id={item.id}
+            username={item.username}
+            avatarSource={item.avatar}
+            same_friends={item.same_friends}
+            created={item.created}
+          />
+        )}
+        keyExtractor={item => item.id}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
+        getItemLayout={(data, index) => ({
+          length: ITEM_HEIGHT,
+          offset: ITEM_HEIGHT * index,
+          index
+        })}
+      />
+    </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: 'white'
   },
   lineText: {
