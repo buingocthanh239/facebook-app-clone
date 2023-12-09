@@ -2,14 +2,50 @@ import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-nati
 import { color } from 'src/common/constants/color';
 import { UserFriendCard } from '../../components/FriendCard';
 import Modal from 'react-native-modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
+import { IGetUserFriends, IUserFriends } from 'src/interfaces/friends.interface';
+import { getUserFriends } from 'src/services/friends.services';
+import { useSelector } from 'react-redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
 
 function AllFriendScreen() {
-  const totalFriend = 2151;
+  const [totalFriend, setTotalFriend] = useState(0);
   const formattedNumberTotalFriend = totalFriend.toLocaleString();
 
+  const [listFriends, setListFriends] = useState<IUserFriends[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const createdFriendAt = (created: string) => {
+    const createdDate = new Date(created);
+
+    const month = createdDate.getMonth() + 1;
+    const year = createdDate.getFullYear();
+    return `tháng ${month} năm ${year}`;
+  };
+
+  const userSelector = useSelector(selectAuth);
+  const user_id = userSelector.user?.id;
+
+  useEffect(() => {
+    const data: IGetUserFriends = {
+      index: '0',
+      count: '5',
+      user_id: !user_id ? '' : user_id
+    };
+    const fetchData = async (data: IGetUserFriends) => {
+      try {
+        const result = await getUserFriends(data);
+        console.log(result);
+        setTotalFriend(result.data.total);
+        setListFriends(result.data.friends);
+        return result;
+      } catch (error) {
+        return console.log({ message: 'sever availability' });
+      }
+    };
+
+    fetchData(data).catch(console.error);
+  }, []);
 
   const showModal = () => {
     setModalVisible(true);
@@ -34,73 +70,6 @@ function AllFriendScreen() {
     }
   ];
 
-  const friends = [
-    {
-      username: 'Ngô Hải Văn',
-      avatarSource: 'https://placekitten.com/300/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải A',
-      avatarSource: 'https://placekitten.com/200/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải B',
-      avatarSource: 'https://placekitten.com/400/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải C',
-      avatarSource: 'https://placekitten.com/500/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải D',
-      avatarSource: 'https://placekitten.com/200/300',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải E',
-      avatarSource: 'https://placekitten.com/200/400',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải F',
-      avatarSource: 'https://placekitten.com/200/500',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải G',
-      avatarSource: 'https://placekitten.com/600/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải H',
-      avatarSource: 'https://placekitten.com/900/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải I',
-      avatarSource: 'https://placekitten.com/1000/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải K',
-      avatarSource: 'https://placekitten.com/200/260',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải L',
-      avatarSource: 'https://placekitten.com/200/210',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải M',
-      avatarSource: 'https://placekitten.com/200/220',
-      mutualFriend: 200
-    }
-  ];
   return (
     <ScrollView
       style={styles.container}
@@ -120,16 +89,18 @@ function AllFriendScreen() {
           <Text style={{ fontSize: 17, color: color.primary }}>Sắp xếp</Text>
         </TouchableOpacity>
       </View>
-      {friends.map((friend, index) => {
+      {listFriends.map((friend, index) => {
         return (
           <TouchableOpacity
             key={index}
             onPress={() => console.log(`Go to ${friend.username} page.`)}
           >
             <UserFriendCard
-              avatarSource={friend.avatarSource}
+              id={friend.id}
+              created={createdFriendAt(friend.created)}
+              avatarSource={friend.avatar}
               username={friend.username}
-              mutualFriend={friend.mutualFriend}
+              same_friends={friend.same_friends}
             ></UserFriendCard>
           </TouchableOpacity>
         );

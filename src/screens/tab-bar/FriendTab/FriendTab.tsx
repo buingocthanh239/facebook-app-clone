@@ -21,13 +21,10 @@ function Friends() {
     };
     const fetchData = async (data: IGetRequestedFriends) => {
       try {
-        console.log('data:');
-        console.log(data);
         const result = await getRequestedFriendsApi(data);
         console.log(result);
         setTotalRequestFriend(result.data.total);
         setListRequestFriend(result.data.requests);
-        console.log(result.data.requests);
         return result;
       } catch (error) {
         return console.log({ message: 'sever availability' });

@@ -65,8 +65,6 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
   };
   const onPressAccept = async (data: ISetAcceptFriend) => {
     try {
-      console.log('data:');
-      console.log(data);
       const result = await setAcceptFriendApi(data);
       setStatus('Accept');
       console.log(result);

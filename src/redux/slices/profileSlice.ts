@@ -20,8 +20,6 @@ export const changeInfoAfterSignup = createAsyncThunk(
   'profile/change_info_after_signup',
   async (data: IChangeInfoAfterSignup, { rejectWithValue }) => {
     try {
-      console.log('data:');
-      console.log(data);
       const result = await changeInfoAfterSignupApi(data);
       console.log(result);
       return result;
@@ -42,8 +40,6 @@ const profileSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(changeInfoAfterSignup.fulfilled, (state, action) => {
       const updatedInfo = action.payload.data;
-      // console.log('updatedInfo: ')
-      // console.log(updatedInfo)
       state.info = {
         ...state.info,
         username: updatedInfo.username,

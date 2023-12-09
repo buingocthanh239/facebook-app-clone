@@ -6,15 +6,19 @@ import { color } from 'src/common/constants/color';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
 
 interface UserFriendCardProps {
+  id: string;
   username: string;
   avatarSource: string;
-  mutualFriend: number;
+  same_friends: string;
+  created: string;
 }
 
-const RequestFriendCard: React.FC<UserFriendCardProps> = ({
+const UserFriendCard: React.FC<UserFriendCardProps> = ({
+  id,
   username,
   avatarSource,
-  mutualFriend
+  same_friends,
+  created
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -48,7 +52,11 @@ const RequestFriendCard: React.FC<UserFriendCardProps> = ({
       <View style={styles.infoContainer}>
         <View style={styles.usernameField}>
           <Text style={styles.username}>{username}</Text>
-          <Text style={styles.friendCount}>{mutualFriend} bạn chung</Text>
+          {parseInt(same_friends) < 1 ? (
+            <></>
+          ) : (
+            <Text style={styles.friendCount}>{same_friends} bạn chung</Text>
+          )}
         </View>
         <IconButton
           icon={require('../../../../assets/three-dot.png')}
@@ -68,7 +76,7 @@ const RequestFriendCard: React.FC<UserFriendCardProps> = ({
         <View style={styles.modalContent}>
           <TouchableOpacity
             style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 10 }}
-            onPress={() => console.log('Go to User Friend Page')}
+            onPress={() => console.log('Go to User Friend Page with id: ' + id)}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 10 }}>
               <View style={styles.avatarContainer}>
@@ -79,7 +87,7 @@ const RequestFriendCard: React.FC<UserFriendCardProps> = ({
               </View>
               <View style={{ alignContent: 'center' }}>
                 <Text style={styles.username}>{username}</Text>
-                <Text>Là bạn bè từ tháng 3 năm 2022</Text>
+                <Text>Là bạn bè từ {created}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -121,7 +129,8 @@ const styles = StyleSheet.create({
     marginRight: 16
   },
   usernameField: {
-    justifyContent: 'space-between'
+    alignItems: 'flex-start',
+    justifyContent: 'center'
   },
   avatar: {
     width: 60,
@@ -146,4 +155,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default RequestFriendCard;
+export default UserFriendCard;
