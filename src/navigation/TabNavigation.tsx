@@ -17,7 +17,7 @@ function TabNavigation() {
         tabBarShowIcon: true,
         tabBarShowLabel: false,
         tabBarActiveTintColor: color.primary,
-        tabBarContentContainerStyle: { backgroundColor: color.sureface },
+        tabBarStyle: { backgroundColor: color.sureface },
         tabBarPressColor: color.borderColor
       }}
     >

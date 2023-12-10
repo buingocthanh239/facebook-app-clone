@@ -12,7 +12,7 @@ function Header() {
       screen: SearchNavigationName.SearchScreen
     });
   return (
-    <Appbar.Header>
+    <Appbar.Header style={{ height: 40, marginTop: 8 }}>
       <Appbar.Content
         title='facebook'
         color={color.primary}

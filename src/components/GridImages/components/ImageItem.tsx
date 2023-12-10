@@ -10,7 +10,7 @@ function ImageItem({ onPress, image }: IImageItemProps) {
     <TouchableOpacity style={styles.image_view} onPress={onPress} activeOpacity={0.8}>
       <Image
         style={styles.image}
-        resizeMode='center'
+        resizeMode='cover'
         source={{
           uri: image
         }}

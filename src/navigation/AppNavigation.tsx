@@ -61,7 +61,7 @@ function AppNavigation() {
           <>
             <Stack.Screen
               name={AppNaviagtionName.ChangeProfileAfterSign}
-              options={{ headerShown: true, header: () => <Header /> }}
+              options={{ headerShown: false, header: () => <Header /> }}
               component={TabNavigationWrapper}
             />
             <Stack.Screen
