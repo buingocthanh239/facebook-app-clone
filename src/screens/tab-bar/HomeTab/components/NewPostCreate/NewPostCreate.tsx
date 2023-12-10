@@ -3,12 +3,25 @@ import { Avatar, IconButton, Text } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import styles from './styles';
 import { NavigationProp, useNavigation } from '@react-navigation/core';
+import {
+  AppNaviagtionName,
+  PostNavigationName,
+  ProfileNavigationName
+} from 'src/common/constants/nameScreen';
 
 function NewPostCreate() {
-  const navigation: NavigationProp<PropfileNavigationType, 'Profile'> = useNavigation();
-  const navigation2: NavigationProp<CreatePostNavigationType, 'CreatePostScreen'> = useNavigation();
-  const navigaProfileScreen = () => navigation.navigate('Profile');
-  const handleNavigateCreatePost = () => navigation2.navigate('CreatePostScreen', {});
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+  const navigation2: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
+    useNavigation();
+  const navigaProfileScreen = () =>
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile
+    });
+  const handleNavigateCreatePost = () =>
+    navigation2.navigate(AppNaviagtionName.PostNavigation, {
+      screen: PostNavigationName.CreatePostScreen
+    });
   return (
     <View style={styles.wrapperCreatePost}>
       <TouchableOpacity activeOpacity={0.8} onPress={navigaProfileScreen}>

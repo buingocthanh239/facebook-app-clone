@@ -2,11 +2,19 @@ import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-nati
 import RequestFriendCard from '../components/FriendCard/RequestFriendCard';
 import { color } from 'src/common/constants/color';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, FriendNavigationName } from 'src/common/constants/nameScreen';
 
 function Friends() {
-  const navigation: NavigationProp<FriendNavigationType> = useNavigation();
-  const handleSuggestPress = () => navigation.navigate('SuggestionsScreen');
-  const handleFriendPress = () => navigation.navigate('AllFriendScreen');
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.FriendNavigation> =
+    useNavigation();
+  const handleSuggestPress = () =>
+    navigation.navigate(AppNaviagtionName.FriendNavigation, {
+      screen: FriendNavigationName.SuggestionsScreen
+    });
+  const handleFriendPress = () =>
+    navigation.navigate(AppNaviagtionName.FriendNavigation, {
+      screen: FriendNavigationName.SuggestionsScreen
+    });
   const totalRequestFriend = 251;
   return (
     <ScrollView style={styles.container}>

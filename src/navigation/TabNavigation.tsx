@@ -6,6 +6,7 @@ import FontAwesomeIcon6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { color } from 'src/common/constants/color';
+import WraperScreen from 'src/components/WraperScreen';
 
 const tab = createMaterialTopTabNavigator();
 
@@ -84,4 +85,10 @@ function TabNavigation() {
   );
 }
 
-export default TabNavigation;
+const TabNavigationWrapper = () => (
+  <WraperScreen paddingBottom={0} paddingHorizontal={0}>
+    <TabNavigation />
+  </WraperScreen>
+);
+
+export default TabNavigationWrapper;
