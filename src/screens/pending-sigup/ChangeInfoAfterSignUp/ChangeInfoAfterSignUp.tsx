@@ -74,6 +74,7 @@ const ChangeInfoAfterSignUpScreen: React.FC = () => {
 
       const file = new File([blob], fileName !== undefined ? fileName : '', { type: fileType });
       setAvatarSource(file);
+      console.log(typeof avatarSource, avatarSource);
     });
   };
 
@@ -84,7 +85,7 @@ const ChangeInfoAfterSignUpScreen: React.FC = () => {
 
     const formData = {
       username,
-      avatar: avatarSource
+      avatar: avatarPreview
     };
     dispatch(changeInfoAfterSignup(formData));
   };

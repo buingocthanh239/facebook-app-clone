@@ -1,28 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { changeInfoAfterSignupApi } from 'src/services/profile.services';
-import { IChangeInfoAfterSignup } from 'src/interfaces/profile.interface';
+import { IChangeInfoAfterSignup, IUserInfo } from 'src/interfaces/profile.interface';
+import { IErrorData } from 'src/interfaces/common.interface';
 
 interface IProfileState {
-  username: string;
-  description: string;
-  avatar: File | null;
-  address: string;
-  city: string;
-  country: string;
-  cover_image: File | null;
-  link: string;
+  loading: boolean;
+  error: IErrorData | IErrorData[] | string | null;
+  info: IUserInfo | null;
 }
 
 const initialState: IProfileState = {
-  username: '',
-  description: '',
-  avatar: null,
-  address: '',
-  city: '',
-  country: '',
-  cover_image: null,
-  link: ''
+  loading: false,
+  error: null,
+  info: null
 };
 
 export const changeInfoAfterSignup = createAsyncThunk(
@@ -43,13 +34,17 @@ const profileSlice = createSlice({
   initialState,
   reducers: {
     setLink: (state, action) => {
-      state = { ...state, link: action.payload };
+      state = { ...state, info: action.payload };
     }
   },
   extraReducers: builder => {
     builder.addCase(changeInfoAfterSignup.fulfilled, (state, action) => {
-      const updatedInfo = action.payload;
-      state = { ...state, ...updatedInfo };
+      const updatedInfo = action.payload.data;
+      state.info = {
+        ...state.info,
+        username: updatedInfo.username,
+        avatar: updatedInfo.avatar
+      } as IUserInfo;
     });
   }
 });
