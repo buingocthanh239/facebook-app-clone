@@ -1,5 +1,6 @@
 import { IBodyResponse } from 'src/interfaces/common.interface';
 import {
+  IDeleteRequestFriend,
   IGetRequestedFriends,
   ISetAcceptFriend,
   ISetRequestFriend
@@ -31,4 +32,14 @@ export const setAcceptFriendApi = async (data: ISetAcceptFriend): Promise<IBodyR
 
 export const setRequestFriendApi = async (data: ISetRequestFriend): Promise<IBodyResponse<any>> => {
   return postMethodApi(FriendApi.SET_REQUEST_FRIEND, data);
+};
+
+export const deleteRequestFriendApi = async (
+  data: IDeleteRequestFriend
+): Promise<IBodyResponse<any>> => {
+  return postMethodApi(FriendApi.DEL_REQUEST_FRIEND, data);
+};
+
+export const unfriendApi = async (data: IDeleteRequestFriend): Promise<IBodyResponse<any>> => {
+  return postMethodApi(FriendApi.UNFRIEND, data);
 };

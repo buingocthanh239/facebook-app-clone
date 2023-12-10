@@ -53,7 +53,13 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.username}>{username}</Text>
-            {parseInt(same_friends) < 1 ? <></> : <Text>{`${same_friends} bạn chung`}</Text>}
+            {parseInt(same_friends) < 1 ? (
+              <></>
+            ) : (
+              <Text
+                style={{ marginBottom: 7, marginTop: 2, fontSize: 15 }}
+              >{`${same_friends} bạn chung`}</Text>
+            )}
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.acceptButton}

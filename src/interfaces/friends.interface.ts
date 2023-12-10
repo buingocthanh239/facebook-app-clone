@@ -20,6 +20,14 @@ export interface ISetRequestFriend {
   user_id: string;
 }
 
+export interface IDeleteRequestFriend {
+  user_id: string;
+}
+
+export interface IUnfriend {
+  user_id: string;
+}
+
 export interface IRequestedFriends {
   id: string;
   username: string;
