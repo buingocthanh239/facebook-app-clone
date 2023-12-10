@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { color } from 'src/common/constants/color';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { Appbar } from 'react-native-paper';
+import { AppNaviagtionName, SearchNavigationName } from 'src/common/constants/nameScreen';
 
 interface HeaderWithSearchProps {
   title: string;
@@ -11,63 +10,24 @@ interface HeaderWithSearchProps {
 
 const HeaderWithSearch: React.FC<HeaderWithSearchProps> = ({ title, titleIsCenter }) => {
   const navigation = useNavigation();
-
+  const searchNavigation: NavigationProp<AppNavigationType, AppNaviagtionName.SearchNavigation> =
+    useNavigation();
   const handleBackPress = () => {
     navigation.goBack();
   };
 
   const handleSearchPress = () => {
-    console.log('Search button pressed');
+    searchNavigation.navigate(AppNaviagtionName.SearchNavigation, {
+      screen: SearchNavigationName.SearchScreen
+    });
   };
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 10,
-        paddingBottom: 15,
-        borderBottomColor: color.borderBottom,
-        borderBottomWidth: 1,
-        paddingHorizontal: 20
-      }}
-    >
-      {titleIsCenter === true ? (
-        <>
-          <TouchableOpacity onPress={handleBackPress}>
-            <Icon name='arrow-left' size={22} color='black' />
-          </TouchableOpacity>
-          <Text style={{ fontSize: 20, fontWeight: '500', color: color.textColor }}>{title}</Text>
-          <TouchableOpacity onPress={handleSearchPress} style={{ paddingLeft: 0 }}>
-            <Icon name='search' size={24} color='black' />
-          </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          <View
-            style={{
-              flexDirection: 'row',
-              paddingHorizontal: 10,
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}
-          >
-            <TouchableOpacity onPress={handleBackPress}>
-              <Icon name='arrow-left' size={22} color='black' />
-            </TouchableOpacity>
-            <Text
-              style={{ fontSize: 20, fontWeight: '500', marginLeft: 25, color: color.textColor }}
-            >
-              {title}
-            </Text>
-          </View>
-          <TouchableOpacity onPress={handleSearchPress}>
-            <Icon name='search' size={24} color='black' />
-          </TouchableOpacity>
-        </>
-      )}
-    </View>
+    <Appbar.Header mode={titleIsCenter ? 'center-aligned' : 'small'} style={{ height: 52 }}>
+      <Appbar.BackAction onPress={handleBackPress} size={30} />
+      <Appbar.Content title={title} titleStyle={{ fontSize: 18, fontWeight: '700' }} />
+      <Appbar.Action icon='magnify' onPress={handleSearchPress} size={30} />
+    </Appbar.Header>
   );
 };
 

@@ -1,16 +1,29 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import RequestFriendCard from '../components/FriendCard/RequestFriendCard';
 import { color } from 'src/common/constants/color';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { IGetRequestedFriends, IRequestedFriends } from 'src/interfaces/friends.interface';
 import { getRequestedFriendsApi } from 'src/services/friends.services';
+import { NavigationProp, useNavigation, useScrollToTop } from '@react-navigation/native';
+import { AppNaviagtionName, FriendNavigationName } from 'src/common/constants/nameScreen';
+import { useRef } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
 
 function Friends() {
-  const navigation: NavigationProp<FriendNavigationType> = useNavigation();
-  const handleSuggestPress = () => navigation.navigate('SuggestionsScreen');
-  const handleFriendPress = () => navigation.navigate('AllFriendScreen');
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.FriendNavigation> =
+    useNavigation();
+  const handleSuggestPress = () =>
+    navigation.navigate(AppNaviagtionName.FriendNavigation, {
+      screen: FriendNavigationName.SuggestionsScreen
+    });
+  const handleFriendPress = () =>
+    navigation.navigate(AppNaviagtionName.FriendNavigation, {
+      screen: FriendNavigationName.AllFriendScreen
+    });
+
+  // scroll to top
+  const ref = useRef(null);
+  useScrollToTop(ref);
 
   const [totalRequestFriend, setTotalRequestFriend] = useState(0);
   const [listRequestFriend, setListRequestFriend] = useState<IRequestedFriends[]>([]);
@@ -85,6 +98,7 @@ function Friends() {
         </View>
       </View>
       <BaseFlatList
+        ref={ref}
         ListHeaderComponent={() => (
           <View style={styles.lineText}>
             <Text
@@ -99,7 +113,10 @@ function Friends() {
         )}
         data={listRequestFriend}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => console.log(`Go to ${item.username} page.`)}>
+          <TouchableOpacity
+            onPress={() => console.log(`Go to ${item.username} page.`)}
+            activeOpacity={0.8}
+          >
             <RequestFriendCard
               id={item.id}
               username={item.username}

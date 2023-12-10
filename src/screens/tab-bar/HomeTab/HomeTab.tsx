@@ -1,8 +1,16 @@
 import Post from 'src/components/Post';
 import NewPostCreate from './components/NewPostCreate/NewPostCreate';
 import { IVideo } from 'src/interfaces/common.interface';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
+import { PanResponder } from 'react-native';
+import {
+  NavigationProp,
+  useIsFocused,
+  useNavigation,
+  useScrollToTop
+} from '@react-navigation/native';
+import { AppNaviagtionName } from 'src/common/constants/nameScreen';
 
 export interface IPost {
   id: string;
@@ -83,8 +91,41 @@ function HomeTab() {
     }, 2000);
   };
 
+  const ref = useRef(null);
+  useScrollToTop(ref);
+
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.TabNavigation> =
+    useNavigation();
+
+  const [isShowHeader, setIsShowHeader] = useState(true);
+  const isFocus = useIsFocused();
+  useEffect(() => {
+    if (isShowHeader && isFocus) {
+      navigation?.getParent()?.setOptions({ headerShown: true });
+    } else {
+      navigation?.getParent()?.setOptions({ headerShown: false });
+    }
+  }, [isShowHeader, isFocus, navigation]);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (event, gestureState) => {
+        const { dy } = gestureState;
+        if (dy < 0) {
+          setIsShowHeader(false);
+        } else {
+          setIsShowHeader(true);
+        }
+      }
+    })
+  ).current;
+
   return (
     <BaseFlatList
+      {...panResponder.panHandlers}
+      ref={ref}
       ListHeaderComponent={<NewPostCreate />}
       data={data}
       renderItem={({ item }) => (

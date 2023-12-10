@@ -3,11 +3,16 @@ import { color } from 'src/common/constants/color';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconFont from 'react-native-vector-icons/FontAwesome6';
 import { NavigationProp, useNavigation } from '@react-navigation/core';
+import { AppNaviagtionName, SearchNavigationName } from 'src/common/constants/nameScreen';
 function Header() {
-  const navigation: NavigationProp<SearchNavigationType> = useNavigation();
-  const navigaSearchTab = () => navigation.navigate('SearchScreen');
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.SearchNavigation> =
+    useNavigation();
+  const navigaSearchTab = () =>
+    navigation.navigate(AppNaviagtionName.SearchNavigation, {
+      screen: SearchNavigationName.SearchScreen
+    });
   return (
-    <Appbar.Header>
+    <Appbar.Header style={{ height: 40, marginTop: 8 }}>
       <Appbar.Content
         title='facebook'
         color={color.primary}
