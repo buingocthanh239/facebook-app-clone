@@ -1,7 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import RequestFriendCard from '../components/FriendCard/RequestFriendCard';
 import { color } from 'src/common/constants/color';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { IGetRequestedFriends, IRequestedFriends } from 'src/interfaces/friends.interface';
 import { getRequestedFriendsApi } from 'src/services/friends.services';
@@ -19,7 +18,7 @@ function Friends() {
     });
   const handleFriendPress = () =>
     navigation.navigate(AppNaviagtionName.FriendNavigation, {
-      screen: FriendNavigationName.SuggestionsScreen
+      screen: FriendNavigationName.AllFriendScreen
     });
 
   // scroll to top
@@ -99,6 +98,7 @@ function Friends() {
         </View>
       </View>
       <BaseFlatList
+        ref={ref}
         ListHeaderComponent={() => (
           <View style={styles.lineText}>
             <Text
@@ -113,7 +113,10 @@ function Friends() {
         )}
         data={listRequestFriend}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => console.log(`Go to ${item.username} page.`)}>
+          <TouchableOpacity
+            onPress={() => console.log(`Go to ${item.username} page.`)}
+            activeOpacity={0.8}
+          >
             <RequestFriendCard
               id={item.id}
               username={item.username}
