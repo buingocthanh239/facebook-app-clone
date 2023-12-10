@@ -14,7 +14,7 @@ function SuggestionsScreen() {
 
   const onRefresh = () => {
     setRefreshing(true);
-    if (index + 20 > 80) {
+    if (index + 20 > 100) {
       setIndex(Math.random() * 10);
     }
     setIndex(index => index + Math.random() * 10 + 10);
@@ -39,6 +39,7 @@ function SuggestionsScreen() {
 
     fetchData(data).catch(console.error);
   }, [refreshing]);
+
   return (
     <View style={styles.container}>
       <BaseFlatList

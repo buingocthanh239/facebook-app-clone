@@ -16,6 +16,10 @@ export interface ISetAcceptFriend {
   is_accept: string;
 }
 
+export interface ISetRequestFriend {
+  user_id: string;
+}
+
 export interface IRequestedFriends {
   id: string;
   username: string;

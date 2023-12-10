@@ -84,15 +84,19 @@ function Friends() {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.lineText}>
-        <Text style={{ fontWeight: 'bold', fontSize: 20, marginRight: 5, color: color.textColor }}>
-          Lời mời kết bạn
-        </Text>
-        <Text style={{ fontWeight: 'bold', fontSize: 21, color: color.error }}>
-          {totalRequestFriend}
-        </Text>
-      </View>
       <BaseFlatList
+        ListHeaderComponent={() => (
+          <View style={styles.lineText}>
+            <Text
+              style={{ fontWeight: 'bold', fontSize: 20, marginRight: 5, color: color.textColor }}
+            >
+              Lời mời kết bạn
+            </Text>
+            <Text style={{ fontWeight: 'bold', fontSize: 21, color: color.error }}>
+              {totalRequestFriend}
+            </Text>
+          </View>
+        )}
         data={listRequestFriend}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => console.log(`Go to ${item.username} page.`)}>

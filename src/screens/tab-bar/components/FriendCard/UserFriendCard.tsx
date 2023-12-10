@@ -4,6 +4,8 @@ import { IconButton } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import { color } from 'src/common/constants/color';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
+import { IUnfriend } from 'src/interfaces/friends.interface';
+import { unfriendApi } from 'src/services/friends.services';
 
 interface UserFriendCardProps {
   id: string;
@@ -43,6 +45,15 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
       title: `Hủy kết bạn với ${username}`
     }
   ];
+  const handleUnfriend = async (data: IUnfriend) => {
+    try {
+      const result = await unfriendApi(data);
+      console.log(result);
+      return result;
+    } catch (error) {
+      return console.log({ message: 'sever availability' });
+    }
+  };
 
   return (
     <View style={styles.cardContainer}>
@@ -92,7 +103,14 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
             </View>
           </TouchableOpacity>
           {options.map((option, index) => (
-            <TouchableOpacity key={index} onPress={() => console.log(`Selected: ${option.title}`)}>
+            <TouchableOpacity
+              key={index}
+              onPress={() =>
+                index === 2
+                  ? handleUnfriend({ user_id: id })
+                  : console.log(`Selected: ${option.title}`)
+              }
+            >
               <View style={[styles.option, { height: 19 * 3 }]}>
                 <OptionCard icon={option.icon} title={option.title} />
               </View>

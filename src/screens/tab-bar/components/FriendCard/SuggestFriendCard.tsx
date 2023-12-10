@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { color } from 'src/common/constants/color';
+import { ISetRequestFriend } from 'src/interfaces/friends.interface';
+import { setRequestFriendApi } from 'src/services/friends.services';
 
 interface SuggestFriendCardProps {
   id: string;
@@ -18,12 +20,18 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
   created
 }) => {
   const [status, setStatus] = useState('');
-  const onPressAddFriend = () => {
-    setStatus('AddFriend');
-    console.log(`&id=${id} &created=${created}`);
+  const onPressAddFriend = async (data: ISetRequestFriend) => {
+    try {
+      const result = await setRequestFriendApi(data);
+      setStatus('AddFriend');
+      console.log(result);
+    } catch (error) {
+      return console.log({ message: 'sever availability' });
+    }
   };
   const onPressDelete = () => {
     setStatus('Delete');
+    console.log(`${created}`);
   };
   const onPressCancle = () => {
     setStatus('Cancle');
@@ -47,7 +55,10 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
             <Text style={styles.username}>{username}</Text>
             {parseInt(same_friends) < 1 ? <></> : <Text>{`${same_friends} bạn chung`}</Text>}
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.acceptButton} onPress={onPressAddFriend}>
+              <TouchableOpacity
+                style={styles.acceptButton}
+                onPress={() => onPressAddFriend({ user_id: id })}
+              >
                 <Text style={[styles.buttonText, { color: 'white' }]}>Thêm bạn bè</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.deleteButton} onPress={onPressDelete}>
@@ -96,7 +107,10 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
             </View>
             <Text style={{ marginBottom: 10 }}>Đã hủy yêu cầu</Text>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.acceptButton} onPress={onPressAddFriend}>
+              <TouchableOpacity
+                style={styles.acceptButton}
+                onPress={() => onPressAddFriend({ user_id: id })}
+              >
                 <Text style={[styles.buttonText, { color: 'white' }]}>Thêm bạn bè</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.deleteButton} onPress={onPressDelete}>
