@@ -4,17 +4,23 @@ import { IconButton } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import { color } from 'src/common/constants/color';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
+import { ISetRequestFriend, IUnfriend } from 'src/interfaces/friends.interface';
+import { setRequestFriendApi, unfriendApi } from 'src/services/friends.services';
 
 interface UserFriendCardProps {
+  id: string;
   username: string;
   avatarSource: string;
-  mutualFriend: number;
+  same_friends: string;
+  created: string;
 }
 
-const RequestFriendCard: React.FC<UserFriendCardProps> = ({
+const UserFriendCard: React.FC<UserFriendCardProps> = ({
+  id,
   username,
   avatarSource,
-  mutualFriend
+  same_friends,
+  created
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -40,6 +46,33 @@ const RequestFriendCard: React.FC<UserFriendCardProps> = ({
     }
   ];
 
+  const [status, setStatus] = useState('');
+  const handleUnfriend = async (data: IUnfriend) => {
+    try {
+      const result = await unfriendApi(data);
+      console.log(result);
+      hideModal();
+      setStatus('unfriended');
+      return result;
+    } catch (error) {
+      return console.log({ message: 'sever availability' });
+    }
+  };
+
+  const onPressAddFriend = async (data: ISetRequestFriend) => {
+    try {
+      const result = await setRequestFriendApi(data);
+      setStatus('addFriend');
+      console.log(result);
+    } catch (error) {
+      return console.log({ message: 'sever availability' });
+    }
+  };
+
+  const onPressCancel = () => {
+    setStatus('unfriended');
+  };
+
   return (
     <View style={styles.cardContainer}>
       <View style={styles.avatarContainer}>
@@ -48,14 +81,31 @@ const RequestFriendCard: React.FC<UserFriendCardProps> = ({
       <View style={styles.infoContainer}>
         <View style={styles.usernameField}>
           <Text style={styles.username}>{username}</Text>
-          <Text style={styles.friendCount}>{mutualFriend} bạn chung</Text>
+          {parseInt(same_friends) < 1 ? (
+            <></>
+          ) : (
+            <Text style={styles.friendCount}>{same_friends} bạn chung</Text>
+          )}
         </View>
-        <IconButton
-          icon={require('../../../../assets/three-dot.png')}
-          onPress={() => {
-            showModal();
-          }}
-        ></IconButton>
+        {status === '' ? (
+          <IconButton
+            icon={require('../../../../assets/three-dot.png')}
+            onPress={() => {
+              showModal();
+            }}
+          ></IconButton>
+        ) : status === 'unfriended' ? (
+          <TouchableOpacity
+            style={styles.acceptButton}
+            onPress={() => onPressAddFriend({ user_id: id })}
+          >
+            <Text style={styles.buttonText}>Thêm bạn bè</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.acceptButton} onPress={() => onPressCancel()}>
+            <Text style={styles.buttonText}>Hủy</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <Modal
         isVisible={modalVisible}
@@ -68,7 +118,7 @@ const RequestFriendCard: React.FC<UserFriendCardProps> = ({
         <View style={styles.modalContent}>
           <TouchableOpacity
             style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 10 }}
-            onPress={() => console.log('Go to User Friend Page')}
+            onPress={() => console.log('Go to User Friend Page with id: ' + id)}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 10 }}>
               <View style={styles.avatarContainer}>
@@ -79,12 +129,19 @@ const RequestFriendCard: React.FC<UserFriendCardProps> = ({
               </View>
               <View style={{ alignContent: 'center' }}>
                 <Text style={styles.username}>{username}</Text>
-                <Text>Là bạn bè từ tháng 3 năm 2022</Text>
+                <Text>Là bạn bè từ {created}</Text>
               </View>
             </View>
           </TouchableOpacity>
           {options.map((option, index) => (
-            <TouchableOpacity key={index} onPress={() => console.log(`Selected: ${option.title}`)}>
+            <TouchableOpacity
+              key={index}
+              onPress={() =>
+                index === 2
+                  ? handleUnfriend({ user_id: id })
+                  : console.log(`Selected: ${option.title}`)
+              }
+            >
               <View style={[styles.option, { height: 19 * 3 }]}>
                 <OptionCard icon={option.icon} title={option.title} />
               </View>
@@ -121,7 +178,8 @@ const styles = StyleSheet.create({
     marginRight: 16
   },
   usernameField: {
-    justifyContent: 'space-between'
+    alignItems: 'flex-start',
+    justifyContent: 'center'
   },
   avatar: {
     width: 60,
@@ -143,7 +201,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: color.textColor,
     marginBottom: 10
+  },
+  acceptButton: {
+    backgroundColor: color.borderBottom,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    height: 35,
+    marginTop: 8,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  buttonText: {
+    color: color.textColor,
+    textAlign: 'center',
+    fontWeight: '800'
   }
 });
 
-export default RequestFriendCard;
+export default UserFriendCard;
