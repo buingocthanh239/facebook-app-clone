@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
 import NotificationItem from './components/NotificationItem';
 import { INotification } from 'src/interfaces/notification.interface';
@@ -15,6 +15,7 @@ import {
 import BaseModal from 'src/components/BaseModal';
 import { color } from 'src/common/constants/color';
 import { View } from 'react-native';
+import { useScrollToTop } from '@react-navigation/native';
 function NotificationTab() {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [modalContent, setModalContent] = useState<INotification | null>(null);
@@ -77,9 +78,14 @@ function NotificationTab() {
     }, 2000);
   };
 
+  // scroll to top
+  const ref = useRef(null);
+  useScrollToTop(ref);
+
   return (
     <>
       <BaseFlatList
+        ref={ref}
         ListHeaderComponent={
           <>
             {newData.length !== 0 && (

@@ -1,8 +1,9 @@
 import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-native';
 import RequestFriendCard from '../components/FriendCard/RequestFriendCard';
 import { color } from 'src/common/constants/color';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation, useScrollToTop } from '@react-navigation/native';
 import { AppNaviagtionName, FriendNavigationName } from 'src/common/constants/nameScreen';
+import { useRef } from 'react';
 
 function Friends() {
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.FriendNavigation> =
@@ -11,13 +12,18 @@ function Friends() {
     navigation.navigate(AppNaviagtionName.FriendNavigation, {
       screen: FriendNavigationName.SuggestionsScreen
     });
+
+  // scroll to top
+  const ref = useRef(null);
+  useScrollToTop(ref);
+
   const handleFriendPress = () =>
     navigation.navigate(AppNaviagtionName.FriendNavigation, {
       screen: FriendNavigationName.SuggestionsScreen
     });
   const totalRequestFriend = 251;
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} ref={ref}>
       <View style={styles.header}>
         <Text style={{ fontSize: 24, fontWeight: '700', color: color.textColor }}>Bạn bè</Text>
         <View style={styles.lineText}>

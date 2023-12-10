@@ -1,11 +1,12 @@
+import { ForwardedRef, forwardRef } from 'react';
 import { FlatListProps, FlatList, RefreshControl } from 'react-native';
 import { color } from 'src/common/constants/color';
 export type BaseFlatListProps = FlatListProps<any>;
-function BaseFlatList(props: BaseFlatListProps) {
+function BaseFlatList(props: BaseFlatListProps, ref: ForwardedRef<FlatList>) {
   const { onRefresh, refreshing, ...propsRemain } = props;
-
   return (
     <FlatList
+      ref={ref}
       {...propsRemain}
       refreshControl={
         <RefreshControl
@@ -18,4 +19,4 @@ function BaseFlatList(props: BaseFlatListProps) {
   );
 }
 
-export default BaseFlatList;
+export default forwardRef(BaseFlatList);

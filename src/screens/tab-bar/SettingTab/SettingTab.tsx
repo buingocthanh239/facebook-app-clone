@@ -7,11 +7,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import globalStyles from 'src/common/styles/globalStyles';
 import TextTitle from './components/TextTitle';
 import ListItemCard from './components/ListItemCard';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation, NavigationProp, useScrollToTop } from '@react-navigation/native';
 import { useAppDispatch, useAppSelector } from 'src/redux';
 import { logout, selectAuth } from 'src/redux/slices/authSlice';
 import BaseModalLoading from 'src/components/BaseModalLoading/BaseModalLoading';
 import { AppNaviagtionName, SettingNavigationName } from 'src/common/constants/nameScreen';
+import { useRef } from 'react';
 
 interface ISettingAcordion {
   title: string;
@@ -55,8 +56,13 @@ function SettingTab() {
       onPress: onPressNotificationItem
     }
   ];
+
+  // scroll to top
+  const ref = useRef(null);
+  useScrollToTop(ref);
+
   return (
-    <ScrollView>
+    <ScrollView ref={ref}>
       <View
         style={[
           globalStyles.flexRow,

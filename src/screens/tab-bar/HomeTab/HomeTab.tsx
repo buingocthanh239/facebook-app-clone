@@ -1,8 +1,10 @@
 import Post from 'src/components/Post';
 import NewPostCreate from './components/NewPostCreate/NewPostCreate';
 import { IVideo } from 'src/interfaces/common.interface';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
+import { PanResponder } from 'react-native';
+import { useScrollToTop } from '@react-navigation/native';
 
 export interface IPost {
   id: string;
@@ -82,9 +84,41 @@ function HomeTab() {
       setrefreshing(false);
     }, 2000);
   };
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (event, gestureState) => {
+        const { dy } = gestureState;
 
+        // Nếu vuốt lên (dy < 0), hiện header; ngược lại, ẩn header
+        if (dy < 0) {
+          // Hiển thị header
+          showHeader();
+        } else {
+          // Ẩn header
+          hideHeader();
+        }
+      }
+    })
+  ).current;
+
+  const showHeader = () => {
+    // Thực hiện các logic để hiển thị header
+    console.log('Show header');
+  };
+
+  const hideHeader = () => {
+    // Thực hiện các logic để ẩn header
+    console.log('Hide header');
+  };
+
+  const ref = useRef(null);
+  useScrollToTop(ref);
   return (
     <BaseFlatList
+      {...panResponder.panHandlers}
+      ref={ref}
       ListHeaderComponent={<NewPostCreate />}
       data={data}
       renderItem={({ item }) => (
