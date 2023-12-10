@@ -51,3 +51,8 @@ export interface ISuggestedFriends {
   same_friends: string;
   created: string;
 }
+
+export interface IDataFriends {
+  friends: IUserFriends[];
+  total: string;
+}

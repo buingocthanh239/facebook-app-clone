@@ -4,8 +4,8 @@ import { IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import Modal from 'react-native-modal';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
-import { IDeleteRequestFriend, ISetAcceptFriend } from 'src/interfaces/friends.interface';
-import { deleteRequestFriendApi, setAcceptFriendApi } from 'src/services/friends.services';
+import { ISetAcceptFriend } from 'src/interfaces/friends.interface';
+import { setAcceptFriendApi } from 'src/services/friends.services';
 
 interface RequestFriendCardProps {
   id: string;
@@ -73,9 +73,9 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
     }
   };
 
-  const onPressDelete = async (data: IDeleteRequestFriend) => {
+  const onPressDelete = async (data: ISetAcceptFriend) => {
     try {
-      const result = await deleteRequestFriendApi(data);
+      const result = await setAcceptFriendApi(data);
       setStatus('Delete');
       console.log(result);
     } catch (error) {
@@ -113,7 +113,7 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.deleteButton}
-              onPress={() => onPressDelete({ user_id: id })}
+              onPress={() => onPressDelete({ user_id: id, is_accept: '0' })}
             >
               <Text style={[styles.buttonText, { color: color.textColor }]}>Xóa</Text>
             </TouchableOpacity>

@@ -9,7 +9,7 @@ import BaseFlatList from 'src/components/BaseFlatList';
 function SuggestionsScreen() {
   const [listSuggestedFriend, setListSuggestedFriend] = useState<ISuggestedFriends[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(80);
   const ITEM_HEIGHT = 10;
 
   const onRefresh = () => {

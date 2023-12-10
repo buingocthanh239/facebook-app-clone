@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { color } from 'src/common/constants/color';
-import { ISetRequestFriend } from 'src/interfaces/friends.interface';
-import { setRequestFriendApi } from 'src/services/friends.services';
+import { IDeleteRequestFriend, ISetRequestFriend } from 'src/interfaces/friends.interface';
+import { deleteRequestFriendApi, setRequestFriendApi } from 'src/services/friends.services';
 
 interface SuggestFriendCardProps {
   id: string;
@@ -33,8 +33,14 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
     setStatus('Delete');
     console.log(`${created}`);
   };
-  const onPressCancle = () => {
-    setStatus('Cancle');
+  const onPressCancel = async (data: IDeleteRequestFriend) => {
+    try {
+      const result = await deleteRequestFriendApi(data);
+      setStatus('cancel');
+      console.log(result);
+    } catch (error) {
+      return console.log({ message: 'sever availability' });
+    }
   };
 
   return (
@@ -90,12 +96,12 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
               <Text style={[styles.username, { marginTop: 0 }]}>{username}</Text>
             </View>
             <Text style={{ marginBottom: 10 }}>Đã gửi yêu cầu</Text>
-            <TouchableOpacity style={styles.button} onPress={onPressCancle}>
+            <TouchableOpacity style={styles.button} onPress={() => onPressCancel({ user_id: id })}>
               <Text style={styles.buttonText}>Hủy</Text>
             </TouchableOpacity>
           </View>
         </View>
-      ) : status === 'Cancle' ? (
+      ) : status === 'cancel' ? (
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
             {avatarSource && avatarSource !== '' ? (

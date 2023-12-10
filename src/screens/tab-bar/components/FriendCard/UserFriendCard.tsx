@@ -4,8 +4,8 @@ import { IconButton } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import { color } from 'src/common/constants/color';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
-import { IUnfriend } from 'src/interfaces/friends.interface';
-import { unfriendApi } from 'src/services/friends.services';
+import { ISetRequestFriend, IUnfriend } from 'src/interfaces/friends.interface';
+import { setRequestFriendApi, unfriendApi } from 'src/services/friends.services';
 
 interface UserFriendCardProps {
   id: string;
@@ -45,14 +45,32 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
       title: `Hủy kết bạn với ${username}`
     }
   ];
+
+  const [status, setStatus] = useState('');
   const handleUnfriend = async (data: IUnfriend) => {
     try {
       const result = await unfriendApi(data);
       console.log(result);
+      hideModal();
+      setStatus('unfriended');
       return result;
     } catch (error) {
       return console.log({ message: 'sever availability' });
     }
+  };
+
+  const onPressAddFriend = async (data: ISetRequestFriend) => {
+    try {
+      const result = await setRequestFriendApi(data);
+      setStatus('addFriend');
+      console.log(result);
+    } catch (error) {
+      return console.log({ message: 'sever availability' });
+    }
+  };
+
+  const onPressCancel = () => {
+    setStatus('unfriended');
   };
 
   return (
@@ -69,12 +87,25 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
             <Text style={styles.friendCount}>{same_friends} bạn chung</Text>
           )}
         </View>
-        <IconButton
-          icon={require('../../../../assets/three-dot.png')}
-          onPress={() => {
-            showModal();
-          }}
-        ></IconButton>
+        {status === '' ? (
+          <IconButton
+            icon={require('../../../../assets/three-dot.png')}
+            onPress={() => {
+              showModal();
+            }}
+          ></IconButton>
+        ) : status === 'unfriended' ? (
+          <TouchableOpacity
+            style={styles.acceptButton}
+            onPress={() => onPressAddFriend({ user_id: id })}
+          >
+            <Text style={styles.buttonText}>Thêm bạn bè</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.acceptButton} onPress={() => onPressCancel()}>
+            <Text style={styles.buttonText}>Hủy</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <Modal
         isVisible={modalVisible}
@@ -170,6 +201,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: color.textColor,
     marginBottom: 10
+  },
+  acceptButton: {
+    backgroundColor: color.borderBottom,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    height: 35,
+    marginTop: 8,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  buttonText: {
+    color: color.textColor,
+    textAlign: 'center',
+    fontWeight: '800'
   }
 });
 

@@ -9,10 +9,11 @@ import { getUserFriendsApi } from 'src/services/friends.services';
 import { useSelector } from 'react-redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 import BaseFlatList from 'src/components/BaseFlatList';
+import { getUserFriends } from 'src/redux/slices/friendSlice';
+import { useAppDispatch } from 'src/redux';
 
 function AllFriendScreen() {
-  const [totalFriend, setTotalFriend] = useState(0);
-  const formattedNumberTotalFriend = totalFriend.toLocaleString();
+  const [totalFriend, setTotalFriend] = useState('');
 
   const [listFriends, setListFriends] = useState<IUserFriends[]>([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -28,6 +29,8 @@ function AllFriendScreen() {
 
   const userSelector = useSelector(selectAuth);
   const user_id = userSelector.user?.id;
+
+  const dispatch = useAppDispatch();
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -53,6 +56,7 @@ function AllFriendScreen() {
     };
 
     fetchData(data).catch(console.error);
+    dispatch(getUserFriends(data));
   }, [refreshing]);
 
   const showModal = () => {
@@ -83,7 +87,7 @@ function AllFriendScreen() {
     <View style={styles.container}>
       <View style={styles.lineText}>
         <Text style={{ fontWeight: '800', fontSize: 20, color: color.textColor }}>
-          {formattedNumberTotalFriend} bạn bè
+          {totalFriend} bạn bè
         </Text>
         <TouchableOpacity
           style={{ marginRight: 10 }}
