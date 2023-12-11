@@ -1,5 +1,6 @@
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { color } from 'src/common/constants/color';
+import { getAvatarUri } from 'src/utils/helper';
 export interface FriendProps {
   username: string;
   avatarUrl: string;
@@ -7,7 +8,7 @@ export interface FriendProps {
 const FriendCard = (props: FriendProps) => {
   return (
     <View style={styles.card}>
-      <Image style={styles.avatar} source={{ uri: props.avatarUrl }} />
+      <Image style={styles.avatar} source={getAvatarUri(props.avatarUrl)} />
       <Text style={styles.username}>{props.username}</Text>
     </View>
   );

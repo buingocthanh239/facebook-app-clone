@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { launchImageLibrary, MediaType, PhotoQuality } from 'react-native-image-picker';
 import { color } from 'src/common/constants/color';
+import { getAvatarUri } from 'src/utils/helper';
 
 function EditProfile() {
   const [avatar, setAvatar] = useState('https://placekitten.com/200/200');
@@ -96,7 +97,7 @@ function EditProfile() {
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.wrapAvatar}>
-        <Image source={{ uri: avatar }} style={styles.avatar}></Image>
+        <Image source={getAvatarUri(avatar)} style={styles.avatar}></Image>
       </TouchableOpacity>
       <View style={styles.wrapText}>
         <Text style={{ fontSize: 20, fontWeight: 'bold', color: color.textColor }}>Ảnh bìa</Text>

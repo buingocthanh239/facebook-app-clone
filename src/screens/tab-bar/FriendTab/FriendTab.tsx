@@ -41,7 +41,6 @@ function Friends() {
     const fetchData = async (data: IGetRequestedFriends) => {
       try {
         const result = await getRequestedFriendsApi(data);
-        console.log(result);
         setTotalRequestFriend(result.data.total);
         setListRequestFriend(result.data.requests);
         setRefreshing(false);
