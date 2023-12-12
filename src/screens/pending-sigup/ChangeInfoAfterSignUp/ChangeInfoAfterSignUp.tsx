@@ -20,8 +20,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { nameFormSchema } from 'src/validation/signUp.validate';
 import { useAppDispatch } from 'src/redux';
 import { IChangeInfoScreen } from 'src/interfaces/profile.interface';
-import { changeInfoAfterSignup } from 'src/redux/slices/profileSlice';
 import { Buffer } from 'buffer';
+import { changeInfoAfterSignupApi } from 'src/services/profile.services';
+import { modifyAccountAtivity } from 'src/redux/slices/authSlice';
+import { AccountStatus } from 'src/common/enum/commom';
 
 const ChangeInfoAfterSignUpScreen: React.FC = () => {
   const methods = useForm({ resolver: yupResolver(nameFormSchema) });
@@ -74,19 +76,28 @@ const ChangeInfoAfterSignUpScreen: React.FC = () => {
 
       const file = new File([blob], fileName !== undefined ? fileName : '', { type: fileType });
       setAvatarSource(file);
+      console.log(typeof avatarSource, avatarSource);
     });
   };
 
   const dispatch = useAppDispatch();
 
-  const onPressNextButton = (data: IChangeInfoScreen) => {
-    const username = data.firstname + ' ' + data.lastname;
+  const onPressNextButton = async (data: IChangeInfoScreen) => {
+    try {
+      const username = data.firstname + ' ' + data.lastname;
 
-    const formData = {
-      username,
-      avatar: avatarSource
-    };
-    dispatch(changeInfoAfterSignup(formData));
+      const formData = {
+        username,
+        avatar: avatarPreview
+      };
+      const res = await changeInfoAfterSignupApi(formData);
+      if (!res.success) {
+        return;
+      }
+      dispatch(modifyAccountAtivity(AccountStatus.Active));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

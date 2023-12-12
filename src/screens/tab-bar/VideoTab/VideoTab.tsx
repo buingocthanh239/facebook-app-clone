@@ -5,8 +5,9 @@ import { Button, IconButton, Text, Divider } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 import { IVideo } from 'src/interfaces/common.interface';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
+import { useScrollToTop } from '@react-navigation/native';
 
 export interface IPost {
   id: string;
@@ -76,6 +77,10 @@ function VideoTab() {
     }, 2000);
   };
 
+  //scroll to top
+  const ref = useRef(null);
+  useScrollToTop(ref);
+
   return (
     <SafeAreaView style={styles.header}>
       <View style={styles.button}>
@@ -105,6 +110,7 @@ function VideoTab() {
 
       <Divider />
       <BaseFlatList
+        ref={ref}
         data={data}
         renderItem={({ item }) => (
           <Post

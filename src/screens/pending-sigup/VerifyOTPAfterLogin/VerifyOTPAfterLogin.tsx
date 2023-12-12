@@ -1,6 +1,5 @@
 import { Text } from 'react-native-paper';
 import { useForm } from 'react-hook-form';
-//import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { View } from 'react-native';
 
@@ -17,7 +16,8 @@ import BaseModalError from 'src/components/BaseModalError';
 import BaseTextTitle from 'src/components/BaseTextTitle';
 import BaseModalLoading from 'src/components/BaseModalLoading/BaseModalLoading';
 import { useAppDispatch, useAppSelector } from 'src/redux';
-import { logout, selectAuth } from 'src/redux/slices/authSlice';
+import { logout, modifyAccountAtivity, selectAuth } from 'src/redux/slices/authSlice';
+import { AccountStatus } from 'src/common/enum/commom';
 
 function VerifyOTPAfterLogin() {
   const [textError, setTextError] = useState<string>('');
@@ -28,7 +28,6 @@ function VerifyOTPAfterLogin() {
   const dispatch = useAppDispatch();
   const auth = useAppSelector(selectAuth);
 
-  //const navigation: NavigationProp<AuthNavigationType, 'SaveInfoAccountScreen'> = useNavigation();
   const methods = useForm({ resolver: yupResolver(otpFormSchema) });
   const { handleSubmit, setValue } = methods;
 
@@ -60,7 +59,7 @@ function VerifyOTPAfterLogin() {
       if (!res.success) {
         return setTextError(res.message);
       }
-      // navigation.navigate('SaveInfoAccountScreen');
+      dispatch(modifyAccountAtivity(AccountStatus.Pending));
       setIsLoading(false);
     } catch (err) {
       setTextError('Dịch vụ chưa sẵn sàng');

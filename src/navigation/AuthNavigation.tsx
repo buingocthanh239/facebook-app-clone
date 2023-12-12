@@ -14,6 +14,8 @@ import {
 } from 'src/screens/auth/SignIn';
 import { BaseHeader } from 'src/components/BaseHeader';
 import ForgetPassword from 'src/screens/auth/ForgotPassword';
+import { TransitionPresets } from '@react-navigation/stack';
+import { AuthNavigationName } from 'src/common/constants/nameScreen';
 
 const Stack = createNativeStackNavigator();
 function AuthNavigation() {
@@ -21,23 +23,37 @@ function AuthNavigation() {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
+        ...TransitionPresets.SlideFromRightIOS,
+        animation: 'slide_from_right',
+        gestureEnabled: true,
+        gestureDirection: 'vertical',
         header: () => <BaseHeader />
       }}
     >
-      <Stack.Screen name='HomeAuth' options={{ headerShown: false }} component={HomeAuth} />
-      <Stack.Screen name='Login' component={LoginScreen} />
+      <Stack.Screen
+        name={AuthNavigationName.HomeAuth}
+        options={{ headerShown: false }}
+        component={HomeAuth}
+      />
+      <Stack.Screen name={AuthNavigationName.Login} component={LoginScreen} />
       <Stack.Group>
-        <Stack.Screen name='FirstScreen' component={FirstScreen} />
-        <Stack.Screen name='NameScreen' component={NameScreen} />
-        <Stack.Screen name='BirthdayScreen' component={BirthDayScreen} />
-        <Stack.Screen name='GenderScreen' component={GenderScreen} />
-        <Stack.Screen name='EmailScreen' component={EmailScreen} />
-        <Stack.Screen name='PasswordScreen' component={PasswordScreen} />
-        <Stack.Screen name='ConfirmPolicyScreen' component={ConfirmPolicyScreen} />
-        <Stack.Screen name='VerifyOTPScreen' component={VerifyOTPScreen} />
-        <Stack.Screen name='SaveInfoAccountScreen' component={SaveInfoAccountScreen} />
+        <Stack.Screen name={AuthNavigationName.FirstScreen} component={FirstScreen} />
+        <Stack.Screen name={AuthNavigationName.NameScreen} component={NameScreen} />
+        <Stack.Screen name={AuthNavigationName.BirthdayScreen} component={BirthDayScreen} />
+        <Stack.Screen name={AuthNavigationName.GenderScreen} component={GenderScreen} />
+        <Stack.Screen name={AuthNavigationName.EmailScreen} component={EmailScreen} />
+        <Stack.Screen name={AuthNavigationName.PasswordScreen} component={PasswordScreen} />
+        <Stack.Screen
+          name={AuthNavigationName.ConfirmPolicyScreen}
+          component={ConfirmPolicyScreen}
+        />
+        <Stack.Screen name={AuthNavigationName.VerifyOTPScreen} component={VerifyOTPScreen} />
+        <Stack.Screen
+          name={AuthNavigationName.SaveInfoAccountScreen}
+          component={SaveInfoAccountScreen}
+        />
       </Stack.Group>
-      <Stack.Screen name='ForgotPasswordScreen' component={ForgetPassword} />
+      <Stack.Screen name={AuthNavigationName.ForgotPasswordScreen} component={ForgetPassword} />
     </Stack.Navigator>
   );
 }

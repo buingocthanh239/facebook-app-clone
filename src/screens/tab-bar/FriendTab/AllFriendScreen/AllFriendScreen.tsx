@@ -1,15 +1,62 @@
-import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { color } from 'src/common/constants/color';
 import { UserFriendCard } from '../../components/FriendCard';
 import Modal from 'react-native-modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
+import { IGetUserFriends, IUserFriends } from 'src/interfaces/friends.interface';
+import { getUserFriendsApi } from 'src/services/friends.services';
+import { selectAuth } from 'src/redux/slices/authSlice';
+import BaseFlatList from 'src/components/BaseFlatList';
+import { getUserFriends } from 'src/redux/slices/friendSlice';
+import { useAppDispatch, useAppSelector } from 'src/redux';
 
 function AllFriendScreen() {
-  const totalFriend = 2151;
-  const formattedNumberTotalFriend = totalFriend.toLocaleString();
+  const [totalFriend, setTotalFriend] = useState('');
+
+  const [listFriends, setListFriends] = useState<IUserFriends[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const createdFriendAt = (created: string) => {
+    const createdDate = new Date(created);
+
+    const month = createdDate.getMonth() + 1;
+    const year = createdDate.getFullYear();
+    return `tháng ${month} năm ${year}`;
+  };
+
+  const userSelector = useAppSelector(selectAuth);
+  const user_id = userSelector.user?.id;
+
+  const dispatch = useAppDispatch();
+
+  const onRefresh = () => {
+    setRefreshing(true);
+  };
+
+  useEffect(() => {
+    const data: IGetUserFriends = {
+      index: '0',
+      count: '100',
+      user_id: !user_id ? '' : user_id
+    };
+    const fetchData = async (data: IGetUserFriends) => {
+      try {
+        const result = await getUserFriendsApi(data);
+        console.log(result);
+        setTotalFriend(result.data.total);
+        setListFriends(result.data.friends);
+        setRefreshing(false);
+        return result;
+      } catch (error) {
+        return console.log({ message: 'sever availability' });
+      }
+    };
+
+    fetchData(data).catch(console.error);
+    dispatch(getUserFriends(data));
+  }, [dispatch, refreshing, user_id]);
 
   const showModal = () => {
     setModalVisible(true);
@@ -33,83 +80,13 @@ function AllFriendScreen() {
       title: `Bạn bè lâu năm nhất trước tiên`
     }
   ];
+  const ITEM_HEIGHT = 20;
 
-  const friends = [
-    {
-      username: 'Ngô Hải Văn',
-      avatarSource: 'https://placekitten.com/300/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải A',
-      avatarSource: 'https://placekitten.com/200/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải B',
-      avatarSource: 'https://placekitten.com/400/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải C',
-      avatarSource: 'https://placekitten.com/500/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải D',
-      avatarSource: 'https://placekitten.com/200/300',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải E',
-      avatarSource: 'https://placekitten.com/200/400',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải F',
-      avatarSource: 'https://placekitten.com/200/500',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải G',
-      avatarSource: 'https://placekitten.com/600/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải H',
-      avatarSource: 'https://placekitten.com/900/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải I',
-      avatarSource: 'https://placekitten.com/1000/200',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải K',
-      avatarSource: 'https://placekitten.com/200/260',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải L',
-      avatarSource: 'https://placekitten.com/200/210',
-      mutualFriend: 200
-    },
-    {
-      username: 'Ngô Hải M',
-      avatarSource: 'https://placekitten.com/200/220',
-      mutualFriend: 200
-    }
-  ];
   return (
-    <ScrollView
-      style={styles.container}
-      keyboardShouldPersistTaps='handled'
-      contentContainerStyle={{ flexGrow: 1 }}
-    >
+    <View style={styles.container}>
       <View style={styles.lineText}>
         <Text style={{ fontWeight: '800', fontSize: 20, color: color.textColor }}>
-          {formattedNumberTotalFriend} bạn bè
+          {totalFriend} bạn bè
         </Text>
         <TouchableOpacity
           style={{ marginRight: 10 }}
@@ -120,20 +97,28 @@ function AllFriendScreen() {
           <Text style={{ fontSize: 17, color: color.primary }}>Sắp xếp</Text>
         </TouchableOpacity>
       </View>
-      {friends.map((friend, index) => {
-        return (
-          <TouchableOpacity
-            key={index}
-            onPress={() => console.log(`Go to ${friend.username} page.`)}
-          >
+      <BaseFlatList
+        data={listFriends}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => console.log(`Go to ${item.username} page.`)}>
             <UserFriendCard
-              avatarSource={friend.avatarSource}
-              username={friend.username}
-              mutualFriend={friend.mutualFriend}
+              id={item.id}
+              created={createdFriendAt(item.created)}
+              avatarSource={item.avatar}
+              username={item.username}
+              same_friends={item.same_friends}
             ></UserFriendCard>
           </TouchableOpacity>
-        );
-      })}
+        )}
+        keyExtractor={item => item.id}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
+        getItemLayout={(data, index) => ({
+          length: ITEM_HEIGHT,
+          offset: ITEM_HEIGHT * index,
+          index
+        })}
+      />
       <Modal
         isVisible={modalVisible}
         animationIn='slideInUp'
@@ -152,11 +137,12 @@ function AllFriendScreen() {
           ))}
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: color.white
   },
   header: {

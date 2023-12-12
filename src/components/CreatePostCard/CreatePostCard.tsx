@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { color } from 'src/common/constants/color';
+import { getAvatarUri } from 'src/utils/helper';
 
 export interface CreatePostCardProps {
   avatar: string;
@@ -10,7 +11,7 @@ const CreatePostCard = (props: CreatePostCardProps) => {
   return (
     <View style={styles.containerCreatePost}>
       <TouchableOpacity activeOpacity={0.8}>
-        <Image source={{ uri: props.avatar }} style={styles.avatar} />
+        <Image source={getAvatarUri(props.avatar)} style={styles.avatar} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.input} activeOpacity={0.7}>
         <Text style={{ color: color.textColor, fontSize: 16 }}>Bạn đang nghĩ gì?</Text>

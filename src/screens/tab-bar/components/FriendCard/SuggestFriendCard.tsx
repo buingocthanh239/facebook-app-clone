@@ -1,22 +1,46 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { color } from 'src/common/constants/color';
+import { IDeleteRequestFriend, ISetRequestFriend } from 'src/interfaces/friends.interface';
+import { deleteRequestFriendApi, setRequestFriendApi } from 'src/services/friends.services';
 
 interface SuggestFriendCardProps {
+  id: string;
   username: string;
   avatarSource: string;
+  same_friends: string;
+  created: string;
 }
 
-const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({ username, avatarSource }) => {
+const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
+  id,
+  username,
+  avatarSource,
+  same_friends,
+  created
+}) => {
   const [status, setStatus] = useState('');
-  const onPressAddFriend = () => {
-    setStatus('AddFriend');
+  const onPressAddFriend = async (data: ISetRequestFriend) => {
+    try {
+      const result = await setRequestFriendApi(data);
+      setStatus('AddFriend');
+      console.log(result);
+    } catch (error) {
+      return console.log({ message: 'sever availability' });
+    }
   };
   const onPressDelete = () => {
     setStatus('Delete');
+    console.log(`${created}`);
   };
-  const onPressCancle = () => {
-    setStatus('Cancle');
+  const onPressCancel = async (data: IDeleteRequestFriend) => {
+    try {
+      const result = await deleteRequestFriendApi(data);
+      setStatus('cancel');
+      console.log(result);
+    } catch (error) {
+      return console.log({ message: 'sever availability' });
+    }
   };
 
   return (
@@ -24,12 +48,29 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({ username, avatarS
       {status === '' ? (
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
-            <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            {avatarSource && avatarSource !== '' ? (
+              <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            ) : (
+              <Image
+                source={require('../../../../assets/avatar-default.png')}
+                style={styles.avatar}
+              />
+            )}
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.username}>{username}</Text>
+            {parseInt(same_friends) < 1 ? (
+              <></>
+            ) : (
+              <Text
+                style={{ marginBottom: 7, marginTop: 2, fontSize: 15 }}
+              >{`${same_friends} bạn chung`}</Text>
+            )}
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.acceptButton} onPress={onPressAddFriend}>
+              <TouchableOpacity
+                style={styles.acceptButton}
+                onPress={() => onPressAddFriend({ user_id: id })}
+              >
                 <Text style={[styles.buttonText, { color: 'white' }]}>Thêm bạn bè</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.deleteButton} onPress={onPressDelete}>
@@ -41,22 +82,36 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({ username, avatarS
       ) : status === 'AddFriend' ? (
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
-            <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            {avatarSource && avatarSource !== '' ? (
+              <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            ) : (
+              <Image
+                source={require('../../../../assets/avatar-default.png')}
+                style={styles.avatar}
+              />
+            )}
           </View>
           <View style={styles.infoContainer}>
             <View>
               <Text style={[styles.username, { marginTop: 0 }]}>{username}</Text>
             </View>
             <Text style={{ marginBottom: 10 }}>Đã gửi yêu cầu</Text>
-            <TouchableOpacity style={styles.button} onPress={onPressCancle}>
+            <TouchableOpacity style={styles.button} onPress={() => onPressCancel({ user_id: id })}>
               <Text style={styles.buttonText}>Hủy</Text>
             </TouchableOpacity>
           </View>
         </View>
-      ) : status === 'Cancle' ? (
+      ) : status === 'cancel' ? (
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
-            <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            {avatarSource && avatarSource !== '' ? (
+              <Image source={{ uri: avatarSource }} style={styles.avatar} />
+            ) : (
+              <Image
+                source={require('../../../../assets/avatar-default.png')}
+                style={styles.avatar}
+              />
+            )}
           </View>
           <View style={styles.infoContainer}>
             <View>
@@ -64,7 +119,10 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({ username, avatarS
             </View>
             <Text style={{ marginBottom: 10 }}>Đã hủy yêu cầu</Text>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.acceptButton} onPress={onPressAddFriend}>
+              <TouchableOpacity
+                style={styles.acceptButton}
+                onPress={() => onPressAddFriend({ user_id: id })}
+              >
                 <Text style={[styles.buttonText, { color: 'white' }]}>Thêm bạn bè</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.deleteButton} onPress={onPressDelete}>

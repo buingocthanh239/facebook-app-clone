@@ -1,2 +1,4 @@
-export { default as BaseHeader } from './BaseHeader';
-export { default as HeaderWithSearch } from './HeaderWithSearch';
+import BaseHeader from './BaseHeader';
+import HeaderWithSearch from './HeaderWithSearch';
+
+export { BaseHeader, HeaderWithSearch };

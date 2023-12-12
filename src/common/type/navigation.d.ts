@@ -1,7 +1,17 @@
 /* eslint-disable no-unused-vars */
 type AppNavigationType = {
-  AuthNavigation: undefined;
-  TabNavigation: undefined;
+  AuthNavigation: { screen: AuthNavigationName };
+  TabNavigation: { screen: TabNavigationName };
+  SettingNavigation: { screen: SettingNavigationName };
+  FriendNavigation: { screen: FriendNavigationName };
+  ProfileNavigation:
+    | { screen: ProfileNavigationName.Profile; params: { user_id: string } }
+    | { screen: ProfileNavigationName.EditProfile };
+  PostNavigation: { screen: PostNavigationName };
+  SearchNavigation: { screen: SearchNavigationName };
+  VerifyOTPAfterLogin: undefined;
+  ChangeProfileAfterSign: undefined;
+  NotFoundScreen: undefined;
 };
 
 type AuthNavigationType = {
@@ -25,13 +35,8 @@ type AuthNavigationType = {
   ForgetPasswordScreen: undefined;
 };
 
-type PendingSignupType = {
-  VerifyOTPAfterLogin: undefined;
-  ChangeProfileAfterSign: undefined;
-};
-
 type PropfileNavigationType = {
-  Profile: undefined;
+  Profile: { user_id: string };
   EditProfile: undefined;
 };
 
@@ -47,16 +52,22 @@ type SettingNavigationType = {
 };
 
 type FriendNavigationType = {
-  FriendTab: undefined;
   SuggestionsScreen: undefined;
   AllFriendScreen: undefined;
 };
-type CreatePostNavigationType = {
+type PostNavigationType = {
   CreatePostScreen: { selectedItem: CardData } | undefined;
   EnAScreen: undefined;
 };
 
-type CreatePostScreenProps = NativeStackScreenProps<CreatePostNavigationType, 'CreatePostScreen'>;
+type TabNavigationType = {
+  Home: undefined;
+  Video: undefined;
+  Friend: undefined;
+  Notification: undefined;
+  Setting: undefined;
+};
+
 type SearchNavigationType = {
   SearchScreen: undefined;
 };

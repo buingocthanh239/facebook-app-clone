@@ -7,10 +7,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import globalStyles from 'src/common/styles/globalStyles';
 import TextTitle from './components/TextTitle';
 import ListItemCard from './components/ListItemCard';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation, NavigationProp, useScrollToTop } from '@react-navigation/native';
 import { useAppDispatch, useAppSelector } from 'src/redux';
 import { logout, selectAuth } from 'src/redux/slices/authSlice';
 import BaseModalLoading from 'src/components/BaseModalLoading/BaseModalLoading';
+import { AppNaviagtionName, SettingNavigationName } from 'src/common/constants/nameScreen';
+import { useRef } from 'react';
 
 interface ISettingAcordion {
   title: string;
@@ -18,12 +20,21 @@ interface ISettingAcordion {
   onPress: () => any;
 }
 function SettingTab() {
-  const navigation: NavigationProp<SettingNavigationType> = useNavigation();
+  const navigation: NavigationProp<AppNavigationType> = useNavigation();
   const dispatch = useAppDispatch();
   const auth = useAppSelector(selectAuth);
-  const onPressSettingItem = () => navigation.navigate('SettingScreen');
-  const onPressPrivacyItem = () => navigation.navigate('BlockFriendScreen');
-  const onPressNotificationItem = () => navigation.navigate('SettingNotification');
+  const onPressSettingItem = () =>
+    navigation.navigate(AppNaviagtionName.SettingNavigation, {
+      screen: SettingNavigationName.SettingScreen
+    });
+  const onPressPrivacyItem = () =>
+    navigation.navigate(AppNaviagtionName.SettingNavigation, {
+      screen: SettingNavigationName.BlockFriendScreen
+    });
+  const onPressNotificationItem = () =>
+    navigation.navigate(AppNaviagtionName.SettingNavigation, {
+      screen: SettingNavigationName.SettingNotification
+    });
   const onPressExit = () => BackHandler.exitApp();
   const onPressLogout = () => {
     dispatch(logout());
@@ -45,8 +56,13 @@ function SettingTab() {
       onPress: onPressNotificationItem
     }
   ];
+
+  // scroll to top
+  const ref = useRef(null);
+  useScrollToTop(ref);
+
   return (
-    <ScrollView>
+    <ScrollView ref={ref}>
       <View
         style={[
           globalStyles.flexRow,
