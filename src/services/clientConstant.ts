@@ -6,7 +6,8 @@ export enum AuthAPi {
   CHANGEPASSWORD = '/change_password',
   GETVERIFYTOKEN = '/get_verify_code',
   CHECKVERIFYTOKEN = '/check_verify_code',
-  RESETPASSWORD = '/reset_password'
+  RESETPASSWORD = '/reset_password',
+  CHECK_EMAIL = '/check_email'
 }
 
 export enum ProfileApi {

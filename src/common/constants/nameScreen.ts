@@ -7,6 +7,7 @@ export enum AppNaviagtionName {
   ProfileNavigation = 'ProfileNavigation',
   PostNavigation = 'PostNavigation',
   SearchNavigation = 'SearchNavigation',
+  ReportNavigation = 'ReportNavigation',
   VerifyOTPAfterLogin = 'VerifyOTPAfterLogin',
   ChangeProfileAfterSign = 'ChangeProfileAfterSign',
   NotFoundScreen = 'NotFoundScreen'
@@ -63,4 +64,8 @@ export enum TabNavigationName {
 
 export enum SearchNavigationName {
   SearchScreen = 'SearchScreen'
+}
+
+export enum ReportNavigationName {
+  ReportScreen = 'ReportScreen'
 }

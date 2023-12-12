@@ -1,14 +1,25 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal/dist/modal';
 import { Divider, IconButton, Text } from 'react-native-paper';
+import { AppNaviagtionName, ReportNavigationName } from 'src/common/constants/nameScreen';
 
 export type ReportModalType = {
   isVisible: boolean;
+  id: string;
   onBackdropPress: () => any;
 };
 
 function ReportModal(props: ReportModalType) {
-  const { isVisible, onBackdropPress } = props;
+  const { isVisible, onBackdropPress, id } = props;
+
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ReportNavigation> =
+    useNavigation();
+  const handleNavigation = () =>
+    navigation.navigate(AppNaviagtionName.ReportNavigation, {
+      screen: ReportNavigationName.ReportScreen,
+      params: { id: id }
+    });
   return (
     <Modal
       isVisible={isVisible}
@@ -86,7 +97,7 @@ function ReportModal(props: ReportModalType) {
             <Text style={{ fontSize: 18 }}> Tại sao tôi nhìn thấy bài viết này? </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={{ flexDirection: 'row' }}>
+        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={handleNavigation}>
           <IconButton
             icon='folder-information-outline'
             style={{ alignSelf: 'flex-start', marginLeft: 10 }}

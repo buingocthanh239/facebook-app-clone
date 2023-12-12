@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { TouchableHighlight } from 'react-native';
-import { Card, CardTitleProps, Divider, IconButton } from 'react-native-paper';
+import { Card, CardTitleProps, Divider, IconButton, TouchableRipple } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 type FuctionItemProps = CardTitleProps & {
   onPress?: () => any;
@@ -24,11 +23,7 @@ function FunctionItem(props: FuctionItemProps) {
   } = props;
   return (
     <>
-      <TouchableHighlight
-        activeOpacity={1}
-        underlayColor={color.borderColor}
-        onPress={onPress ?? (() => {})}
-      >
+      <TouchableRipple underlayColor={color.borderColor} onPress={onPress ?? (() => {})}>
         <Card.Title
           {...remainProps}
           title={title}
@@ -53,7 +48,7 @@ function FunctionItem(props: FuctionItemProps) {
             ) : null
           }
         />
-      </TouchableHighlight>
+      </TouchableRipple>
       {isDivider ? <Divider /> : null}
     </>
   );

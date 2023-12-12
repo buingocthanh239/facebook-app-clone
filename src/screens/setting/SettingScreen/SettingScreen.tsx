@@ -1,7 +1,6 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
-import { TouchableHighlight } from 'react-native';
-import { Card, IconButton } from 'react-native-paper';
+import { Card, IconButton, TouchableRipple } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 export interface IListItem {
   title: string;
@@ -67,12 +66,7 @@ function SettingScreen() {
           />
 
           {item.children.map((child, i) => (
-            <TouchableHighlight
-              key={i}
-              activeOpacity={1}
-              underlayColor={color.borderColor}
-              onPress={child.onPress}
-            >
+            <TouchableRipple key={i} underlayColor={color.borderColor} onPress={child.onPress}>
               <Card.Title
                 title={child.title}
                 titleVariant='titleMedium'
@@ -82,7 +76,7 @@ function SettingScreen() {
                 subtitleNumberOfLines={3}
                 subtitle={child.subtitle}
               />
-            </TouchableHighlight>
+            </TouchableRipple>
           ))}
         </View>
       ))}

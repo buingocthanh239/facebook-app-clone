@@ -6,7 +6,12 @@ import { RootState } from '..';
 import { saveTokenIntoKeychain } from 'src/utils/kechain';
 import { resetGenericPassword } from 'react-native-keychain';
 import { AccountStatus } from 'src/common/enum/commom';
-import { getUserInfoApi } from 'src/services/profile.services';
+import {
+  getUserInfoApi,
+  ISetUserInfoResponseData,
+  setUserInfoApi
+} from 'src/services/profile.services';
+import { ISetUserInfoData } from 'src/interfaces/profile.interface';
 
 interface IAuthState {
   isLoading: boolean;
@@ -61,6 +66,21 @@ export const getProfile = createAsyncThunk('auth/getProfile', async (data: { use
   }
 });
 
+export const setProfile = createAsyncThunk(
+  'auth/setProfile',
+  async (data: ISetUserInfoData, { rejectWithValue }) => {
+    try {
+      const res = await setUserInfoApi(data);
+      if (!res.success) {
+        return rejectWithValue(res.message);
+      }
+      return { ...res.data, username: data.username };
+    } catch (err) {
+      return rejectWithValue('Vui lòng kiểm tra lại kết nối internet');
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -102,6 +122,28 @@ const authSlice = createSlice({
     //get profile
     build.addCase(getProfile.fulfilled, (state, action) => {
       state.user = { ...state.user, ...action.payload } as IUser;
+    });
+
+    //set profile
+    build.addCase(setProfile.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const { username, ...remainPayload } = action.payload as ISetUserInfoResponseData & {
+        username: string;
+      };
+      if (username) {
+        state.user = { ...state.user, ...remainPayload, username: username } as IUser;
+      } else {
+        state.user = { ...state.user, ...remainPayload } as IUser;
+      }
+    });
+
+    build.addCase(setProfile.pending, state => {
+      state.isLoading = true;
+    });
+
+    build.addCase(setProfile.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
     });
   },
   reducers: {

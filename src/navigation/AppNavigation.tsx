@@ -11,6 +11,7 @@ import AuthNavigation from './AuthNavigation';
 import VerifyOTPAfterLogin from 'src/screens/pending-sigup/VerifyOTPAfterLogin';
 import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
+import ReportNavigationWrapper from './ReportNavigation';
 
 import Header from 'src/screens/tab-bar/components/Header';
 import { useAppDispatch, useAppSelector } from 'src/redux';
@@ -81,6 +82,10 @@ function AppNavigation() {
             <Stack.Screen
               name={AppNaviagtionName.ProfileNavigation}
               component={ProfileNavigationWrapper}
+            />
+            <Stack.Screen
+              name={AppNaviagtionName.ReportNavigation}
+              component={ReportNavigationWrapper}
             />
             <Stack.Screen
               name={AppNaviagtionName.NotFoundScreen}

@@ -1,13 +1,11 @@
-import { View, TouchableOpacity } from 'react-native';
-import { Button, IconButton, Text, Divider, Card } from 'react-native-paper';
+import { View } from 'react-native';
+import { Button, IconButton, Text, Divider, Card, TouchableRipple } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 
 const ReportScreen = () => {
   return (
     <SafeAreaView style={styles.header}>
-      <IconButton icon='close' style={{ alignSelf: 'flex-end' }} />
-      <Divider bold />
       <Text
         style={{
           fontSize: 17,
@@ -74,26 +72,32 @@ const ReportScreen = () => {
       >
         Các bước khác mà bạn có thể thực hiện{' '}
       </Text>
-      <TouchableOpacity style={styles.button}>
-        <IconButton icon='account-minus-outline' style={{ alignSelf: 'flex-start' }} size={50} />
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 18 }}> Chặn Phạm</Text>
-          <Text style={{ fontSize: 12, marginLeft: 5 }}>
-            Các bạn sẽ không thể nhìn thấy hoặc liên hệ với {'\n'}nhau.
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <IconButton
-          icon='archive-outline'
-          style={{ alignSelf: 'flex-start', marginLeft: 10 }}
-          size={50}
-        />
-        <View style={{ flexDirection: 'column', marginTop: 10 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 18 }}> Bỏ theo dõi Phạm</Text>
-          <Text style={{ fontSize: 12, marginLeft: 5 }}>Dừng xem bài viết nhưng vẫn là bạn bè</Text>
-        </View>
-      </TouchableOpacity>
+      <TouchableRipple style={styles.button}>
+        <>
+          <IconButton icon='account-minus-outline' style={{ alignSelf: 'flex-start' }} size={25} />
+          <View style={{ flexDirection: 'column' }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 18 }}> Chặn Phạm</Text>
+            <Text style={{ fontSize: 12, marginLeft: 5 }}>
+              Các bạn sẽ không thể nhìn thấy hoặc liên hệ với {'\n'}nhau.
+            </Text>
+          </View>
+        </>
+      </TouchableRipple>
+      <TouchableRipple style={styles.button}>
+        <>
+          <IconButton
+            icon='archive-outline'
+            style={{ alignSelf: 'flex-start', marginLeft: 10 }}
+            size={25}
+          />
+          <View style={{ flexDirection: 'column', marginTop: 10 }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 18 }}> Bỏ theo dõi Phạm</Text>
+            <Text style={{ fontSize: 12, marginLeft: 5 }}>
+              Dừng xem bài viết nhưng vẫn là bạn bè
+            </Text>
+          </View>
+        </>
+      </TouchableRipple>
       <Card>
         <Card.Content style={{ flexDirection: 'row', margin: 2, alignItems: 'center' }}>
           <IconButton icon={'information'} />
@@ -115,7 +119,8 @@ const styles = StyleSheet.create({
   title: {},
   header: { flex: 1 },
   button: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    padding: 5
   }
 });
 
