@@ -13,26 +13,24 @@ import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAft
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
 
 import Header from 'src/screens/tab-bar/components/Header';
-import { useAppSelector } from 'src/redux';
-import { selectAuth } from 'src/redux/slices/authSlice';
+import { useAppDispatch, useAppSelector } from 'src/redux';
+import { getProfile, selectAuth } from 'src/redux/slices/authSlice';
 import { AppNaviagtionName } from 'src/common/constants/nameScreen';
+import { useEffect } from 'react';
+import { AccountStatus } from 'src/common/enum/commom';
 
 const Stack = createNativeStackNavigator();
 
 function AppNavigation() {
   const auth = useAppSelector(selectAuth);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   const getToken = async () => {
-  //     const token = await getTokenFromKeychain();
-  //     if (!token) {
-  //       dispatch(reset());
-  //     }
-  //     return token;
-  //   };
-  //   getToken();
-  // }, []);
+  useEffect(() => {
+    if (auth.user?.active === AccountStatus.Active) {
+      dispatch(getProfile({ user_id: auth.user.id }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth.user?.active, dispatch]);
 
   return (
     <Stack.Navigator
@@ -45,13 +43,13 @@ function AppNavigation() {
       }}
     >
       {auth.isAuthenticated ? (
-        auth.user?.active === '0' ? (
+        auth.user?.active === AccountStatus.Inactive ? (
           <Stack.Screen
             name={AppNaviagtionName.VerifyOTPAfterLogin}
             component={VerifyOTPAfterLogin}
             options={{ headerShown: false }}
           />
-        ) : auth.user?.active === '-1' ? (
+        ) : auth.user?.active === AccountStatus.Pending ? (
           <Stack.Screen
             name={AppNaviagtionName.ChangeProfileAfterSign}
             options={{ headerShown: false }}
@@ -60,7 +58,7 @@ function AppNavigation() {
         ) : (
           <>
             <Stack.Screen
-              name={AppNaviagtionName.ChangeProfileAfterSign}
+              name={AppNaviagtionName.TabNavigation}
               options={{ headerShown: false, header: () => <Header /> }}
               component={TabNavigationWrapper}
             />

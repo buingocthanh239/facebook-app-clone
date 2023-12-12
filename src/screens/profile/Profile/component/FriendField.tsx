@@ -2,9 +2,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import FriendCard from './FriendCard';
 import { color } from 'src/common/constants/color';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, TabNavigationName } from 'src/common/constants/nameScreen';
 
 const FriendField = () => {
-  const navigation: NavigationProp<FriendNavigationType, 'FriendTab'> = useNavigation();
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.TabNavigation> =
+    useNavigation();
   const avatarUrl = 'https://placekitten.com/200/200';
   const friends = [
     {
@@ -58,7 +60,11 @@ const FriendField = () => {
         </View>
         <TouchableOpacity
           style={styles.searchFriend}
-          onPress={() => navigation.navigate('FriendTab')}
+          onPress={() =>
+            navigation.navigate(AppNaviagtionName.TabNavigation, {
+              screen: TabNavigationName.Friend
+            })
+          }
         >
           <Text style={{ fontSize: 16, color: color.primary }}>Tìm bạn bè</Text>
         </TouchableOpacity>
