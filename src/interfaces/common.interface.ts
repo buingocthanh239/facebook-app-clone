@@ -16,12 +16,17 @@ export interface IBodyResponse<T> extends AxiosResponse {
   error?: IErrorData | IErrorData[] | string;
 }
 
+export interface IListBodyResponse<T> extends AxiosResponse {
+  success: boolean;
+  code: ReponseCode;
+  message: string;
+  data: T[];
+  error?: IErrorData | IErrorData[] | string;
+}
+
 export interface ICommonListQuery {
-  page?: number;
-  limit?: number;
-  orderBy?: string;
-  orderDirection?: OrderDirection;
-  keyword?: string;
+  index?: number;
+  count?: number;
 }
 
 export interface IUser {

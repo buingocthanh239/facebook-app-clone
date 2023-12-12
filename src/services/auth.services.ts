@@ -1,12 +1,14 @@
 import {
   IChangePasswordBody,
   ICheckVerifyCodeBody,
+  IEmailScreenForm,
   ILoginData,
   IResetPasswordBody
 } from 'src/interfaces/auth.interface';
 import { postMethodApi } from './api';
 import { AuthAPi } from './clientConstant';
 import { IBodyResponse, IUser } from 'src/interfaces/common.interface';
+import { ExistedEmail } from 'src/common/enum/commom';
 
 export interface ILoginResponseData extends IUser {
   token: string;
@@ -18,6 +20,10 @@ export interface ISignUpResponseData {
 
 export interface IChangePasswordResponseData {
   token: string;
+}
+
+export interface ICheckEmailDataResponse {
+  existed: ExistedEmail;
 }
 
 export const loginApi = async (data: ILoginData): Promise<IBodyResponse<ILoginResponseData>> => {
@@ -52,4 +58,10 @@ export const changPasswordApi = async (
 
 export const resetPasswordApi = async (data: IResetPasswordBody): Promise<IBodyResponse<any>> => {
   return postMethodApi(AuthAPi.RESETPASSWORD, data);
+};
+
+export const checkEmailApi = async (
+  data: IEmailScreenForm
+): Promise<IBodyResponse<ICheckEmailDataResponse>> => {
+  return postMethodApi(AuthAPi.CHECK_EMAIL, data);
 };

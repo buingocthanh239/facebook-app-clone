@@ -46,3 +46,5 @@ export enum OrderDirection {
   ASC = 'asc',
   DESC = 'desc'
 }
+
+export const COUNT_ITEM = 20;

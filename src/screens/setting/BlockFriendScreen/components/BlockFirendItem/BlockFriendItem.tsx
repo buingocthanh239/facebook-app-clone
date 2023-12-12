@@ -1,5 +1,5 @@
-import { TouchableHighlight, TouchableOpacity } from 'react-native';
-import { Avatar, Card, CardTitleProps, Text } from 'react-native-paper';
+import { TouchableOpacity } from 'react-native';
+import { Avatar, Card, CardTitleProps, Text, TouchableRipple } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import { getAvatarUri } from 'src/utils/helper';
 export type BlockFirendItemProps = CardTitleProps & {
@@ -10,11 +10,7 @@ export type BlockFirendItemProps = CardTitleProps & {
 function BlockFriendItem(props: BlockFirendItemProps) {
   const { title, avatar, onPress, onPressNonBlock, ...remainProps } = props;
   return (
-    <TouchableHighlight
-      activeOpacity={1}
-      underlayColor={color.borderColor}
-      onPress={onPress ?? (() => {})}
-    >
+    <TouchableRipple underlayColor={color.borderColor} onPress={onPress ?? (() => {})}>
       <Card.Title
         {...remainProps}
         title={title}
@@ -40,7 +36,7 @@ function BlockFriendItem(props: BlockFirendItemProps) {
           </TouchableOpacity>
         )}
       />
-    </TouchableHighlight>
+    </TouchableRipple>
   );
 }
 
