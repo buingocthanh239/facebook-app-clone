@@ -8,15 +8,21 @@ import {
   PostNavigationName,
   ProfileNavigationName
 } from 'src/common/constants/nameScreen';
+import { useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
+import { getAvatarUri } from 'src/utils/helper';
 
 function NewPostCreate() {
+  const auth = useAppSelector(selectAuth);
+  const avatar = auth.user?.avatar;
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
     useNavigation();
   const navigation2: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
     useNavigation();
   const navigaProfileScreen = () =>
     navigation.navigate(AppNaviagtionName.ProfileNavigation, {
-      screen: ProfileNavigationName.Profile
+      screen: ProfileNavigationName.Profile,
+      params: { user_id: auth.user?.id as string }
     });
   const handleNavigateCreatePost = () =>
     navigation2.navigate(AppNaviagtionName.PostNavigation, {
@@ -25,7 +31,7 @@ function NewPostCreate() {
   return (
     <View style={styles.wrapperCreatePost}>
       <TouchableOpacity activeOpacity={0.8} onPress={navigaProfileScreen}>
-        <Avatar.Image source={require('src/assets/avatar-default.png')} size={40} />
+        <Avatar.Image source={getAvatarUri(avatar as string)} size={40} />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.createPostButton}

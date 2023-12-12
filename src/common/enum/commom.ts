@@ -15,10 +15,10 @@ export enum NotificationType {
 }
 
 export enum AccountStatus {
-  Pending = -1,
-  Inactive = 0,
-  Active = 1,
-  Banned = 2
+  Pending = '-1',
+  Inactive = '0',
+  Active = '1',
+  Banned = '2'
 }
 
 export enum CategoryType {

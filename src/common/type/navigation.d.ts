@@ -1,14 +1,14 @@
-//import { AuthNavigationName, SettingNavigationName } from './name';
-
 /* eslint-disable no-unused-vars */
 type AppNavigationType = {
   AuthNavigation: { screen: AuthNavigationName };
-  TabNavigation: { screen: SettingNavigationName };
+  TabNavigation: { screen: TabNavigationName };
   SettingNavigation: { screen: SettingNavigationName };
-  FriendNavigation: { screen: SettingNavigationName };
-  ProfileNavigation: { screen: SettingNavigationName };
-  PostNavigation: { screen: SettingNavigationName };
-  SearchNavigation: { screen: SettingNavigationName };
+  FriendNavigation: { screen: FriendNavigationName };
+  ProfileNavigation:
+    | { screen: ProfileNavigationName.Profile; params: { user_id: string } }
+    | { screen: ProfileNavigationName.EditProfile };
+  PostNavigation: { screen: PostNavigationName };
+  SearchNavigation: { screen: SearchNavigationName };
   VerifyOTPAfterLogin: undefined;
   ChangeProfileAfterSign: undefined;
   NotFoundScreen: undefined;
@@ -36,7 +36,7 @@ type AuthNavigationType = {
 };
 
 type PropfileNavigationType = {
-  Profile: undefined;
+  Profile: { user_id: string };
   EditProfile: undefined;
 };
 

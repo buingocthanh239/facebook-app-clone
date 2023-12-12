@@ -1,10 +1,12 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ILoginData } from 'src/interfaces/auth.interface';
 import { IBodyResponse, IErrorData, IUser } from 'src/interfaces/common.interface';
 import { ILoginResponseData, loginApi, logoutApi } from 'src/services/auth.services';
 import { RootState } from '..';
 import { saveTokenIntoKeychain } from 'src/utils/kechain';
 import { resetGenericPassword } from 'react-native-keychain';
+import { AccountStatus } from 'src/common/enum/commom';
+import { getUserInfoApi } from 'src/services/profile.services';
 
 interface IAuthState {
   isLoading: boolean;
@@ -41,6 +43,19 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   try {
     await logoutApi();
     await resetGenericPassword();
+  } catch (err) {
+    return;
+  }
+});
+
+export const getProfile = createAsyncThunk('auth/getProfile', async (data: { user_id: string }) => {
+  try {
+    const res = await getUserInfoApi(data);
+    if (res.success) {
+      return res.data;
+    } else {
+      return;
+    }
   } catch (err) {
     return;
   }
@@ -83,6 +98,11 @@ const authSlice = createSlice({
     build.addCase(logout.pending, state => {
       state.isLoading = true;
     });
+
+    //get profile
+    build.addCase(getProfile.fulfilled, (state, action) => {
+      state.user = { ...state.user, ...action.payload } as IUser;
+    });
   },
   reducers: {
     deleteErrorMessage: state => ({ ...state, error: null }),
@@ -92,9 +112,13 @@ const authSlice = createSlice({
       user: null,
       error: null,
       isLoading: false
+    }),
+    modifyAccountAtivity: (state, action: PayloadAction<AccountStatus>) => ({
+      ...state,
+      user: { ...state.user, active: action.payload } as IUser
     })
   }
 });
 export const selectAuth = (state: RootState) => state.auth;
-export const { deleteErrorMessage, reset } = authSlice.actions;
+export const { deleteErrorMessage, reset, modifyAccountAtivity } = authSlice.actions;
 export default authSlice.reducer;

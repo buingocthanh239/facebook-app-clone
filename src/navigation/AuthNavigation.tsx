@@ -53,7 +53,7 @@ function AuthNavigation() {
           component={SaveInfoAccountScreen}
         />
       </Stack.Group>
-      <Stack.Screen name={AuthNavigationName.HomeAuth} component={ForgetPassword} />
+      <Stack.Screen name={AuthNavigationName.ForgotPasswordScreen} component={ForgetPassword} />
     </Stack.Navigator>
   );
 }

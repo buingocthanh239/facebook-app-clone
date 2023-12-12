@@ -24,7 +24,7 @@ export enum AuthNavigationName {
   ConfirmPolicyScreen = 'ConfirmPolicyScreen',
   VerifyOTPScreen = 'VerifyOTPScreen',
   SaveInfoAccountScreen = 'SaveInfoAccountScreen',
-  ForgetPasswordScreen = 'ForgetPasswordScreen'
+  ForgotPasswordScreen = 'ForgotPasswordScreen'
 }
 
 export enum ProfileNavigationName {
