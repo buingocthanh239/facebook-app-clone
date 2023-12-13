@@ -35,6 +35,11 @@ function ProfileScreen() {
 
   const navigateEditProfileScreen = () => navigation.navigate('EditProfile');
 
+  // // 0: user profile
+  // // 1: is friend
+  // // 2: be requested
+  // const [isFriend, setIsFriend] = useState('0');
+
   const showModalAvatar = () => {
     setModalAvatarVisible(true);
   };

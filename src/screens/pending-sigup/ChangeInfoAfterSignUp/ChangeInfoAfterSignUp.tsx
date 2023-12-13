@@ -20,7 +20,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { nameFormSchema } from 'src/validation/signUp.validate';
 import { useAppDispatch } from 'src/redux';
 import { IChangeInfoScreen } from 'src/interfaces/profile.interface';
-import { Buffer } from 'buffer';
 import { changeInfoAfterSignupApi } from 'src/services/profile.services';
 import { modifyAccountAtivity } from 'src/redux/slices/authSlice';
 import { AccountStatus } from 'src/common/enum/commom';
@@ -29,8 +28,7 @@ const ChangeInfoAfterSignUpScreen: React.FC = () => {
   const methods = useForm({ resolver: yupResolver(nameFormSchema) });
   const { handleSubmit } = methods;
 
-  const [avatarSource, setAvatarSource] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState('');
+  const [avatarSource, setAvatarSource] = useState('');
   const selectAvatar = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -58,25 +56,8 @@ const ChangeInfoAfterSignUpScreen: React.FC = () => {
       maxHeight: 800
     };
     launchImageLibrary(options, response => {
-      const srcUri =
-        response !== undefined && response?.assets !== undefined
-          ? response?.assets[0]?.uri
-          : avatarPreview;
-      setAvatarPreview(srcUri !== undefined && srcUri !== null ? srcUri : '');
-
-      const assets =
-        response !== undefined && response?.assets !== undefined ? response?.assets[0] : {};
-
-      const base64Image =
-        response !== undefined && response?.assets !== undefined ? response?.assets[0].base64 : '';
-      const fileName = assets.fileName;
-      const fileType = assets.type;
-      const buffer = Buffer.from(base64Image !== undefined ? base64Image : '', 'base64');
-      const blob = new Blob([buffer], { type: fileType });
-
-      const file = new File([blob], fileName !== undefined ? fileName : '', { type: fileType });
-      setAvatarSource(file);
-      console.log(typeof avatarSource, avatarSource);
+      const srcUri = response && response?.assets ? response?.assets[0]?.uri : avatarSource;
+      setAvatarSource(srcUri ? srcUri : '');
     });
   };
 
@@ -85,11 +66,15 @@ const ChangeInfoAfterSignUpScreen: React.FC = () => {
   const onPressNextButton = async (data: IChangeInfoScreen) => {
     try {
       const username = data.firstname + ' ' + data.lastname;
-
-      const formData = {
-        username,
-        avatar: avatarPreview
-      };
+      const formData = new FormData();
+      if (avatarSource !== '') {
+        formData.append('avatar', {
+          uri: avatarSource,
+          type: 'image/png',
+          name: 'avatar.jpg'
+        } as never);
+      }
+      formData.append('username', username);
       const res = await changeInfoAfterSignupApi(formData);
       if (!res.success) {
         return;
@@ -114,9 +99,9 @@ const ChangeInfoAfterSignUpScreen: React.FC = () => {
           </Text>
           <TouchableOpacity onPress={selectAvatar} style={{ alignItems: 'center', paddingTop: 20 }}>
             <View style={styles.avatarContainer}>
-              {avatarPreview ? (
+              {avatarSource ? (
                 <TouchableOpacity style={styles.wrapAvatar} onPress={selectAvatar}>
-                  <Image source={{ uri: avatarPreview }} style={styles.avatar}></Image>
+                  <Image source={{ uri: avatarSource }} style={styles.avatar}></Image>
                 </TouchableOpacity>
               ) : (
                 <Text>Chọn ảnh đại diện</Text>

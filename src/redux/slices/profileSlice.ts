@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { changeInfoAfterSignupApi } from 'src/services/profile.services';
-import { IChangeInfoAfterSignup, IUserInfo } from 'src/interfaces/profile.interface';
+import { IUserInfo } from 'src/interfaces/profile.interface';
 import { IErrorData } from 'src/interfaces/common.interface';
+import { MyFormData } from 'src/common/type/type';
 
 interface IProfileState {
   loading: boolean;
@@ -18,7 +19,7 @@ const initialState: IProfileState = {
 
 export const changeInfoAfterSignup = createAsyncThunk(
   'profile/change_info_after_signup',
-  async (data: IChangeInfoAfterSignup, { rejectWithValue }) => {
+  async (data: MyFormData, { rejectWithValue }) => {
     try {
       const result = await changeInfoAfterSignupApi(data);
       console.log(result);
