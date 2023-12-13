@@ -1,11 +1,11 @@
+import { MyFormData } from 'src/common/type/type';
+
 export interface IChangeInfoAfterSignup {
-  username: string;
-  avatar?: string | null;
+  data: MyFormData;
 }
 export interface IChangeInfoScreen {
   firstname: string;
   lastname: string;
-  avatarSource?: string;
 }
 export interface IUserInfo {
   username: string;

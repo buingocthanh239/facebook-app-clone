@@ -21,7 +21,6 @@ export const getUserFriends = createAsyncThunk(
   async (data: IGetUserFriends, { rejectWithValue }) => {
     try {
       const result = await getUserFriendsApi(data);
-      console.log(result);
       return result;
     } catch (error) {
       return rejectWithValue({ message: 'sever availability' });
@@ -58,22 +57,14 @@ const friendSlice = createSlice({
         friends: updatedInfo.friends,
         total: updatedInfo.total
       } as IDataFriends;
-      console.log('state');
-      console.log(state.friends);
     });
     builder.addCase(unfriend.fulfilled, (state, action) => {
       const updatedInfo = action.payload.data;
-      console.log('updatedInfo');
-      console.log(updatedInfo);
-      console.log('action.payload');
-      console.log(action.payload);
       state.friends = {
         ...state.friends,
         friends: updatedInfo.friends,
         total: updatedInfo.total
       } as IDataFriends;
-      console.log('state');
-      console.log(state.friends);
     });
   }
 });

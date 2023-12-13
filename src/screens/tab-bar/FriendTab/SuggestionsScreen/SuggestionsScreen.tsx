@@ -28,7 +28,6 @@ function SuggestionsScreen() {
     const fetchData = async (data: IGetSuggestedFriends) => {
       try {
         const result = await getSuggestedFriendsApi(data);
-        console.log(result);
         setListSuggestedFriend(result.data);
         setRefreshing(false);
         return result;

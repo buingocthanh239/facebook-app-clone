@@ -81,3 +81,14 @@ export const postMethodApi = async function <P, T>(
 ): Promise<IBodyResponse<T>> {
   return await axiosInstance.post(client, data);
 };
+
+export const postMethodWithFormDataApi = async function <P, T>(
+  client: string,
+  data?: P
+): Promise<IBodyResponse<T>> {
+  return await axiosInstance.post(client, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+};

@@ -6,6 +6,7 @@ import Modal from 'react-native-modal';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
 import { ISetAcceptFriend } from 'src/interfaces/friends.interface';
 import { setAcceptFriendApi } from 'src/services/friends.services';
+import { getAvatarUri } from 'src/utils/helper';
 
 interface RequestFriendCardProps {
   id: string;
@@ -67,7 +68,7 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
     try {
       const result = await setAcceptFriendApi(data);
       setStatus('Accept');
-      console.log(result);
+      return result;
     } catch (error) {
       return console.log({ message: 'sever availability' });
     }
@@ -77,7 +78,7 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
     try {
       const result = await setAcceptFriendApi(data);
       setStatus('Delete');
-      console.log(result);
+      return result;
     } catch (error) {
       return console.log({ message: 'sever availability' });
     }
@@ -86,7 +87,7 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
   return (
     <View style={styles.cardContainer}>
       <View style={styles.avatarContainer}>
-        <Image source={{ uri: avatarSource }} style={styles.avatar} />
+        <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
       </View>
 
       {status === '' ? (

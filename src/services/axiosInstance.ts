@@ -26,7 +26,6 @@ axiosInstance.interceptors.request.use(async (config: any) => {
       ...config.headers,
       'X-Timezone': dayjs().format('Z'),
       'X-Timezone-Name': dayjs.tz.guess(),
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${token ?? ''}`
     }
   });

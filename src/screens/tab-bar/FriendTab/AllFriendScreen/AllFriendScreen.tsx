@@ -44,7 +44,6 @@ function AllFriendScreen() {
     const fetchData = async (data: IGetUserFriends) => {
       try {
         const result = await getUserFriendsApi(data);
-        console.log(result);
         setTotalFriend(result.data.total);
         setListFriends(result.data.friends);
         setRefreshing(false);
