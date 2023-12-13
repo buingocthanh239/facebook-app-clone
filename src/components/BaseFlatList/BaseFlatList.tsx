@@ -1,12 +1,13 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { FlatListProps, FlatList, RefreshControl } from 'react-native';
+import { FlatListProps, FlatList, RefreshControl, View } from 'react-native';
+import { ActivityIndicator, Text } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 
 const ITEM_HEIGHT = 10;
 
-export type BaseFlatListProps = FlatListProps<any>;
+export type BaseFlatListProps = FlatListProps<any> & { isFootterLoading?: boolean };
 function BaseFlatList(props: BaseFlatListProps, ref: ForwardedRef<FlatList>) {
-  const { onRefresh, refreshing, ...propsRemain } = props;
+  const { onRefresh, refreshing, isFootterLoading, ListEmptyComponent, ...propsRemain } = props;
   return (
     <FlatList
       ref={ref}
@@ -22,6 +23,20 @@ function BaseFlatList(props: BaseFlatListProps, ref: ForwardedRef<FlatList>) {
           refreshing={refreshing as boolean}
           colors={[color.primary]}
         />
+      }
+      ListEmptyComponent={
+        ListEmptyComponent ?? (
+          <Text variant='bodyLarge' style={{ textAlign: 'center', marginTop: 20 }}>
+            Danh sách trống
+          </Text>
+        )
+      }
+      ListFooterComponent={
+        isFootterLoading ? (
+          <View style={{ marginTop: 20 }}>
+            <ActivityIndicator color={color.outlineColor} />
+          </View>
+        ) : null
       }
     />
   );
