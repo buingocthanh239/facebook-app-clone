@@ -6,9 +6,6 @@ import FriendField from './component/FriendField';
 import OptionCard from './component/OptionCard';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconFA from 'react-native-vector-icons/FontAwesome5';
-import IconFA6 from 'react-native-vector-icons/FontAwesome6';
-import IconF from 'react-native-vector-icons/Fontisto';
 import CreatePostCard from '../../../components/CreatePostCard/CreatePostCard';
 import { color } from 'src/common/constants/color';
 import { NavigationProp, useNavigation } from '@react-navigation/core';
@@ -19,11 +16,14 @@ import { ProfileNavigationName } from 'src/common/constants/nameScreen';
 import { IUser } from 'src/interfaces/common.interface';
 import { getAvatarUri } from 'src/utils/helper';
 import { getUserInfoApi } from 'src/services/profile.services';
+import ButtonField0 from './component/ButtonField0';
+import ButtonField1 from './component/ButtonField1';
+import ButtonField2 from './component/ButtonField2';
+import ButtonField3 from './component/ButtonField3';
 
 function ProfileScreen() {
   const [modalAvatarVisible, setModalAvatarVisible] = useState(false);
   const [modalCoverVisible, setModalCoverVisible] = useState(false);
-  const [modalResponseVisible, setModalResponseVisible] = useState(false);
   const [profile, setProfile] = useState<IUser | null>(null);
 
   const route: RouteProp<PropfileNavigationType, ProfileNavigationName.Profile> = useRoute();
@@ -72,12 +72,7 @@ function ProfileScreen() {
   const hideModalCover = () => {
     setModalCoverVisible(false);
   };
-  const showModalResponse = () => {
-    setModalResponseVisible(true);
-  };
-  const hideModalResponse = () => {
-    setModalResponseVisible(false);
-  };
+
   const optionsAvatar = [
     {
       icon: 'account-circle',
@@ -98,16 +93,7 @@ function ProfileScreen() {
       title: 'Chọn ảnh bìa'
     }
   ];
-  const optionsResponse = [
-    {
-      icon: 'check',
-      title: 'Chấp nhận'
-    },
-    {
-      icon: 'delete-outline',
-      title: 'Xóa'
-    }
-  ];
+
   const totalHeight = 2 * 25;
   return (
     <ScrollView style={styles.container}>
@@ -153,6 +139,7 @@ function ProfileScreen() {
           <Text style={styles.bio}>{profile?.description}</Text>
         </View>
       </View>
+      {/* Button Field */}
       {isOwnProfile ? (
         <View style={styles.section}>
           <TouchableOpacity
@@ -164,174 +151,13 @@ function ProfileScreen() {
           </TouchableOpacity>
         </View>
       ) : !isOwnProfile && isFriend === '0' ? (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.primary,
-              padding: 8,
-              borderRadius: 5,
-              width: '42%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <IconFA name='user-plus' color={'white'} size={15} style={{ paddingRight: 5 }} />
-            <Text style={styles.buttonText}>Thêm bạn bè</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.outlineColor,
-              padding: 8,
-              borderRadius: 5,
-              width: '42%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <IconF name='messenger' color={'black'} size={15} style={{ paddingRight: 5 }} />
-            <Text style={[styles.buttonText, { color: color.textColor }]}>Nhắn tin</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.outlineColor,
-              padding: 8,
-              borderRadius: 5,
-              width: '12%',
-              alignItems: 'center'
-            }}
-          >
-            <Icon name='dots-horizontal' size={20}></Icon>
-          </TouchableOpacity>
-        </View>
+        <ButtonField0 />
       ) : !isOwnProfile && isFriend === '1' ? (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.outlineColor,
-              padding: 8,
-              borderRadius: 5,
-              width: '42%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <IconFA name='user-check' color={'black'} size={15} style={{ paddingRight: 5 }} />
-            <Text style={[styles.buttonText, { color: color.textColor }]}>Bạn bè</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.primary,
-              padding: 8,
-              borderRadius: 5,
-              width: '42%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <IconF name='messenger' color={'white'} size={15} style={{ paddingRight: 5 }} />
-            <Text style={styles.buttonText}>Nhắn tin</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.outlineColor,
-              padding: 8,
-              borderRadius: 5,
-              width: '12%',
-              alignItems: 'center'
-            }}
-          >
-            <Icon name='dots-horizontal' size={20}></Icon>
-          </TouchableOpacity>
-        </View>
+        <ButtonField1 />
       ) : !isOwnProfile && isFriend === '2' ? (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.primary,
-              padding: 8,
-              borderRadius: 5,
-              width: '42%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <IconFA6 name='user-clock' color={'white'} size={15} style={{ paddingRight: 5 }} />
-            <Text style={styles.buttonText}>Hủy lời mời</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.outlineColor,
-              padding: 8,
-              borderRadius: 5,
-              width: '42%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <IconF name='messenger' color={'black'} size={15} style={{ paddingRight: 5 }} />
-            <Text style={[styles.buttonText, { color: color.textColor }]}>Nhắn tin</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.outlineColor,
-              padding: 8,
-              borderRadius: 5,
-              width: '12%',
-              alignItems: 'center'
-            }}
-          >
-            <Icon name='dots-horizontal' size={20}></Icon>
-          </TouchableOpacity>
-        </View>
+        <ButtonField2 />
       ) : !isOwnProfile && isFriend === '3' ? (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.primary,
-              padding: 8,
-              borderRadius: 5,
-              width: '42%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onPress={showModalResponse}
-          >
-            <IconFA6 name='user-check' color={'white'} size={15} style={{ paddingRight: 5 }} />
-            <Text style={styles.buttonText}>Phản hồi</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.outlineColor,
-              padding: 8,
-              borderRadius: 5,
-              width: '42%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <IconF name='messenger' color={'black'} size={15} style={{ paddingRight: 5 }} />
-            <Text style={[styles.buttonText, { color: color.textColor }]}>Nhắn tin</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.outlineColor,
-              padding: 8,
-              borderRadius: 5,
-              width: '12%',
-              alignItems: 'center'
-            }}
-          >
-            <Icon name='dots-horizontal' size={20}></Icon>
-          </TouchableOpacity>
-        </View>
+        <ButtonField3 />
       ) : null}
       <View style={styles.detailsContainer}>
         <View style={styles.detailRow}>
@@ -408,31 +234,6 @@ function ProfileScreen() {
               activeOpacity={0.8}
               key={index}
               onPress={() => console.log(`Selected: ${option.title}`)}
-            >
-              <View style={[styles.option, { height: totalHeight }]}>
-                <OptionCard icon={option.icon} title={option.title} />
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </Modal>
-      <Modal
-        isVisible={modalResponseVisible}
-        animationIn='slideInUp'
-        animationOut='slideOutDown'
-        backdropOpacity={0.5}
-        onBackdropPress={hideModalResponse}
-        style={styles.modal}
-      >
-        <View style={styles.modalContent}>
-          {optionsResponse.map((option, index) => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              key={index}
-              onPress={() => {
-                console.log(`Selected: ${option.title}`);
-                hideModalResponse();
-              }}
             >
               <View style={[styles.option, { height: totalHeight }]}>
                 <OptionCard icon={option.icon} title={option.title} />
