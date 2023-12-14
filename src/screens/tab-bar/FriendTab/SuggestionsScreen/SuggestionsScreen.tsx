@@ -1,17 +1,30 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { color } from 'src/common/constants/color';
 import { SuggestFriendCard } from '../../components/FriendCard';
 import { getSuggestedFriendsApi } from 'src/services/friends.services';
 import BaseFlatList from 'src/components/BaseFlatList';
 import useLoadingListApi from 'src/hooks/useLoadingListApi';
 import BaseActivityIndicator from 'src/components/BaseActivityIndicator';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 
 function SuggestionsScreen() {
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+
+  const handleNavigateUserProfile = (user_id: string) => {
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id }
+    });
+  };
+
   const { data, isLoadingFirstApi, isNextFetchingApi, onEndReadable, refreshing, onRefresh } =
     useLoadingListApi(getSuggestedFriendsApi);
   return isLoadingFirstApi ? (
     <BaseActivityIndicator />
   ) : (
+
     <View style={styles.container}>
       <BaseFlatList
         ListHeaderComponent={() => (
@@ -23,13 +36,15 @@ function SuggestionsScreen() {
         )}
         data={data}
         renderItem={({ item }) => (
-          <SuggestFriendCard
-            id={item.id}
-            username={item.username}
-            avatarSource={item.avatar}
-            same_friends={item.same_friends}
-            created={item.created}
-          />
+          <TouchableOpacity onPress={() => handleNavigateUserProfile(item.id)}>
+            <SuggestFriendCard
+              id={item.id}
+              username={item.username}
+              avatarSource={item.avatar}
+              same_friends={item.same_friends}
+              created={item.created}
+            />
+          </TouchableOpacity>
         )}
         keyExtractor={item => item.id}
         onEndReached={onEndReadable}

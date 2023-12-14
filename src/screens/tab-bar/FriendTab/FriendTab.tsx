@@ -5,13 +5,26 @@ import { useEffect, useState } from 'react';
 import { IGetRequestedFriends, IRequestedFriends } from 'src/interfaces/friends.interface';
 import { getRequestedFriendsApi } from 'src/services/friends.services';
 import { NavigationProp, useNavigation, useScrollToTop } from '@react-navigation/native';
-import { AppNaviagtionName, FriendNavigationName } from 'src/common/constants/nameScreen';
+import {
+  AppNaviagtionName,
+  FriendNavigationName,
+  ProfileNavigationName
+} from 'src/common/constants/nameScreen';
 import { useRef } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
 
 function Friends() {
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.FriendNavigation> =
     useNavigation();
+  const navigation2: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+
+  const handleNavigateUserProfile = (user_id: string) => {
+    navigation2.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id }
+    });
+  };
   const handleSuggestPress = () =>
     navigation.navigate(AppNaviagtionName.FriendNavigation, {
       screen: FriendNavigationName.SuggestionsScreen
@@ -112,10 +125,7 @@ function Friends() {
         )}
         data={listRequestFriend}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => console.log(`Go to ${item.username} page.`)}
-            activeOpacity={0.8}
-          >
+          <TouchableOpacity onPress={() => handleNavigateUserProfile(item.id)} activeOpacity={0.8}>
             <RequestFriendCard
               id={item.id}
               username={item.username}

@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     textAlign: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 15
   },
   sectionTitle: {
     fontSize: 20,
