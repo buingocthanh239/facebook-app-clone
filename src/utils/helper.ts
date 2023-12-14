@@ -68,7 +68,7 @@ export function hasPermissionToAccessRoute(requiredPermissions: string[]): boole
 }
 
 export const getAvatarUri = (uri: string) =>
-  uri ? { uri: uri } : require('src/assets/avatar-default.png');
+uri ? { uri: uri } : require('src/assets/avatar-default.jpg');
 
 export const handShowErrorMessage = (code: number): string => {
   switch (code) {

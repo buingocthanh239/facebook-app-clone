@@ -3,81 +3,53 @@ import FriendCard from './FriendCard';
 import { color } from 'src/common/constants/color';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AppNaviagtionName, TabNavigationName } from 'src/common/constants/nameScreen';
+import { IUserFriends } from 'src/interfaces/friends.interface';
 
-const FriendField = () => {
+interface FriendFieldProps {
+  friends: IUserFriends[];
+  totalFriend: string;
+  isOwnProfile: boolean;
+}
+const FriendField = ({ friends, totalFriend, isOwnProfile }: FriendFieldProps) => {
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.TabNavigation> =
     useNavigation();
-  const avatarUrl = 'https://placekitten.com/200/200';
-  const friends = [
-    {
-      avatarUrl: avatarUrl,
-      username: 'Ngô Hải Văn'
-    },
-    {
-      avatarUrl: avatarUrl,
-      username: 'Ngô Hải Văn'
-    },
-    {
-      avatarUrl: avatarUrl,
-      username: 'Nguyễn Văn Quyền'
-    },
-    {
-      avatarUrl: avatarUrl,
-      username: 'Ngô Hải Văn'
-    },
-    {
-      avatarUrl: avatarUrl,
-      username: 'Ngô Hải Văn'
-    },
-    {
-      avatarUrl: avatarUrl,
-      username: 'Ngô Hải Văn'
-    },
-    {
-      avatarUrl: avatarUrl,
-      username: 'Ngô Hải Văn'
-    },
-    {
-      avatarUrl: avatarUrl,
-      username: 'Ngô Hải Văn'
-    },
-    {
-      avatarUrl: avatarUrl,
-      username: 'Ngô Hải Văn'
-    },
-    {
-      avatarUrl: avatarUrl,
-      username: 'Ngô Hải Văn'
-    }
-  ];
-  const totalFriend = 1523;
+
   return (
     <View style={styles.container}>
       <View style={styles.headerFriendField}>
         <View style={styles.totalFriend}>
           <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'black' }}>Bạn bè</Text>
-          <Text style={{ fontSize: 14 }}>{totalFriend.toLocaleString()} người bạn</Text>
+          <Text style={{ fontSize: 15 }}>{totalFriend.toLocaleString()} người bạn</Text>
         </View>
-        <TouchableOpacity
-          style={styles.searchFriend}
-          onPress={() =>
-            navigation.navigate(AppNaviagtionName.TabNavigation, {
-              screen: TabNavigationName.Friend
-            })
-          }
-        >
-          <Text style={{ fontSize: 16, color: color.primary }}>Tìm bạn bè</Text>
-        </TouchableOpacity>
+        {isOwnProfile && (
+          <TouchableOpacity
+            style={styles.searchFriend}
+            onPress={() =>
+              navigation.navigate(AppNaviagtionName.TabNavigation, {
+                screen: TabNavigationName.Friend
+              })
+            }
+          >
+            <Text style={{ fontSize: 16, color: color.primary }}>Tìm bạn bè</Text>
+          </TouchableOpacity>
+        )}
       </View>
-      <View style={styles.row}>
-        <FriendCard avatarUrl={friends[0].avatarUrl} username={friends[0].username} />
-        <FriendCard avatarUrl={friends[1].avatarUrl} username={friends[1].username} />
-        <FriendCard avatarUrl={friends[2].avatarUrl} username={friends[2].username} />
-      </View>
-      <View style={styles.row}>
-        <FriendCard avatarUrl={friends[3].avatarUrl} username={friends[3].username} />
-        <FriendCard avatarUrl={friends[4].avatarUrl} username={friends[4].username} />
-        <FriendCard avatarUrl={friends[5].avatarUrl} username={friends[5].username} />
+      <View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'flex-start'
+        }}
+      >
+        {parseInt(totalFriend) > 6
+          ? friends
+              .slice(0, 6)
+              .map((item, index) => (
+                <FriendCard avatarUrl={item.avatar} username={item.username} key={index} />
+              ))
+          : friends.map((item, index) => (
+              <FriendCard avatarUrl={item.avatar} username={item.username} key={index} />
+            ))}
       </View>
       <TouchableOpacity style={styles.allFriendBtn} activeOpacity={0.7}>
         <Text

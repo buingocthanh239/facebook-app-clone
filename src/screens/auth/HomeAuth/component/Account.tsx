@@ -12,7 +12,7 @@ function Account(props: AccountProps) {
         <Avatar.Image
           size={54}
           source={
-            props.imageUrl ? { uri: props.imageUrl } : require('src/assets/avatar-default.png')
+            props.imageUrl ? { uri: props.imageUrl } : require('src/assets/avatar-default.jpg')
           }
         />
         <Text>{props.name}</Text>

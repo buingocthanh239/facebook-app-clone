@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HeaderWithSearch } from 'src/components/BaseHeader';
 import ProfileScreen from 'src/screens/profile/Profile/ProfileScreen';
 import EditProfile from 'src/screens/profile/EditProfile';
 import WraperScreen from 'src/components/WraperScreen';
@@ -21,7 +20,7 @@ function ProfileNavigation() {
       <Stack.Screen
         name={ProfileNavigationName.Profile}
         options={{
-          header: () => <HeaderWithSearch title='Ngô Hải Văn' titleIsCenter={true} />
+          headerShown: false
         }}
         component={ProfileScreen}
       />

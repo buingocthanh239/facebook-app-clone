@@ -65,7 +65,7 @@ function Post(props: PostProps) {
   const isInteract: boolean = !!props.numberComments || !!props.numberLikes || !!props.numberShares;
   const AvatarSource = props.ownerAvatar
     ? { url: props.ownerAvatar }
-    : require('src/assets/avatar-default.png');
+    : require('src/assets/avatar-default.jpg');
   return (
     <View style={styles.postContainer}>
       {friendComments && friendComments?.length !== 0 && (
