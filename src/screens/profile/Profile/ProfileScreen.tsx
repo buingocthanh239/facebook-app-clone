@@ -61,8 +61,8 @@ function ProfileScreen() {
     };
 
     fetchData({
-      index: '0',
-      count: '6',
+      index: 0,
+      count: 6,
       user_id: !user_id ? '' : user_id
     }).catch(console.error);
   }, []);

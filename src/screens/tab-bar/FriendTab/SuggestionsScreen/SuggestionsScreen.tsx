@@ -24,7 +24,6 @@ function SuggestionsScreen() {
   return isLoadingFirstApi ? (
     <BaseActivityIndicator />
   ) : (
-
     <View style={styles.container}>
       <BaseFlatList
         ListHeaderComponent={() => (
