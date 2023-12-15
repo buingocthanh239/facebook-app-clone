@@ -20,7 +20,9 @@ const styles = StyleSheet.create({
     height: 115,
     flexDirection: 'column',
     backgroundColor: 'white',
-    marginBottom: 35
+    minWidth: 124,
+    minHeight: 170,
+    paddingHorizontal: 5
   },
   avatar: {
     width: 115,

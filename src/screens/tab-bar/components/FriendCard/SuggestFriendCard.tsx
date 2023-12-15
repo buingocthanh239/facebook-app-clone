@@ -53,7 +53,7 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
               <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
             ) : (
               <Image
-                source={require('../../../../assets/avatar-default.png')}
+                source={require('../../../../assets/avatar-default.jpg')}
                 style={styles.avatar}
               />
             )}
@@ -87,7 +87,7 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
               <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
             ) : (
               <Image
-                source={require('../../../../assets/avatar-default.png')}
+                source={require('../../../../assets/avatar-default.jpg')}
                 style={styles.avatar}
               />
             )}
@@ -109,7 +109,7 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
               <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
             ) : (
               <Image
-                source={require('../../../../assets/avatar-default.png')}
+                source={require('../../../../assets/avatar-default.jpg')}
                 style={styles.avatar}
               />
             )}
