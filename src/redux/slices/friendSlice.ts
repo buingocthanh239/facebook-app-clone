@@ -33,7 +33,6 @@ export const unfriend = createAsyncThunk(
   async (data: IUnfriend, { rejectWithValue }) => {
     try {
       const result = await unfriendApi(data);
-      console.log(result);
       return result;
     } catch (error) {
       return rejectWithValue({ message: 'sever availability' });

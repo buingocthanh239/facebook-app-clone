@@ -1,9 +1,10 @@
-import { IBodyResponse } from 'src/interfaces/common.interface';
+import { IBodyResponse, IListBodyResponse } from 'src/interfaces/common.interface';
 import {
   IDeleteRequestFriend,
   IGetRequestedFriends,
   ISetAcceptFriend,
-  ISetRequestFriend
+  ISetRequestFriend,
+  ISuggestedFriends
 } from 'src/interfaces/friends.interface';
 import { postMethodApi } from './api';
 import { FriendApi } from './clientConstant';
@@ -22,7 +23,7 @@ export const getUserFriendsApi = async (
 
 export const getSuggestedFriendsApi = async (
   data: IGetRequestedFriends
-): Promise<IBodyResponse<any>> => {
+): Promise<IListBodyResponse<ISuggestedFriends>> => {
   return postMethodApi(FriendApi.GET_SUGGESTED_FRIENDS, data);
 };
 

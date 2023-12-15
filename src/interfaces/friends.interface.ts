@@ -1,15 +1,15 @@
 export interface IGetRequestedFriends {
-  index: string;
-  count: string;
+  index: number;
+  count: number;
 }
 export interface IGetUserFriends {
-  index: string;
-  count: string;
+  index: number;
+  count: number;
   user_id: string;
 }
 export interface IGetSuggestedFriends {
-  index: string;
-  count: string;
+  index: number;
+  count: number;
 }
 export interface ISetAcceptFriend {
   user_id: string;

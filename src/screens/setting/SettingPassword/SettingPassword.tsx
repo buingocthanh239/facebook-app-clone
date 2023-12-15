@@ -59,7 +59,6 @@ function SettingPassword() {
       await saveTokenIntoKeychain(auth.user?.id as string, res.data.token);
       setAlertText(SUCCESS_MESSAGE);
     } catch (err) {
-      console.log(err);
       setAlertText('Vui lòng kiểm tra kết nối internet');
     }
   };

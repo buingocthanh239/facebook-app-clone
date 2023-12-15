@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
-
 import BaseFlatList from 'src/components/BaseFlatList';
 import BlockFirendItem from './components/BlockFirendItem';
 import HeaderItem from './components/HeaderItem';
-import { Divider, Text } from 'react-native-paper';
+import { ActivityIndicator, Divider, Text } from 'react-native-paper';
 import { getListBlockApi } from 'src/services/block.service';
-import { COUNT_ITEM } from 'src/common/constants';
+import useLoadingListApi from 'src/hooks/useLoadingListApi';
+import { color } from 'src/common/constants/color';
 
 export interface IBlockFriend {
   id: string;
@@ -14,49 +13,12 @@ export interface IBlockFriend {
 }
 
 function BlockFriendScreen() {
-  const [blockUsers, setBlockUsers] = useState<IBlockFriend[]>([]);
-  const [isFetch, setIsFetch] = useState<boolean>(true);
-  const [skip, setSkip] = useState<number>(0);
+  const { data, onEndReadable, isLoadingFirstApi, isNextFetchingApi } =
+    useLoadingListApi(getListBlockApi);
 
-  const getListUsers = useCallback(() => {
-    async function getFirstUsers() {
-      try {
-        const res = await getListBlockApi({ index: 0, count: COUNT_ITEM });
-        if (res.success) {
-          setBlockUsers(res.data);
-          if (res.data.length < COUNT_ITEM) {
-            setIsFetch(false);
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    getFirstUsers();
-  }, []);
-
-  useEffect(() => {
-    getListUsers();
-  }, [getListUsers]);
-
-  async function onEndReadable() {
-    if (isFetch) {
-      try {
-        const res = await getListBlockApi({ index: skip + COUNT_ITEM, count: COUNT_ITEM });
-        if (res.success) {
-          if (res.data.length === 0) {
-            return setIsFetch(false);
-          }
-          setBlockUsers(blockUsers => [...blockUsers, ...res.data]);
-          setSkip(skip => skip + COUNT_ITEM);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }
-
-  return (
+  return isLoadingFirstApi ? (
+    <ActivityIndicator color={color.activeOutlineColor} style={{ marginTop: '50%' }} />
+  ) : (
     <>
       <BaseFlatList
         ListHeaderComponent={<HeaderItem />}
@@ -65,7 +27,7 @@ function BlockFriendScreen() {
             Danh sách chặn trống
           </Text>
         }
-        data={blockUsers}
+        data={data}
         renderItem={({ item }) => (
           <>
             <BlockFirendItem title={item.name} />
@@ -76,6 +38,7 @@ function BlockFriendScreen() {
         refreshing={false}
         onEndReached={onEndReadable}
         onEndReachedThreshold={0.05}
+        isFootterLoading={isNextFetchingApi}
       />
     </>
   );
