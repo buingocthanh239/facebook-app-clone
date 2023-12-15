@@ -54,7 +54,6 @@ function ProfileScreen() {
         const result = await getUserFriendsApi(data);
         setTotalFriend(result.data.total);
         setListFriends(result.data.friends);
-        console.log(listFriends);
         return result;
       } catch (error) {
         return console.log({ message: 'sever availability' });

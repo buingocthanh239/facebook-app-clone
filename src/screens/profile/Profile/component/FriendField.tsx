@@ -41,15 +41,9 @@ const FriendField = ({ friends, totalFriend, isOwnProfile }: FriendFieldProps) =
           justifyContent: 'flex-start'
         }}
       >
-        {parseInt(totalFriend) > 6
-          ? friends
-              .slice(0, 6)
-              .map((item, index) => (
-                <FriendCard avatarUrl={item.avatar} username={item.username} key={index} />
-              ))
-          : friends.map((item, index) => (
-              <FriendCard avatarUrl={item.avatar} username={item.username} key={index} />
-            ))}
+        {friends.map((item, index) => (
+          <FriendCard avatarUrl={item.avatar} username={item.username} key={index} />
+        ))}
       </View>
       <TouchableOpacity style={styles.allFriendBtn} activeOpacity={0.7}>
         <Text
