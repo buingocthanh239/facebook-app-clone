@@ -70,6 +70,7 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
       setStatus('Accept');
       return result;
     } catch (error) {
+      console.log(error);
       return console.log({ message: 'sever availability' });
     }
   };

@@ -9,7 +9,6 @@ import BaseActivityIndicator from 'src/components/BaseActivityIndicator';
 function SuggestionsScreen() {
   const { data, isLoadingFirstApi, isNextFetchingApi, onEndReadable, refreshing, onRefresh } =
     useLoadingListApi(getSuggestedFriendsApi);
-
   return isLoadingFirstApi ? (
     <BaseActivityIndicator />
   ) : (
@@ -34,7 +33,7 @@ function SuggestionsScreen() {
         )}
         keyExtractor={item => item.id}
         onEndReached={onEndReadable}
-        onEndReachedThreshold={0.05}
+        onEndReachedThreshold={2 / data.length}
         isFootterLoading={isNextFetchingApi}
         onRefresh={onRefresh}
         refreshing={refreshing}

@@ -35,8 +35,8 @@ function Friends() {
 
   useEffect(() => {
     const data: IGetRequestedFriends = {
-      index: '0',
-      count: '100'
+      index: 0,
+      count: 100
     };
     const fetchData = async (data: IGetRequestedFriends) => {
       try {
