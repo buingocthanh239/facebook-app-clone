@@ -5,6 +5,7 @@ import axios, {
   type AxiosRequestHeaders,
   type AxiosResponse
 } from 'axios';
+import { API_BASE } from '@env';
 import dayjs from 'src/utils/dayjs';
 import { getTokenFromKeychain, deleteTokenFromKeychain } from 'src/utils/kechain';
 
@@ -12,7 +13,7 @@ const options: AxiosRequestConfig = {
   headers: {
     'Content-Type': 'application/json'
   } as unknown as AxiosRequestHeaders,
-  baseURL: 'https://1985-2001-ee0-4a77-2bf0-8593-5c3e-c34f-60ed.ngrok-free.app',
+  baseURL: API_BASE,
   responseType: 'json'
 };
 
