@@ -22,7 +22,6 @@ function AllFriendScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const createdFriendAt = (created: string) => {
     const createdDate = new Date(created);
-
     const month = createdDate.getMonth() + 1;
     const year = createdDate.getFullYear();
     return `tháng ${month} năm ${year}`;
@@ -39,8 +38,8 @@ function AllFriendScreen() {
 
   useEffect(() => {
     const data: IGetUserFriends = {
-      index: '0',
-      count: '100',
+      index: 0,
+      count: 100,
       user_id: !user_id ? '' : user_id
     };
     const fetchData = async (data: IGetUserFriends) => {

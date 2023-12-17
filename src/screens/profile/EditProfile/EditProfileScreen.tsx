@@ -6,11 +6,14 @@ import {
   Image,
   StyleSheet,
   Platform,
-  PermissionsAndroid
+  PermissionsAndroid,
+  TextInput,
+  ScrollView
 } from 'react-native';
 import { launchImageLibrary, MediaType, PhotoQuality } from 'react-native-image-picker';
 import { color } from 'src/common/constants/color';
 import { getAvatarUri } from 'src/utils/helper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 function EditProfile() {
   const [avatar, setAvatar] = useState('https://placekitten.com/200/200');
@@ -83,7 +86,7 @@ function EditProfile() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.wrapTexta}>
         <Text style={{ fontSize: 20, fontWeight: 'bold', color: color.textColor }}>
           Ảnh đại diện
@@ -118,19 +121,62 @@ function EditProfile() {
           <Text style={{ fontSize: 18, color: color.primary }}>Thêm</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.wrapAvatar} activeOpacity={0.8}>
-        <Text style={{ fontSize: 18 }}>Mô tả bản thân...</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.wrapAvatar}>
+        <TextInput style={{ fontSize: 18 }} placeholder='Mô tả bản thân'></TextInput>
+      </View>
+      <View style={styles.wrapText}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: color.textColor }}>
+          Thông tin chi tiết
+        </Text>
+        <TouchableOpacity activeOpacity={0.8}>
+          <Text style={{ fontSize: 18, color: color.primary }}>Thêm</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.detailsContainer}>
+        <View style={styles.detailRow}>
+          <View style={{ alignItems: 'center', flex: 1, maxWidth: 20 }}>
+            <Icon name='home' size={20} color='black' />
+          </View>
+
+          <Text style={styles.detailLabel}>Sống tại</Text>
+          <TextInput style={styles.detailText} placeholder='Địa điểm'></TextInput>
+        </View>
+        <View style={styles.detailRow}>
+          <View style={{ alignItems: 'center', flex: 1, maxWidth: 20 }}>
+            <Icon name='map-marker' size={20} color='black' />
+          </View>
+          <Text style={styles.detailLabel}>Đến từ</Text>
+          <TextInput style={styles.detailText} placeholder='Thành phố'></TextInput>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: color.borderBottom,
+    marginBottom: 50,
     backgroundColor: color.white
+  },
+  detailsContainer: {
+    marginLeft: 20,
+    marginBottom: 20
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  detailLabel: {
+    fontSize: 18,
+    marginRight: 5,
+    marginLeft: 10
+  },
+  detailText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: color.textColor,
+    width: '50%'
   },
   wrapTexta: {
     flexDirection: 'row',

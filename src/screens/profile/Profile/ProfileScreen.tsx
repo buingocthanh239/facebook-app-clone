@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './styles';
 import FriendField from './component/FriendField';
 import OptionCard from './component/OptionCard';
@@ -13,7 +13,7 @@ import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 import { ProfileNavigationName } from 'src/common/constants/nameScreen';
 import { IUser } from 'src/interfaces/common.interface';
-import { getAvatarUri } from 'src/utils/helper';
+import { getAvatarUri, getCoverUri } from 'src/utils/helper';
 import { getUserInfoApi } from 'src/services/profile.services';
 import ButtonField0 from './component/ButtonField0';
 import ButtonField1 from './component/ButtonField1';
@@ -30,6 +30,13 @@ function ProfileScreen() {
   const [profile, setProfile] = useState<IUser | null>(null);
   const [listFriends, setListFriends] = useState<IUserFriends[]>([]);
   const [totalFriend, setTotalFriend] = useState('');
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  const scrollToTop = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
+    }
+  };
 
   const route: RouteProp<PropfileNavigationType, ProfileNavigationName.Profile> = useRoute();
   const auth = useAppSelector(selectAuth);
@@ -65,7 +72,8 @@ function ProfileScreen() {
       count: 6,
       user_id: !user_id ? '' : user_id
     }).catch(console.error);
-  }, []);
+    scrollToTop();
+  }, [user_id]);
   const isFriend = profile?.is_friend;
 
   const navigation: NavigationProp<PropfileNavigationType, 'EditProfile'> = useNavigation();
@@ -116,24 +124,30 @@ function ProfileScreen() {
 
   const totalHeight = 2 * 25;
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} ref={scrollViewRef}>
       <HeaderWithSearch title={profile?.username as string} titleIsCenter={true} />
       <View style={styles.header}>
         <TouchableOpacity style={styles.coverPhoto} onPress={showModalCover} activeOpacity={0.8}>
-          <Image style={styles.coverPhoto} source={getAvatarUri(profile?.avatar as string)} />
+          <Image style={styles.coverPhoto} source={getCoverUri(profile?.cover_image as string)} />
         </TouchableOpacity>
-        <View style={styles.cameraIconWrapper}>
-          <TouchableOpacity style={styles.cameraIcon} onPress={showModalCover} activeOpacity={0.8}>
-            <IconButton
-              icon='camera'
-              mode='contained'
-              iconColor='black'
-              containerColor='#E6E6EF'
-              size={28}
+        {isOwnProfile && (
+          <View style={styles.cameraIconWrapper}>
+            <TouchableOpacity
+              style={styles.cameraIcon}
               onPress={showModalCover}
-            />
-          </TouchableOpacity>
-        </View>
+              activeOpacity={0.8}
+            >
+              <IconButton
+                icon='camera'
+                mode='contained'
+                iconColor='black'
+                containerColor='#E6E6EF'
+                size={28}
+                onPress={showModalCover}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
         <TouchableOpacity
           style={styles.avatarWrapper}
           onPress={showModalAvatar}
@@ -141,21 +155,23 @@ function ProfileScreen() {
         >
           <Image style={styles.avatar} source={getAvatarUri(profile?.avatar as string)} />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.cameraIconAvatar}
-          onPress={showModalAvatar}
-          activeOpacity={0.8}
-        >
-          <IconButton
-            icon='camera'
-            mode='contained'
-            iconColor={color.textColor}
-            containerColor='#E6E6EF'
-            size={32}
+        {isOwnProfile && (
+          <TouchableOpacity
+            style={styles.cameraIconAvatar}
             onPress={showModalAvatar}
-          />
-        </TouchableOpacity>
-        <View style={styles.infomation}>
+            activeOpacity={0.8}
+          >
+            <IconButton
+              icon='camera'
+              mode='contained'
+              iconColor={color.textColor}
+              containerColor='#E6E6EF'
+              size={32}
+              onPress={showModalAvatar}
+            />
+          </TouchableOpacity>
+        )}
+        <View style={isOwnProfile ? styles.infomation : { ...styles.infomation, marginTop: 100 }}>
           <Text style={styles.name}>{profile?.username}</Text>
           {profile?.description !== '' ? (
             <Text style={styles.bio}>{profile?.description}</Text>
@@ -176,13 +192,13 @@ function ProfileScreen() {
           </TouchableOpacity>
         </View>
       ) : !isOwnProfile && isFriend === '0' ? (
-        <ButtonField0 />
+        <ButtonField0 user_id={user_id} />
       ) : !isOwnProfile && isFriend === '1' ? (
-        <ButtonField1 />
+        <ButtonField1 user_id={user_id} />
       ) : !isOwnProfile && isFriend === '2' ? (
-        <ButtonField2 />
+        <ButtonField2 user_id={user_id} />
       ) : !isOwnProfile && isFriend === '3' ? (
-        <ButtonField3 />
+        <ButtonField3 user_id={user_id} />
       ) : null}
       {/* Infor Detail */}
       <InforDetail address={profile?.address} city={profile?.city} isOwnProfile={isOwnProfile} />

@@ -70,6 +70,9 @@ export function hasPermissionToAccessRoute(requiredPermissions: string[]): boole
 export const getAvatarUri = (uri: string) =>
   uri ? { uri: uri } : require('src/assets/avatar-default.jpg');
 
+export const getCoverUri = (uri: string) =>
+  uri ? { uri: uri } : require('src/assets/cover-default.jpg');
+
 export const handShowErrorMessage = (code: number): string => {
   switch (code) {
     case HttpStatus.NETWORK_ERROR:

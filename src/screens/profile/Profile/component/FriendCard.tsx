@@ -1,16 +1,28 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { color } from 'src/common/constants/color';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 import { getAvatarUri } from 'src/utils/helper';
 export interface FriendProps {
   username: string;
   avatarUrl: string;
+  user_id: string;
 }
 const FriendCard = (props: FriendProps) => {
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+
+  const handleNavigateUserProfile = (user_id: string) => {
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id }
+    });
+  };
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={() => handleNavigateUserProfile(props.user_id)}>
       <Image style={styles.avatar} source={getAvatarUri(props.avatarUrl)} />
       <Text style={styles.username}>{props.username}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

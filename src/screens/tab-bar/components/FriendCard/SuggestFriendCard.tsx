@@ -37,7 +37,7 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
   const onPressCancel = async (data: IDeleteRequestFriend) => {
     try {
       const result = await deleteRequestFriendApi(data);
-      setStatus('cancel');
+      setStatus('Cancel');
       return result;
     } catch (error) {
       return console.log({ message: 'sever availability' });
@@ -102,7 +102,7 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
             </TouchableOpacity>
           </View>
         </View>
-      ) : status === 'cancel' ? (
+      ) : status === 'Cancel' ? (
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
             {avatarSource && avatarSource !== '' ? (
