@@ -60,7 +60,12 @@ const ButtonField3 = ({ user_id }: { user_id: string }) => {
   return (
     <View>
       {status === '' ? (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
+        <View
+          style={[
+            styles.section,
+            { flexDirection: 'row', justifyContent: 'space-between', padding: 20 }
+          ]}
+        >
           <TouchableOpacity
             style={{
               backgroundColor: color.primary,

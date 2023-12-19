@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
     color: 'black'
   },
   detailsContainer: {
-    marginTop: 20,
     marginLeft: 20
   },
   detailLabel: {

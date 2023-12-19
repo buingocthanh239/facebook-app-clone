@@ -17,12 +17,12 @@ import { getAvatarUri, getCoverUri } from 'src/utils/helper';
 import { getUserInfoApi } from 'src/services/profile.services';
 import ButtonField0 from './component/ButtonField0';
 import ButtonField1 from './component/ButtonField1';
-import ButtonField2 from './component/ButtonField2';
 import ButtonField3 from './component/ButtonField3';
 import InforDetail from './component/InforDetail';
 import { HeaderWithSearch } from 'src/components/BaseHeader';
 import { IGetUserFriends, IUserFriends } from 'src/interfaces/friends.interface';
 import { getUserFriendsApi } from 'src/services/friends.services';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function ProfileScreen() {
   const [modalAvatarVisible, setModalAvatarVisible] = useState(false);
@@ -73,7 +73,7 @@ function ProfileScreen() {
       user_id: !user_id ? '' : user_id
     }).catch(console.error);
     scrollToTop();
-  }, [user_id]);
+  }, [auth.user, user_id]);
   const isFriend = profile?.is_friend;
 
   const navigation: NavigationProp<PropfileNavigationType, 'EditProfile'> = useNavigation();
@@ -182,26 +182,53 @@ function ProfileScreen() {
       </View>
       {/* Button Field */}
       {isOwnProfile ? (
-        <View style={styles.section}>
+        <View
+          style={[
+            styles.section,
+            { flexDirection: 'row', justifyContent: 'space-between', padding: 20 }
+          ]}
+        >
           <TouchableOpacity
             activeOpacity={0.8}
-            style={styles.button}
+            style={{
+              backgroundColor: color.primary,
+              padding: 8,
+              borderRadius: 5,
+              width: '84%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
             onPress={navigateEditProfileScreen}
           >
-            <Text style={styles.buttonText}>Edit Profile</Text>
+            <Text style={[styles.buttonText]}>Edit Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: color.outlineColor,
+              padding: 8,
+              borderRadius: 5,
+              width: '12%',
+              alignItems: 'center'
+            }}
+          >
+            <Icon name='dots-horizontal' size={20}></Icon>
           </TouchableOpacity>
         </View>
       ) : !isOwnProfile && isFriend === '0' ? (
         <ButtonField0 user_id={user_id} />
       ) : !isOwnProfile && isFriend === '1' ? (
         <ButtonField1 user_id={user_id} />
-      ) : !isOwnProfile && isFriend === '2' ? (
-        <ButtonField2 user_id={user_id} />
       ) : !isOwnProfile && isFriend === '3' ? (
         <ButtonField3 user_id={user_id} />
       ) : null}
       {/* Infor Detail */}
-      <InforDetail address={profile?.address} city={profile?.city} isOwnProfile={isOwnProfile} />
+      <InforDetail
+        address={profile?.address}
+        city={profile?.city}
+        country={profile?.country}
+        isOwnProfile={isOwnProfile}
+      />
       {/* Friend Field */}
       <View style={styles.section}>
         <FriendField

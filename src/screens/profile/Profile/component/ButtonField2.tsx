@@ -13,7 +13,7 @@ import { IDeleteRequestFriend } from 'src/interfaces/friends.interface';
 import ButtonField0 from './ButtonField0';
 
 const ButtonField2 = ({ user_id }: { user_id: string }) => {
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('RequestFriend');
 
   const onPressCancel = async (data: IDeleteRequestFriend) => {
     try {
@@ -28,7 +28,7 @@ const ButtonField2 = ({ user_id }: { user_id: string }) => {
 
   return (
     <View>
-      {status === '' ? (
+      {status === 'RequestFriend' ? (
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
           <TouchableOpacity
             style={{
@@ -71,8 +71,10 @@ const ButtonField2 = ({ user_id }: { user_id: string }) => {
             <Icon name='dots-horizontal' size={20}></Icon>
           </TouchableOpacity>
         </View>
-      ) : (
+      ) : status === 'Cancel' ? (
         <ButtonField0 user_id={user_id} />
+      ) : (
+        <></>
       )}
     </View>
   );
