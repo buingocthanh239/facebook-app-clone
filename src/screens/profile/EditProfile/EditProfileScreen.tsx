@@ -295,7 +295,7 @@ function EditProfile() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => {
-            confirmChangeInfoDetail({ address, city, country });
+            confirmChangeInfoDetail();
           }}
         >
           <Text style={{ fontSize: 18, color: color.primary }}>Thêm</Text>

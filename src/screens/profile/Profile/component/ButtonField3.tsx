@@ -1,5 +1,5 @@
 //react native
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
 
 //icon
@@ -16,8 +16,10 @@ import { ISetAcceptFriend } from 'src/interfaces/friends.interface';
 import { setAcceptFriendApi } from 'src/services/friends.services';
 import ButtonField1 from './ButtonField1';
 import ButtonField0 from './ButtonField0';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 
-const ButtonField3 = ({ user_id }: { user_id: string }) => {
+const ButtonField3 = ({ user_id, username }: { user_id: string; username: string }) => {
   const [status, setStatus] = useState('');
 
   const [modalResponseVisible, setModalResponseVisible] = useState(false);
@@ -40,8 +42,16 @@ const ButtonField3 = ({ user_id }: { user_id: string }) => {
   const onPressAccept = async (data: ISetAcceptFriend) => {
     try {
       const result = await setAcceptFriendApi(data);
-      setStatus('Accept');
-      return result;
+      if (result.code == 1000) {
+        setStatus('Accept');
+        return result;
+      } else if (result.code == 9994) {
+        Alert.alert('Yêu cầu không hợp lệ', 'Lời mời kết bạn đã hết hạn. Vui lòng thử lại sau!'),
+          setStatus('Failed');
+        return result;
+      } else {
+        return console.log({ message: 'sever availability' });
+      }
     } catch (error) {
       console.log(error);
       return console.log({ message: 'sever availability' });
@@ -51,12 +61,27 @@ const ButtonField3 = ({ user_id }: { user_id: string }) => {
   const onPressDelete = async (data: ISetAcceptFriend) => {
     try {
       const result = await setAcceptFriendApi(data);
-      setStatus('Delete');
-      return result;
+      if (result.code === 1000) {
+        setStatus('Delete');
+        return result;
+      } else if (result.code === 9994) {
+        Alert.alert('Yêu cầu không hợp lệ', 'Lời mời kết bạn đã hết hạn. Vui lòng thử lại sau!'),
+          setStatus('Failed');
+        return result;
+      } else {
+        return console.log({ message: 'sever availability' });
+      }
     } catch (error) {
       return console.log({ message: 'sever availability' });
     }
   };
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+  const navigateSettingProfileScreen = () =>
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.SettingProfile,
+      params: { user_id, username }
+    });
   return (
     <View>
       {status === '' ? (
@@ -103,6 +128,7 @@ const ButtonField3 = ({ user_id }: { user_id: string }) => {
               width: '12%',
               alignItems: 'center'
             }}
+            onPress={navigateSettingProfileScreen}
           >
             <Icon name='dots-horizontal' size={20}></Icon>
           </TouchableOpacity>
@@ -139,9 +165,9 @@ const ButtonField3 = ({ user_id }: { user_id: string }) => {
           </Modal>
         </View>
       ) : status === 'Accept' ? (
-        <ButtonField1 user_id={user_id} />
+        <ButtonField1 user_id={user_id} username={username} />
       ) : status === 'Delete' ? (
-        <ButtonField0 user_id={user_id} />
+        <ButtonField0 user_id={user_id} username={username} />
       ) : (
         <></>
       )}

@@ -11,8 +11,10 @@ import { useState } from 'react';
 import { deleteRequestFriendApi } from 'src/services/friends.services';
 import { IDeleteRequestFriend } from 'src/interfaces/friends.interface';
 import ButtonField0 from './ButtonField0';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 
-const ButtonField2 = ({ user_id }: { user_id: string }) => {
+const ButtonField2 = ({ user_id, username }: { user_id: string; username: string }) => {
   const [status, setStatus] = useState('RequestFriend');
 
   const onPressCancel = async (data: IDeleteRequestFriend) => {
@@ -25,6 +27,13 @@ const ButtonField2 = ({ user_id }: { user_id: string }) => {
       return console.log({ message: 'sever availability' });
     }
   };
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+  const navigateSettingProfileScreen = () =>
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.SettingProfile,
+      params: { user_id, username }
+    });
 
   return (
     <View>
@@ -67,12 +76,13 @@ const ButtonField2 = ({ user_id }: { user_id: string }) => {
               width: '12%',
               alignItems: 'center'
             }}
+            onPress={navigateSettingProfileScreen}
           >
             <Icon name='dots-horizontal' size={20}></Icon>
           </TouchableOpacity>
         </View>
       ) : status === 'Cancel' ? (
-        <ButtonField0 user_id={user_id} />
+        <ButtonField0 user_id={user_id} username={username} />
       ) : (
         <></>
       )}

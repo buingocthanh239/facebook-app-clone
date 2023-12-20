@@ -89,6 +89,27 @@ function AllFriendScreen() {
       title: `Bạn bè lâu năm nhất trước tiên`
     }
   ];
+  const defaultSort = () => {
+    hideModal();
+  };
+  const ascendingSort = () => {
+    setListFriends(
+      [...listFriends].sort(
+        (a: IUserFriends, b: IUserFriends) =>
+          new Date(b.created).getTime() - new Date(a.created).getTime()
+      )
+    );
+    hideModal();
+  };
+  const descendingSort = () => {
+    setListFriends(
+      [...listFriends].sort(
+        (a: IUserFriends, b: IUserFriends) =>
+          new Date(a.created).getTime() - new Date(b.created).getTime()
+      )
+    );
+    hideModal();
+  };
   const ITEM_HEIGHT = 20;
 
   return (
@@ -138,7 +159,12 @@ function AllFriendScreen() {
       >
         <View style={styles.modalContent}>
           {options.map((option, index) => (
-            <TouchableOpacity key={index} onPress={() => console.log(`Selected: ${option.title}`)}>
+            <TouchableOpacity
+              key={index}
+              onPress={() => {
+                index === 0 ? defaultSort() : index === 1 ? ascendingSort() : descendingSort();
+              }}
+            >
               <View style={[styles.option, { height: 19 * 3 }]}>
                 <OptionCard icon={option.icon} title={option.title} />
               </View>

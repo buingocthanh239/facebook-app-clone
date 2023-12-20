@@ -11,8 +11,10 @@ import { useState } from 'react';
 import { IDeleteRequestFriend, ISetRequestFriend } from 'src/interfaces/friends.interface';
 import { deleteRequestFriendApi, setRequestFriendApi } from 'src/services/friends.services';
 import IconFA6 from 'react-native-vector-icons/FontAwesome6';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 
-const ButtonField0 = ({ user_id }: { user_id: string }) => {
+const ButtonField0 = ({ user_id, username }: { user_id: string; username: string }) => {
   const [status, setStatus] = useState('');
   const onPressAddFriend = async (data: ISetRequestFriend) => {
     try {
@@ -34,6 +36,13 @@ const ButtonField0 = ({ user_id }: { user_id: string }) => {
       return console.log({ message: 'sever availability' });
     }
   };
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+  const navigateSettingProfileScreen = () =>
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.SettingProfile,
+      params: { user_id, username }
+    });
 
   return (
     <View>
@@ -81,6 +90,7 @@ const ButtonField0 = ({ user_id }: { user_id: string }) => {
               width: '12%',
               alignItems: 'center'
             }}
+            onPress={navigateSettingProfileScreen}
           >
             <Icon name='dots-horizontal' size={20}></Icon>
           </TouchableOpacity>
@@ -124,6 +134,7 @@ const ButtonField0 = ({ user_id }: { user_id: string }) => {
               width: '12%',
               alignItems: 'center'
             }}
+            onPress={navigateSettingProfileScreen}
           >
             <Icon name='dots-horizontal' size={20}></Icon>
           </TouchableOpacity>

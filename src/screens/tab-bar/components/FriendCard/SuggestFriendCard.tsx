@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { color } from 'src/common/constants/color';
 import { IDeleteRequestFriend, ISetRequestFriend } from 'src/interfaces/friends.interface';
 import { deleteRequestFriendApi, setRequestFriendApi } from 'src/services/friends.services';
@@ -21,22 +21,47 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
   created
 }) => {
   const [status, setStatus] = useState('');
-  const onPressAddFriend = async (data: ISetRequestFriend) => {
-    try {
-      const result = await setRequestFriendApi(data);
-      setStatus('AddFriend');
-      console.log(result);
-    } catch (error) {
-      return console.log({ message: 'sever availability' });
-    }
+  const onPressAddFriend = (data: ISetRequestFriend) => {
+    Alert.alert('XÁC NHẬN', `Bạn có muốn gửi lời mời kết bạn tới ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const result = await setRequestFriendApi(data);
+            setStatus('AddFriend');
+            console.log(result);
+          } catch (error) {
+            return console.log({ message: 'sever availability' });
+          }
+        }
+      }
+    ]);
   };
   const onPressDelete = () => {
-    setStatus('Delete');
-    console.log(`${created}`);
+    Alert.alert('XÁC NHẬN', `Không muốn gợi ý bạn bè từ ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          setStatus('Delete');
+          console.log(`${created}`);
+        }
+      }
+    ]);
   };
   const onPressCancel = async (data: IDeleteRequestFriend) => {
     try {
       const result = await deleteRequestFriendApi(data);
+      console.log(result);
       setStatus('Cancel');
       return result;
     } catch (error) {

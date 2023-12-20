@@ -11,7 +11,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/core';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
-import { ProfileNavigationName } from 'src/common/constants/nameScreen';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 import { IUser } from 'src/interfaces/common.interface';
 import { getAvatarUri, getCoverUri } from 'src/utils/helper';
 import { getUserInfoApi } from 'src/services/profile.services';
@@ -23,6 +23,7 @@ import { HeaderWithSearch } from 'src/components/BaseHeader';
 import { IGetUserFriends, IUserFriends } from 'src/interfaces/friends.interface';
 import { getUserFriendsApi } from 'src/services/friends.services';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ButtonField2 from './component/ButtonField2';
 
 function ProfileScreen() {
   const [modalAvatarVisible, setModalAvatarVisible] = useState(false);
@@ -76,9 +77,17 @@ function ProfileScreen() {
   }, [auth.user, user_id]);
   const isFriend = profile?.is_friend;
 
-  const navigation: NavigationProp<PropfileNavigationType, 'EditProfile'> = useNavigation();
-
-  const navigateEditProfileScreen = () => navigation.navigate('EditProfile');
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+  const navigateSettingProfileScreen = () =>
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.SettingProfile,
+      params: { user_id, username: profile?.username }
+    });
+  const navigateEditProfileScreen = () =>
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.EditProfile
+    });
 
   /*
    * isFirend =
@@ -194,7 +203,7 @@ function ProfileScreen() {
               backgroundColor: color.primary,
               padding: 8,
               borderRadius: 5,
-              width: '84%',
+              width: '85%',
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center'
@@ -211,16 +220,19 @@ function ProfileScreen() {
               width: '12%',
               alignItems: 'center'
             }}
+            onPress={navigateSettingProfileScreen}
           >
             <Icon name='dots-horizontal' size={20}></Icon>
           </TouchableOpacity>
         </View>
       ) : !isOwnProfile && isFriend === '0' ? (
-        <ButtonField0 user_id={user_id} />
+        <ButtonField0 user_id={user_id} username={profile?.username as string} />
       ) : !isOwnProfile && isFriend === '1' ? (
-        <ButtonField1 user_id={user_id} />
+        <ButtonField1 user_id={user_id} username={profile?.username as string} />
+      ) : !isOwnProfile && isFriend === '2' ? (
+        <ButtonField2 user_id={user_id} username={profile?.username as string} />
       ) : !isOwnProfile && isFriend === '3' ? (
-        <ButtonField3 user_id={user_id} />
+        <ButtonField3 user_id={user_id} username={profile?.username as string} />
       ) : null}
       {/* Infor Detail */}
       <InforDetail

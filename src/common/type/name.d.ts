@@ -31,7 +31,8 @@ export enum AuthNavigationName {
 
 export enum ProfileNavigationName {
   Profile = 'Profile',
-  EditProfile = 'EditProfile'
+  EditProfile = 'EditProfile',
+  SettingProfile = 'SettingProfile'
 }
 
 export enum SettingNavigationName {
