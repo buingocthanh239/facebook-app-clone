@@ -1,7 +1,9 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { TouchableHighlight, View } from 'react-native';
-import { Card, Divider, IconButton, Text } from 'react-native-paper';
+import { View } from 'react-native';
+import { Card, Divider, IconButton, Text, TouchableRipple } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
+import { useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
 
 interface IListItemInfo {
   title: string;
@@ -11,11 +13,13 @@ interface IListItemInfo {
 
 function SettingInfo() {
   const navigation: NavigationProp<SettingNavigationType> = useNavigation();
+  const auth = useAppSelector(selectAuth);
+
   const onPressInfoName = () => navigation.navigate('SettingInfoName');
   const listItem: IListItemInfo[] = [
     {
       title: 'Tên',
-      subtitle: 'Bùi Ngọc Thành',
+      subtitle: auth.user?.username as string,
       onPress: onPressInfoName
     },
     {
@@ -39,11 +43,7 @@ function SettingInfo() {
       <Divider />
       {listItem.map((item, i) => (
         <View key={i}>
-          <TouchableHighlight
-            activeOpacity={1}
-            underlayColor={color.borderColor}
-            onPress={item.onPress ?? (() => {})}
-          >
+          <TouchableRipple underlayColor={color.borderColor} onPress={item.onPress ?? (() => {})}>
             <Card.Title
               title={item.title}
               subtitle={item.subtitle}
@@ -55,7 +55,7 @@ function SettingInfo() {
                 <IconButton {...props} icon='chevron-right' iconColor={color.activeOutlineColor} />
               )}
             />
-          </TouchableHighlight>
+          </TouchableRipple>
           <Divider />
         </View>
       ))}

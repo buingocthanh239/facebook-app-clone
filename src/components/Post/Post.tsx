@@ -15,6 +15,7 @@ const MAX_LENGTH_CONTENT = 500;
 
 // define props
 export interface PostProps {
+  id: string;
   ownerAvatar?: string;
   ownerName: string;
   createdAt: string;
@@ -30,7 +31,7 @@ export interface PostProps {
 function Post(props: PostProps) {
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
-  const { friendComments, content, imageUrl, video } = props;
+  const { friendComments, content, imageUrl, video, id } = props;
   useEffect(() => {
     if (content) {
       setDisplayContent(content);
@@ -64,7 +65,7 @@ function Post(props: PostProps) {
   const isInteract: boolean = !!props.numberComments || !!props.numberLikes || !!props.numberShares;
   const AvatarSource = props.ownerAvatar
     ? { url: props.ownerAvatar }
-    : require('src/assets/avatar-default.png');
+    : require('src/assets/avatar-default.jpg');
   return (
     <View style={styles.postContainer}>
       {friendComments && friendComments?.length !== 0 && (
@@ -179,7 +180,7 @@ function Post(props: PostProps) {
           </>
         </TouchableHighlight>
       </View>
-      <ReportModal isVisible={modalVisible} onBackdropPress={hideModal} />
+      <ReportModal isVisible={modalVisible} onBackdropPress={hideModal} id={id} />
     </View>
   );
 }

@@ -1,46 +1,29 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { color } from 'src/common/constants/color';
 import { SuggestFriendCard } from '../../components/FriendCard';
-import { useEffect, useState } from 'react';
-import { IGetSuggestedFriends, ISuggestedFriends } from 'src/interfaces/friends.interface';
 import { getSuggestedFriendsApi } from 'src/services/friends.services';
 import BaseFlatList from 'src/components/BaseFlatList';
+import useLoadingListApi from 'src/hooks/useLoadingListApi';
+import BaseActivityIndicator from 'src/components/BaseActivityIndicator';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 
 function SuggestionsScreen() {
-  const [listSuggestedFriend, setListSuggestedFriend] = useState<ISuggestedFriends[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
-  const [index, setIndex] = useState(80);
-  const ITEM_HEIGHT = 10;
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    if (index + 20 > 100) {
-      setIndex(Math.random() * 10);
-    }
-    setIndex(index => index + Math.random() * 10 + 10);
+  const handleNavigateUserProfile = (user_id: string) => {
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id }
+    });
   };
 
-  useEffect(() => {
-    const data: IGetSuggestedFriends = {
-      index: index.toString(),
-      count: '20'
-    };
-    const fetchData = async (data: IGetSuggestedFriends) => {
-      try {
-        const result = await getSuggestedFriendsApi(data);
-        console.log(result);
-        setListSuggestedFriend(result.data);
-        setRefreshing(false);
-        return result;
-      } catch (error) {
-        return console.log({ message: 'sever availability' });
-      }
-    };
-
-    fetchData(data).catch(console.error);
-  }, [refreshing, index]);
-
-  return (
+  const { data, isLoadingFirstApi, isNextFetchingApi, onEndReadable, refreshing, onRefresh } =
+    useLoadingListApi(getSuggestedFriendsApi);
+  return isLoadingFirstApi ? (
+    <BaseActivityIndicator />
+  ) : (
     <View style={styles.container}>
       <BaseFlatList
         ListHeaderComponent={() => (
@@ -50,24 +33,24 @@ function SuggestionsScreen() {
             </Text>
           </View>
         )}
-        data={listSuggestedFriend}
+        data={data}
         renderItem={({ item }) => (
-          <SuggestFriendCard
-            id={item.id}
-            username={item.username}
-            avatarSource={item.avatar}
-            same_friends={item.same_friends}
-            created={item.created}
-          />
+          <TouchableOpacity onPress={() => handleNavigateUserProfile(item.id)}>
+            <SuggestFriendCard
+              id={item.id}
+              username={item.username}
+              avatarSource={item.avatar}
+              same_friends={item.same_friends}
+              created={item.created}
+            />
+          </TouchableOpacity>
         )}
         keyExtractor={item => item.id}
+        onEndReached={onEndReadable}
+        onEndReachedThreshold={2 / data.length}
+        isFootterLoading={isNextFetchingApi}
         onRefresh={onRefresh}
         refreshing={refreshing}
-        getItemLayout={(data, index) => ({
-          length: ITEM_HEIGHT,
-          offset: ITEM_HEIGHT * index,
-          index
-        })}
       />
     </View>
   );

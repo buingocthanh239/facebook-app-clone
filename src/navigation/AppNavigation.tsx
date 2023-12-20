@@ -11,6 +11,7 @@ import AuthNavigation from './AuthNavigation';
 import VerifyOTPAfterLogin from 'src/screens/pending-sigup/VerifyOTPAfterLogin';
 // import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
+// import ReportNavigationWrapper from './ReportNavigation';
 
 import Header from 'src/screens/tab-bar/components/Header';
 import { useAppDispatch, useAppSelector } from 'src/redux';
@@ -19,11 +20,14 @@ import { AppNaviagtionName } from 'src/common/constants/nameScreen';
 import { useEffect } from 'react';
 import { AccountStatus } from 'src/common/enum/commom';
 import LoginScreen from 'src/screens/auth/Login/LoginScreen';
+// import BaseModalError from 'src/components/BaseModalError';
+// import { deleteMessage, selectApp } from 'src/redux/slices/appSlice';
 
 const Stack = createNativeStackNavigator();
 
 function AppNavigation() {
   const auth = useAppSelector(selectAuth);
+  // const appRedux = useAppSelector(selectApp);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -32,6 +36,10 @@ function AppNavigation() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.user?.active, dispatch]);
+
+  // const onBackdropPress = () => {
+  //   dispatch(deleteMessage());
+  // };
 
   return (
     <Stack.Navigator

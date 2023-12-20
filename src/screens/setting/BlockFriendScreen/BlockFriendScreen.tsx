@@ -1,9 +1,10 @@
-import { useState } from 'react';
-
 import BaseFlatList from 'src/components/BaseFlatList';
 import BlockFirendItem from './components/BlockFirendItem';
 import HeaderItem from './components/HeaderItem';
-import { Divider } from 'react-native-paper';
+import { ActivityIndicator, Divider, Text } from 'react-native-paper';
+import { getListBlockApi } from 'src/services/block.service';
+import useLoadingListApi from 'src/hooks/useLoadingListApi';
+import { color } from 'src/common/constants/color';
 
 export interface IBlockFriend {
   id: string;
@@ -12,35 +13,20 @@ export interface IBlockFriend {
 }
 
 function BlockFriendScreen() {
-  const Data: IBlockFriend[] = [
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      name: 'Bùi Ngọc Thành'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d71',
-      name: 'Bùi Ngọc Thành'
-    }
-  ];
-  const [data, setdata] = useState(Data);
-  const [refreshing, setrefreshing] = useState(false);
-  const onRefresh = async () => {
-    setrefreshing(true);
-    setTimeout(() => {
-      setdata(data => [
-        ...data,
-        {
-          id: '58694a0f-3da1-471f-bd96-145571e29d75' + Math.floor(Math.random() * 100),
-          name: 'Bùi Ngọc Thành'
-        }
-      ]);
-      setrefreshing(false);
-    }, 2000);
-  };
-  return (
+  const { data, onEndReadable, isLoadingFirstApi, isNextFetchingApi } =
+    useLoadingListApi(getListBlockApi);
+
+  return isLoadingFirstApi ? (
+    <ActivityIndicator color={color.activeOutlineColor} style={{ marginTop: '50%' }} />
+  ) : (
     <>
       <BaseFlatList
         ListHeaderComponent={<HeaderItem />}
+        ListEmptyComponent={
+          <Text variant='bodyLarge' style={{ textAlign: 'center', marginTop: 20 }}>
+            Danh sách chặn trống
+          </Text>
+        }
         data={data}
         renderItem={({ item }) => (
           <>
@@ -49,8 +35,10 @@ function BlockFriendScreen() {
           </>
         )}
         keyExtractor={item => item.id}
-        onRefresh={onRefresh}
-        refreshing={refreshing}
+        refreshing={false}
+        onEndReached={onEndReadable}
+        onEndReachedThreshold={0.05}
+        isFootterLoading={isNextFetchingApi}
       />
     </>
   );

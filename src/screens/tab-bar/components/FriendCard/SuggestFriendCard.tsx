@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { color } from 'src/common/constants/color';
 import { IDeleteRequestFriend, ISetRequestFriend } from 'src/interfaces/friends.interface';
 import { deleteRequestFriendApi, setRequestFriendApi } from 'src/services/friends.services';
+import { getAvatarUri } from 'src/utils/helper';
 
 interface SuggestFriendCardProps {
   id: string;
@@ -37,7 +38,7 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
     try {
       const result = await deleteRequestFriendApi(data);
       setStatus('cancel');
-      console.log(result);
+      return result;
     } catch (error) {
       return console.log({ message: 'sever availability' });
     }
@@ -49,10 +50,10 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
             {avatarSource && avatarSource !== '' ? (
-              <Image source={{ uri: avatarSource }} style={styles.avatar} />
+              <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
             ) : (
               <Image
-                source={require('../../../../assets/avatar-default.png')}
+                source={require('../../../../assets/avatar-default.jpg')}
                 style={styles.avatar}
               />
             )}
@@ -83,10 +84,10 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
             {avatarSource && avatarSource !== '' ? (
-              <Image source={{ uri: avatarSource }} style={styles.avatar} />
+              <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
             ) : (
               <Image
-                source={require('../../../../assets/avatar-default.png')}
+                source={require('../../../../assets/avatar-default.jpg')}
                 style={styles.avatar}
               />
             )}
@@ -105,10 +106,10 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
         <View style={styles.cardContainer}>
           <View style={styles.avatarContainer}>
             {avatarSource && avatarSource !== '' ? (
-              <Image source={{ uri: avatarSource }} style={styles.avatar} />
+              <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
             ) : (
               <Image
-                source={require('../../../../assets/avatar-default.png')}
+                source={require('../../../../assets/avatar-default.jpg')}
                 style={styles.avatar}
               />
             )}

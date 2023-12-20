@@ -10,18 +10,41 @@ import BaseForm from 'src/components/BaseForm';
 import { IEmailScreenForm } from 'src/interfaces/auth.interface';
 import WraperAuthScreen from 'src/components/WraperScreen';
 import { emailFormSchema } from 'src/validation/signUp.validate';
+import { useState } from 'react';
+import { checkEmailApi } from 'src/services/auth.services';
+import { ExistedEmail } from 'src/common/enum/commom';
+import BaseModalError from 'src/components/BaseModalError';
 
 function EmailScreen() {
   const methods = useForm({ resolver: yupResolver(emailFormSchema) });
-  const { handleSubmit } = methods;
+
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const { handleSubmit, setValue } = methods;
   const navigation: NavigationProp<AuthNavigationType, 'PasswordScreen'> = useNavigation();
   const route: RouteProp<AuthNavigationType, 'EmailScreen'> = useRoute();
-  const onPressNextButton = (data: IEmailScreenForm) => {
-    navigation.navigate('PasswordScreen', {
-      ...route.params,
-      ...data
-    });
+  const onPressNextButton = async (data: IEmailScreenForm) => {
+    try {
+      const res = await checkEmailApi({ email: data.email });
+      if (!res.success) {
+        return setErrorMessage(res.message);
+      }
+      if (res.data.existed === ExistedEmail.IsExisted) {
+        setErrorMessage('Email đã tồn tại. Vui lòng chọn email khác');
+        setValue('email', '');
+        return;
+      }
+      return navigation.navigate('PasswordScreen', {
+        ...route.params,
+        ...data
+      });
+    } catch (err) {
+      setErrorMessage('Vui lòng kiểm tra kết nối internet');
+    }
   };
+
+  const onBackdropPress = () => setErrorMessage('');
+
   return (
     <WraperAuthScreen linnerGradient>
       <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
@@ -46,6 +69,11 @@ function EmailScreen() {
       >
         Đăng nhập bằng số di động
       </BaseButton>
+      <BaseModalError
+        isVisible={!!errorMessage}
+        onBackdropPress={onBackdropPress}
+        title={errorMessage}
+      />
     </WraperAuthScreen>
   );
 }

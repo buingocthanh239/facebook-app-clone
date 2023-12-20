@@ -9,6 +9,7 @@ type AppNavigationType = {
     | { screen: ProfileNavigationName.EditProfile };
   PostNavigation: { screen: PostNavigationName };
   SearchNavigation: { screen: SearchNavigationName };
+  ReportNavigation: { screen: ReportNavigationName; params: { id: string } };
   VerifyOTPAfterLogin: undefined;
   ChangeProfileAfterSign: undefined;
   NotFoundScreen: undefined;

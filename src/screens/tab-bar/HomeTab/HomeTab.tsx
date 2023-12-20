@@ -130,6 +130,7 @@ function HomeTab() {
       data={data}
       renderItem={({ item }) => (
         <Post
+          id={item.id}
           ownerName={item.ownerName}
           createdAt={item.createdAt}
           friendComments={item.friendComments}

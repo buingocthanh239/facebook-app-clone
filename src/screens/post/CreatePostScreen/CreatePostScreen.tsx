@@ -18,6 +18,7 @@ import OptionCard from './component/OptionCard';
 import Modal from 'react-native-modal';
 import { MediaType, PhotoQuality, launchImageLibrary } from 'react-native-image-picker';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { getAvatarUri } from 'src/utils/helper';
 
 const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
   const selectedItem = route?.params?.selectedItem;
@@ -75,7 +76,6 @@ const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
   //Xử lý sử kiện button back của android
   useEffect(() => {
     const backAction = () => {
-      console.log('Back button pressed!');
       showModal();
       return true;
     };
@@ -120,7 +120,6 @@ const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
       if (src !== undefined && src !== null && src !== '') {
         const newImages = [...listImage, src];
         setListImage(newImages);
-        console.log(listImage);
       }
     });
   };
@@ -134,7 +133,7 @@ const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
       <ScrollView keyboardShouldPersistTaps='handled' style={{ marginBottom: 90 }}>
         <View style={styles.header}>
           <View style={styles.avatarContainer}>
-            <Image source={{ uri: avatar }} style={styles.avatar} />
+            <Image source={getAvatarUri(avatar)} style={styles.avatar} />
           </View>
           <View style={styles.userInfo}>
             <View style={{ flexDirection: 'row', marginRight: 80, marginBottom: 5 }}>

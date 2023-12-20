@@ -10,6 +10,8 @@ import { selectAuth } from 'src/redux/slices/authSlice';
 import BaseFlatList from 'src/components/BaseFlatList';
 import { getUserFriends } from 'src/redux/slices/friendSlice';
 import { useAppDispatch, useAppSelector } from 'src/redux';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 
 function AllFriendScreen() {
   const [totalFriend, setTotalFriend] = useState('');
@@ -44,7 +46,6 @@ function AllFriendScreen() {
     const fetchData = async (data: IGetUserFriends) => {
       try {
         const result = await getUserFriendsApi(data);
-        console.log(result);
         setTotalFriend(result.data.total);
         setListFriends(result.data.friends);
         setRefreshing(false);
@@ -58,6 +59,15 @@ function AllFriendScreen() {
     dispatch(getUserFriends(data));
   }, [dispatch, refreshing, user_id]);
 
+  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+
+  const handleNavigateUserProfile = (user_id: string) => {
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id }
+    });
+  };
   const showModal = () => {
     setModalVisible(true);
   };
@@ -100,7 +110,7 @@ function AllFriendScreen() {
       <BaseFlatList
         data={listFriends}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => console.log(`Go to ${item.username} page.`)}>
+          <TouchableOpacity onPress={() => handleNavigateUserProfile(item.id)}>
             <UserFriendCard
               id={item.id}
               created={createdFriendAt(item.created)}

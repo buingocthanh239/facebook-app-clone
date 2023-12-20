@@ -67,3 +67,8 @@ export enum VerifyCodeStatus {
   Inactive = 0,
   Active = 1
 }
+
+export enum ExistedEmail {
+  IsExisted = '1',
+  IsNotExisted = '0'
+}

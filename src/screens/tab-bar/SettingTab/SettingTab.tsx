@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View, ScrollView, BackHandler } from 'react-native';
-import { Avatar, Card, Divider, IconButton, List, Text } from 'react-native-paper';
+import { Avatar, Card, Divider, IconButton, List, Text, TouchableRipple } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import { getAvatarUri } from 'src/utils/helper';
 import IconFont from 'react-native-vector-icons/FontAwesome5';
@@ -7,12 +7,21 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import globalStyles from 'src/common/styles/globalStyles';
 import TextTitle from './components/TextTitle';
 import ListItemCard from './components/ListItemCard';
-import { useNavigation, NavigationProp, useScrollToTop } from '@react-navigation/native';
+import {
+  useNavigation,
+  NavigationProp,
+  useScrollToTop,
+  useFocusEffect
+} from '@react-navigation/native';
 import { useAppDispatch, useAppSelector } from 'src/redux';
 import { logout, selectAuth } from 'src/redux/slices/authSlice';
 import BaseModalLoading from 'src/components/BaseModalLoading/BaseModalLoading';
-import { AppNaviagtionName, SettingNavigationName } from 'src/common/constants/nameScreen';
-import { useRef } from 'react';
+import {
+  AppNaviagtionName,
+  ProfileNavigationName,
+  SettingNavigationName
+} from 'src/common/constants/nameScreen';
+import { useRef, useState } from 'react';
 
 interface ISettingAcordion {
   title: string;
@@ -20,9 +29,16 @@ interface ISettingAcordion {
   onPress: () => any;
 }
 function SettingTab() {
+  const [loadingSettingTab, setLoadingSettingTab] = useState<boolean>(false);
+  useFocusEffect(() => {
+    setLoadingSettingTab(true);
+    return () => setLoadingSettingTab(false);
+  });
+
   const navigation: NavigationProp<AppNavigationType> = useNavigation();
   const dispatch = useAppDispatch();
   const auth = useAppSelector(selectAuth);
+
   const onPressSettingItem = () =>
     navigation.navigate(AppNaviagtionName.SettingNavigation, {
       screen: SettingNavigationName.SettingScreen
@@ -34,6 +50,11 @@ function SettingTab() {
   const onPressNotificationItem = () =>
     navigation.navigate(AppNaviagtionName.SettingNavigation, {
       screen: SettingNavigationName.SettingNotification
+    });
+  const navigaProfileScreen = () =>
+    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id: auth.user?.id as string }
     });
   const onPressExit = () => BackHandler.exitApp();
   const onPressLogout = () => {
@@ -74,19 +95,29 @@ function SettingTab() {
         <IconButton icon='magnify' size={30} />
       </View>
       <Card style={styles.wrapperAcountCard}>
-        <Card.Title
-          title={<Text variant='titleMedium'>Bùi Ngọc Thành</Text>}
-          left={props => <Avatar.Image {...props} source={getAvatarUri('')} size={40} />}
-          right={props => (
-            <IconButton
-              {...props}
-              mode='contained'
-              icon={() => <IconFont name='chevron-down' color={color.iconButtonColor} size={16} />}
-              containerColor={color.iconButtonBackgroundColor}
-              size={20}
-            />
-          )}
-        />
+        <TouchableRipple onPress={navigaProfileScreen}>
+          <Card.Title
+            title={<Text variant='titleMedium'>{auth.user?.username}</Text>}
+            left={props => (
+              <Avatar.Image
+                {...props}
+                source={getAvatarUri(auth.user?.avatar as string)}
+                size={40}
+              />
+            )}
+            right={props => (
+              <IconButton
+                {...props}
+                mode='contained'
+                icon={() => (
+                  <IconFont name='chevron-down' color={color.iconButtonColor} size={16} />
+                )}
+                containerColor={color.iconButtonBackgroundColor}
+                size={20}
+              />
+            )}
+          />
+        </TouchableRipple>
         <Divider />
         <Card.Title
           title={
@@ -148,7 +179,7 @@ function SettingTab() {
           />
         </TouchableOpacity>
       </List.Section>
-      <BaseModalLoading isVisible={auth.isLoading} />
+      <BaseModalLoading isVisible={loadingSettingTab && auth.isLoading} />
     </ScrollView>
   );
 }

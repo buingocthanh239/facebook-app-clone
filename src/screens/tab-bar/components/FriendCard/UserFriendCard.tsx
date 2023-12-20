@@ -6,6 +6,7 @@ import { color } from 'src/common/constants/color';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
 import { ISetRequestFriend, IUnfriend } from 'src/interfaces/friends.interface';
 import { setRequestFriendApi, unfriendApi } from 'src/services/friends.services';
+import { getAvatarUri } from 'src/utils/helper';
 
 interface UserFriendCardProps {
   id: string;
@@ -50,7 +51,6 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
   const handleUnfriend = async (data: IUnfriend) => {
     try {
       const result = await unfriendApi(data);
-      console.log(result);
       hideModal();
       setStatus('unfriended');
       return result;
@@ -63,7 +63,7 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
     try {
       const result = await setRequestFriendApi(data);
       setStatus('addFriend');
-      console.log(result);
+      return result;
     } catch (error) {
       return console.log({ message: 'sever availability' });
     }
@@ -76,7 +76,7 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
   return (
     <View style={styles.cardContainer}>
       <View style={styles.avatarContainer}>
-        <Image source={{ uri: avatarSource }} style={styles.avatar} />
+        <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
       </View>
       <View style={styles.infoContainer}>
         <View style={styles.usernameField}>
@@ -123,7 +123,7 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 10 }}>
               <View style={styles.avatarContainer}>
                 <Image
-                  source={{ uri: avatarSource }}
+                  source={getAvatarUri(avatarSource)}
                   style={{ width: 50, height: 50, borderRadius: 25 }}
                 />
               </View>
