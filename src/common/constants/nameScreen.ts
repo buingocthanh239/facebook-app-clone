@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 export enum AppNaviagtionName {
-  InboxScreen = 'InboxScreen',
-  InboxListScreen = 'InboxListScreen',
   AuthNavigation = 'AuthNavigation',
   TabNavigation = 'TabNavigation',
   SettingNavigation = 'SettingNavigation',
@@ -10,6 +8,7 @@ export enum AppNaviagtionName {
   PostNavigation = 'PostNavigation',
   SearchNavigation = 'SearchNavigation',
   ReportNavigation = 'ReportNavigation',
+  ChatNavigation = 'ChatNavigation',
   VerifyOTPAfterLogin = 'VerifyOTPAfterLogin',
   ChangeProfileAfterSign = 'ChangeProfileAfterSign',
   NotFoundScreen = 'NotFoundScreen'
@@ -70,4 +69,9 @@ export enum SearchNavigationName {
 
 export enum ReportNavigationName {
   ReportScreen = 'ReportScreen'
+}
+
+export enum ChatNavigationName {
+  InboxScreen = 'InboxScreen',
+  InboxListScreen = 'InboxListScreen'
 }

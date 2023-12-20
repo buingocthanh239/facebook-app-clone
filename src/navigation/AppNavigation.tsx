@@ -12,6 +12,7 @@ import VerifyOTPAfterLogin from 'src/screens/pending-sigup/VerifyOTPAfterLogin';
 import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
 import ReportNavigationWrapper from './ReportNavigation';
+import ChatNavigationWrapper from './ChatNavigation';
 
 import Header from 'src/screens/tab-bar/components/Header';
 import { useAppDispatch, useAppSelector } from 'src/redux';
@@ -21,8 +22,6 @@ import { useEffect } from 'react';
 import { AccountStatus } from 'src/common/enum/commom';
 import BaseModalError from 'src/components/BaseModalError';
 import { deleteMessage, selectApp } from 'src/redux/slices/appSlice';
-import { InboxScreen } from 'src/screens/chattab';
-import { InboxListScreen } from 'src/screens/chattab';
 
 const Stack = createNativeStackNavigator();
 
@@ -69,16 +68,6 @@ function AppNavigation() {
           ) : (
             <>
               <Stack.Screen
-                name={AppNaviagtionName.InboxScreen}
-                options={{ headerShown: false, header: () => <Header /> }}
-                component={InboxScreen}
-              />
-              <Stack.Screen
-                name={AppNaviagtionName.InboxListScreen}
-                options={{ headerShown: false, header: () => <Header /> }}
-                component={InboxListScreen}
-              />
-              <Stack.Screen
                 name={AppNaviagtionName.TabNavigation}
                 options={{ headerShown: false, header: () => <Header /> }}
                 component={TabNavigationWrapper}
@@ -106,6 +95,10 @@ function AppNavigation() {
               <Stack.Screen
                 name={AppNaviagtionName.ReportNavigation}
                 component={ReportNavigationWrapper}
+              />
+              <Stack.Screen
+                name={AppNaviagtionName.ChatNavigation}
+                component={ChatNavigationWrapper}
               />
               <Stack.Screen
                 name={AppNaviagtionName.NotFoundScreen}
