@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 export enum AppNaviagtionName {
+  InboxScreen = 'InboxScreen',
+  InboxListScreen = 'InboxListScreen',
   AuthNavigation = 'AuthNavigation',
   TabNavigation = 'TabNavigation',
   SettingNavigation = 'SettingNavigation',
