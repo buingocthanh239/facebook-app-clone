@@ -10,6 +10,7 @@ type AppNavigationType = {
   PostNavigation: { screen: PostNavigationName };
   SearchNavigation: { screen: SearchNavigationName };
   ReportNavigation: { screen: ReportNavigationName; params: { id: string } };
+  ChatNavigation: { screen: ChatNavigationName };
   VerifyOTPAfterLogin: undefined;
   ChangeProfileAfterSign: undefined;
   NotFoundScreen: undefined;
@@ -71,4 +72,9 @@ type TabNavigationType = {
 
 type SearchNavigationType = {
   SearchScreen: undefined;
+};
+
+type ChatNavigationType = {
+  InboxScreen: undefined;
+  InboxListScreen: undefined;
 };

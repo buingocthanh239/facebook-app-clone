@@ -7,6 +7,8 @@ export enum AppNaviagtionName {
   ProfileNavigation = 'ProfileNavigation',
   PostNavigation = 'PostNavigation',
   SearchNavigation = 'SearchNavigation',
+  ReportNavigation = 'ReportNavigation',
+  ChatNavigation = 'ChatNavigation',
   VerifyOTPAfterLogin = 'VerifyOTPAfterLogin',
   ChangeProfileAfterSign = 'ChangeProfileAfterSign',
   NotFoundScreen = 'NotFoundScreen'
@@ -15,6 +17,7 @@ export enum AppNaviagtionName {
 export enum AuthNavigationName {
   HomeAuth = 'HomeAuth',
   Login = 'Login',
+  FirstScreen = 'FirstScreen',
   NameScreen = 'NameScreen',
   BirthdayScreen = 'BirthdayScreen',
   GenderScreen = 'GenderScreen',
@@ -23,7 +26,7 @@ export enum AuthNavigationName {
   ConfirmPolicyScreen = 'ConfirmPolicyScreen',
   VerifyOTPScreen = 'VerifyOTPScreen',
   SaveInfoAccountScreen = 'SaveInfoAccountScreen',
-  ForgetPasswordScreen = 'ForgetPasswordScreen'
+  ForgotPasswordScreen = 'ForgotPasswordScreen'
 }
 
 export enum ProfileNavigationName {
@@ -62,4 +65,13 @@ export enum TabNavigationName {
 
 export enum SearchNavigationName {
   SearchScreen = 'SearchScreen'
+}
+
+export enum ReportNavigationName {
+  ReportScreen = 'ReportScreen'
+}
+
+export enum ChatNavigationName {
+  InboxScreen = 'InboxScreen',
+  InboxListScreen = 'InboxListScreen'
 }
