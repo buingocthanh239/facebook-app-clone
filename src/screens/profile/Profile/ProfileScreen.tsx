@@ -65,7 +65,7 @@ function ProfileScreen() {
       count: 6,
       user_id: !user_id ? '' : user_id
     }).catch(console.error);
-  }, [auth, isOwnProfile, user_id]);
+  }, []);
   const isFriend = profile?.is_friend;
 
   const navigation: NavigationProp<PropfileNavigationType, 'EditProfile'> = useNavigation();
