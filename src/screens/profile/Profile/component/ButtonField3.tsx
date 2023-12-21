@@ -40,40 +40,61 @@ const ButtonField3 = ({ user_id, username }: { user_id: string; username: string
     }
   ];
   const onPressAccept = async (data: ISetAcceptFriend) => {
-    try {
-      const result = await setAcceptFriendApi(data);
-      if (result.code == 1000) {
-        setStatus('Accept');
-        return result;
-      } else if (result.code == 9994) {
-        Alert.alert('Yêu cầu không hợp lệ', 'Lời mời kết bạn đã hết hạn. Vui lòng thử lại sau!'),
-          setStatus('Failed');
-        return result;
-      } else {
-        return console.log({ message: 'sever availability' });
+    Alert.alert('XÁC NHẬN', `Bạn có muốn chấp nhận lời mời kết bạn của ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const result = await setAcceptFriendApi(data);
+            if (result.code == 1000) {
+              setStatus('Accept');
+              return result;
+            } else if (result.code == 9994) {
+              setStatus('Failed');
+              Alert.alert(
+                'Yêu cầu không hợp lệ',
+                'Lời mời kết bạn đã hết hạn. Vui lòng thử lại sau!'
+              ),
+                setStatus('Failed');
+              return result;
+            } else {
+              setStatus('Failed');
+              return console.log({ message: 'sever availability' });
+            }
+          } catch (error) {
+            console.log(error);
+            return console.log({ message: 'sever availability' });
+          }
+        }
       }
-    } catch (error) {
-      console.log(error);
-      return console.log({ message: 'sever availability' });
-    }
+    ]);
   };
 
-  const onPressDelete = async (data: ISetAcceptFriend) => {
-    try {
-      const result = await setAcceptFriendApi(data);
-      if (result.code === 1000) {
-        setStatus('Delete');
-        return result;
-      } else if (result.code === 9994) {
-        Alert.alert('Yêu cầu không hợp lệ', 'Lời mời kết bạn đã hết hạn. Vui lòng thử lại sau!'),
-          setStatus('Failed');
-        return result;
-      } else {
-        return console.log({ message: 'sever availability' });
+  const onPressDelete = (data: ISetAcceptFriend) => {
+    Alert.alert('XÁC NHẬN', `Bạn có muốn xóa lời mời kết bạn từ ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const result = await setAcceptFriendApi(data);
+            setStatus('Delete');
+            return result;
+          } catch (error) {
+            return console.log({ message: 'sever availability' });
+          }
+        }
       }
-    } catch (error) {
-      return console.log({ message: 'sever availability' });
-    }
+    ]);
   };
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
     useNavigation();
@@ -166,7 +187,7 @@ const ButtonField3 = ({ user_id, username }: { user_id: string; username: string
         </View>
       ) : status === 'Accept' ? (
         <ButtonField1 user_id={user_id} username={username} />
-      ) : status === 'Delete' ? (
+      ) : status === 'Delete' || status === 'Failed' ? (
         <ButtonField0 user_id={user_id} username={username} />
       ) : (
         <></>

@@ -1,5 +1,5 @@
 //react native
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
 //icon
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -36,15 +36,27 @@ const ButtonField1 = ({ user_id, username }: { user_id: string; username: string
       title: `Hủy kết bạn`
     }
   ];
-  const handleUnfriend = async (data: IUnfriend) => {
-    try {
-      const result = await unfriendApi(data);
-      hideModal();
-      setStatus('unfriended');
-      return result;
-    } catch (error) {
-      return console.log({ message: 'sever availability' });
-    }
+  const handleUnfriend = (data: IUnfriend) => {
+    Alert.alert('XÁC NHẬN', `Bạn có muốn hủy kết bạn với ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const result = await unfriendApi(data);
+            hideModal();
+            setStatus('unfriended');
+            return result;
+          } catch (error) {
+            return console.log({ message: 'sever availability' });
+          }
+        }
+      }
+    ]);
   };
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
     useNavigation();

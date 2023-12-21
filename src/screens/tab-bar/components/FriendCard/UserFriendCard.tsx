@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import { color } from 'src/common/constants/color';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
-import { ISetRequestFriend, IUnfriend } from 'src/interfaces/friends.interface';
-import { setRequestFriendApi, unfriendApi } from 'src/services/friends.services';
+import {
+  IDeleteRequestFriend,
+  ISetRequestFriend,
+  IUnfriend
+} from 'src/interfaces/friends.interface';
+import {
+  deleteRequestFriendApi,
+  setRequestFriendApi,
+  unfriendApi
+} from 'src/services/friends.services';
 import { getAvatarUri } from 'src/utils/helper';
 
 interface UserFriendCardProps {
@@ -48,29 +56,60 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
   ];
 
   const [status, setStatus] = useState('');
-  const handleUnfriend = async (data: IUnfriend) => {
+  const handleUnfriend = (data: IUnfriend) => {
+    Alert.alert('XÁC NHẬN', `Bạn có muốn hủy kết bạn với ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const result = await unfriendApi(data);
+            hideModal();
+            setStatus('unfriended');
+            return result;
+          } catch (error) {
+            return console.log({ message: 'sever availability' });
+          }
+        }
+      }
+    ]);
+  };
+
+  const onPressAddFriend = (data: ISetRequestFriend) => {
+    Alert.alert('XÁC NHẬN', `Bạn có muốn gửi lời mời kết bạn tới ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const result = await setRequestFriendApi(data);
+            setStatus('AddFriend');
+            console.log(result);
+          } catch (error) {
+            return console.log({ message: 'sever availability' });
+          }
+        }
+      }
+    ]);
+  };
+
+  const onPressCancel = async (data: IDeleteRequestFriend) => {
     try {
-      const result = await unfriendApi(data);
-      hideModal();
+      const result = await deleteRequestFriendApi(data);
+      console.log(result);
       setStatus('unfriended');
       return result;
     } catch (error) {
       return console.log({ message: 'sever availability' });
     }
-  };
-
-  const onPressAddFriend = async (data: ISetRequestFriend) => {
-    try {
-      const result = await setRequestFriendApi(data);
-      setStatus('addFriend');
-      return result;
-    } catch (error) {
-      return console.log({ message: 'sever availability' });
-    }
-  };
-
-  const onPressCancel = () => {
-    setStatus('unfriended');
   };
 
   return (
@@ -102,7 +141,10 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
             <Text style={styles.buttonText}>Thêm bạn bè</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.acceptButton} onPress={() => onPressCancel()}>
+          <TouchableOpacity
+            style={styles.acceptButton}
+            onPress={() => onPressCancel({ user_id: id })}
+          >
             <Text style={styles.buttonText}>Hủy</Text>
           </TouchableOpacity>
         )}

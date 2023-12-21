@@ -1,5 +1,5 @@
 //react native
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
 //icon
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,14 +16,26 @@ import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/n
 
 const ButtonField0 = ({ user_id, username }: { user_id: string; username: string }) => {
   const [status, setStatus] = useState('');
-  const onPressAddFriend = async (data: ISetRequestFriend) => {
-    try {
-      const result = await setRequestFriendApi(data);
-      setStatus('RequestFriend');
-      console.log(result);
-    } catch (error) {
-      return console.log({ message: 'sever availability' });
-    }
+  const onPressAddFriend = (data: ISetRequestFriend) => {
+    Alert.alert('XÁC NHẬN', `Bạn có muốn gửi lời mời kết bạn tới ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const result = await setRequestFriendApi(data);
+            setStatus('RequestFriend');
+            console.log(result);
+          } catch (error) {
+            return console.log({ message: 'sever availability' });
+          }
+        }
+      }
+    ]);
   };
 
   const onPressCancel = async (data: IDeleteRequestFriend) => {
