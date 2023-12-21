@@ -9,7 +9,7 @@ import SearchNavigationWrapper from './SearchNavigation';
 import PostNavigationWrapper from './PostNavigation';
 import AuthNavigation from './AuthNavigation';
 import VerifyOTPAfterLogin from 'src/screens/pending-sigup/VerifyOTPAfterLogin';
-import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp';
+// import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp';
 import NotFoundScreen from 'src/screens/notfound/NotFoundScreen';
 import ReportNavigationWrapper from './ReportNavigation';
 import ChatNavigationWrapper from './ChatNavigation';
@@ -22,6 +22,7 @@ import { useEffect } from 'react';
 import { AccountStatus } from 'src/common/enum/commom';
 import BaseModalError from 'src/components/BaseModalError';
 import { deleteMessage, selectApp } from 'src/redux/slices/appSlice';
+import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp/ChangeInfoAfterSignUp';
 
 const Stack = createNativeStackNavigator();
 

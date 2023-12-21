@@ -32,13 +32,14 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   section: {
-    marginTop: 10,
+    // marginTop: 10,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
   nearlyall: {
-    marginTop: 10
+    marginTop: 10,
+    position: 'relative'
   },
 
   nearly: {
@@ -156,6 +157,29 @@ const styles = StyleSheet.create({
   },
   option: {
     paddingVertical: 0
+  },
+  clearButton: {
+    position: 'absolute',
+    top: -5,
+    right: 0,
+    opacity: 0.5
+  },
+  headerSearchresult: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10
+  },
+  All: {
+    fontSize: 16,
+    fontWeight: '500'
+  },
+  post: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: color.primary
   }
 });
 export default styles;
