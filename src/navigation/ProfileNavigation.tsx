@@ -4,6 +4,7 @@ import EditProfile from 'src/screens/profile/EditProfile';
 import WraperScreen from 'src/components/WraperScreen';
 import { TransitionPresets } from '@react-navigation/stack';
 import { ProfileNavigationName } from 'src/common/constants/nameScreen';
+import SettingProfile from 'src/screens/profile/SettingProfile/SettingProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,11 @@ function ProfileNavigation() {
         name={ProfileNavigationName.EditProfile}
         options={{ headerTitle: 'Chỉnh sửa trang cá nhân' }}
         component={EditProfile}
+      />
+      <Stack.Screen
+        name={ProfileNavigationName.SettingProfile}
+        options={{ headerTitle: 'Cài đặt trang cá nhân' }}
+        component={SettingProfile}
       />
     </Stack.Navigator>
   );

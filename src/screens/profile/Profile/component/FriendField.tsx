@@ -42,7 +42,12 @@ const FriendField = ({ friends, totalFriend, isOwnProfile }: FriendFieldProps) =
         }}
       >
         {friends.map((item, index) => (
-          <FriendCard avatarUrl={item.avatar} username={item.username} key={index} />
+          <FriendCard
+            avatarUrl={item.avatar}
+            username={item.username}
+            user_id={item.id}
+            key={index}
+          />
         ))}
       </View>
       <TouchableOpacity style={styles.allFriendBtn} activeOpacity={0.7}>

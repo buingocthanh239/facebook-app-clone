@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import Modal from 'react-native-modal';
@@ -65,24 +65,61 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
     setModalVisible(false);
   };
   const onPressAccept = async (data: ISetAcceptFriend) => {
-    try {
-      const result = await setAcceptFriendApi(data);
-      setStatus('Accept');
-      return result;
-    } catch (error) {
-      console.log(error);
-      return console.log({ message: 'sever availability' });
-    }
+    Alert.alert('XÁC NHẬN', `Bạn có muốn chấp nhận lời mời kết bạn của ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const result = await setAcceptFriendApi(data);
+            if (result.code == 1000) {
+              setStatus('Accept');
+              return result;
+            } else if (result.code == 9994) {
+              setStatus('Failed');
+              Alert.alert(
+                'Yêu cầu không hợp lệ',
+                'Lời mời kết bạn đã hết hạn. Vui lòng thử lại sau!'
+              ),
+                setStatus('Failed');
+              return result;
+            } else {
+              setStatus('Failed');
+              return console.log({ message: 'sever availability' });
+            }
+          } catch (error) {
+            console.log(error);
+            return console.log({ message: 'sever availability' });
+          }
+        }
+      }
+    ]);
   };
 
-  const onPressDelete = async (data: ISetAcceptFriend) => {
-    try {
-      const result = await setAcceptFriendApi(data);
-      setStatus('Delete');
-      return result;
-    } catch (error) {
-      return console.log({ message: 'sever availability' });
-    }
+  const onPressDelete = (data: ISetAcceptFriend) => {
+    Alert.alert('XÁC NHẬN', `Bạn có muốn xóa lời mời kết bạn từ ${username}?`, [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const result = await setAcceptFriendApi(data);
+            setStatus('Delete');
+            return result;
+          } catch (error) {
+            return console.log({ message: 'sever availability' });
+          }
+        }
+      }
+    ]);
   };
 
   return (
@@ -127,6 +164,13 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
             <Text style={styles.username}>{username}</Text>
           </View>
           <Text style={{ marginBottom: 20 }}>Các bạn đã là bạn bè</Text>
+        </View>
+      ) : status === 'Failed' ? (
+        <View style={styles.infoContainer}>
+          <View style={styles.usernameField}>
+            <Text style={styles.username}>{username}</Text>
+          </View>
+          <Text style={{ marginBottom: 20 }}>Lời mời kết bạn đã hết hạn</Text>
         </View>
       ) : (
         <View style={styles.infoContainer}>

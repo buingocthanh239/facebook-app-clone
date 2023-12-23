@@ -6,6 +6,10 @@ type AppNavigationType = {
   FriendNavigation: { screen: FriendNavigationName };
   ProfileNavigation:
     | { screen: ProfileNavigationName.Profile; params: { user_id: string } }
+    | {
+        screen: ProfileNavigationName.SettingProfile;
+        params: { user_id: string; username: string };
+      }
     | { screen: ProfileNavigationName.EditProfile };
   PostNavigation: { screen: PostNavigationName };
   SearchNavigation: { screen: SearchNavigationName };
@@ -40,6 +44,7 @@ type AuthNavigationType = {
 type PropfileNavigationType = {
   Profile: { user_id: string };
   EditProfile: undefined;
+  SettingProfile: { user_id: string; username: string };
 };
 
 type SettingNavigationType = {
