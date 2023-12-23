@@ -9,23 +9,40 @@ import {
   TouchableOpacity,
   Platform,
   PermissionsAndroid,
-  BackHandler
+  BackHandler,
+  Alert
 } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import IconM from 'react-native-vector-icons/MaterialIcons';
 import { color } from 'src/common/constants/color';
 import GridImage from 'src/components/GridImages/GridImage';
 import OptionCard from './component/OptionCard';
 import Modal from 'react-native-modal';
 import { MediaType, PhotoQuality, launchImageLibrary } from 'react-native-image-picker';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { getAvatarUri } from 'src/utils/helper';
+import { getAvatarUri, handShowErrorMessage } from 'src/utils/helper';
+import { PostNavigationName } from 'src/common/type/name';
+import { useAppDispatch, useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
+import BaseButton from 'src/components/BaseButton';
+import { addPost } from 'src/services/post.services';
+import { setMessage } from 'src/redux/slices/appSlice';
 
-const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
+const CreatePostScreen = () => {
+  const [listImage, setListImage] = useState(['']);
+  const [video, setVideo] = useState('');
+  const [described, setDescribed] = useState('');
+  const dispatch = useAppDispatch();
+
+  const route: RouteProp<PostNavigationType, PostNavigationName.CreatePostScreen> = useRoute();
   const selectedItem = route?.params?.selectedItem;
 
-  const navigation: NavigationProp<CreatePostNavigationType> = useNavigation();
-  const avatar = 'https://placekitten.com/200/200';
-  const username = 'Ngô Hải Văn';
+  const navigation: NavigationProp<PostNavigationType, PostNavigationName.EnAScreen> =
+    useNavigation();
+  const auth = useAppSelector(selectAuth);
+  const avatar = auth.user?.avatar;
+  const username = auth.user?.username;
   interface IOption {
     icon: string;
     title: string;
@@ -86,8 +103,6 @@ const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
     return () => backHandler.remove();
   }, []);
 
-  const [listImage, setListImage] = useState(['']);
-
   const openImagePicker = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -115,11 +130,27 @@ const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
       maxHeight: 800
     };
     await launchImageLibrary(options, response => {
-      const src =
-        response !== undefined && response?.assets !== undefined ? response?.assets[0]?.uri : '';
-      if (src !== undefined && src !== null && src !== '') {
-        const newImages = [...listImage, src];
-        setListImage(newImages);
+      const src = response && response?.assets ? response?.assets[0]?.uri : '';
+      const type = response && response?.assets ? response?.assets[0]?.type : '';
+      if (src) {
+        if (type === 'video/mp4') {
+          if (listImage.length === 1) {
+            video === ''
+              ? setVideo(src)
+              : Alert.alert('Lỗi!', 'Vui lòng chỉ đăng nhiều nhất 1 video.');
+            console.log('video: ', video);
+          } else {
+            Alert.alert('Lỗi!', 'Vui lòng chỉ đăng ảnh hoặc video.');
+          }
+        } else {
+          if (video === '') {
+            listImage.length <= 4
+              ? setListImage([...listImage, src])
+              : Alert.alert('Lỗi!', 'Vui lòng không đăng quá 4 ảnh.');
+          } else {
+            Alert.alert('Lỗi!', 'Vui lòng chỉ đăng ảnh hoặc video.');
+          }
+        }
       }
     });
   };
@@ -127,13 +158,85 @@ const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
   const handleEnA = () => {
     navigation.navigate('EnAScreen');
   };
+  const navigationGoBack = useNavigation();
+  const handleBackPress = () => {
+    navigationGoBack.goBack();
+  };
+
+  const handleCreatePost = async () => {
+    try {
+      const status = selectedItem
+        ? !selectedItem?.label.startsWith('Đang')
+          ? `- Đang ${selectedItem.emoji} cảm thấy ${selectedItem.label.toLowerCase()}`
+          : `- Đang ${selectedItem.emoji} ${selectedItem.label.slice(5)}`
+        : '';
+      const image = listImage.map(item => {
+        return {
+          uri: item,
+          type: 'image/png',
+          name: 'image.png'
+        };
+      });
+      const formData = new FormData();
+      formData.append('described', described);
+      if (video) {
+        formData.append('video', {
+          uri: video,
+          type: 'video/mp4',
+          name: 'video.mp4'
+        } as never);
+      }
+      if (image.length > 1) {
+        formData.append('image', image as never);
+      }
+      formData.append('status', status);
+      formData.append('auto_accept', 'true');
+      console.log(formData);
+      console.log(image);
+      const res = await addPost(formData);
+      console.log(res);
+      if (res.success) {
+        return res;
+      } else {
+        dispatch(setMessage(handShowErrorMessage(parseInt(res.code as unknown as string))));
+      }
+    } catch (error) {
+      dispatch(setMessage('Vui lòng kiểm tra lại kết nối'));
+    }
+  };
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: 10,
+          justifyContent: 'space-between',
+          paddingHorizontal: 15
+        }}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+          <TouchableOpacity onPress={handleBackPress} activeOpacity={0.8}>
+            <IconM name='arrow-back' size={26} color={color.textColor} />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 19, color: color.textColor }}>Tạo bài viết</Text>
+        </View>
+        <BaseButton
+          borderRadius={5}
+          onPress={() => {
+            handleCreatePost();
+          }}
+          labelStyle={{ color: 'white' }}
+          style={{ backgroundColor: color.primary }}
+        >
+          Đăng
+        </BaseButton>
+      </View>
       <ScrollView keyboardShouldPersistTaps='handled' style={{ marginBottom: 90 }}>
         <View style={styles.header}>
           <View style={styles.avatarContainer}>
-            <Image source={getAvatarUri(avatar)} style={styles.avatar} />
+            <Image source={getAvatarUri(avatar as string)} style={styles.avatar} />
           </View>
           <View style={styles.userInfo}>
             <View style={{ flexDirection: 'row', marginRight: 80, marginBottom: 5 }}>
@@ -164,13 +267,24 @@ const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
         <TextInput
           multiline
           placeholder={
-            listImage.length === 1 ? 'Bạn đang nghĩ gì...' : 'Hãy nói gì đó về các bức ảnh này...'
+            listImage.length === 1 && video === ''
+              ? 'Bạn đang nghĩ gì...'
+              : listImage.length === 1 && video !== ''
+              ? 'Hãy nói gì đó về video này...'
+              : listImage.length === 2 && video === ''
+              ? 'Hãy nói gì đó về bức ảnh này...'
+              : listImage.length > 2 && video === ''
+              ? 'Hãy nói gì đó về các bức ảnh này...'
+              : 'Hãy nói gì đó về nội dung này...'
           }
           style={styles.input}
+          onChange={e => {
+            setDescribed(e.nativeEvent.text);
+          }}
         />
         <View>
           <GridImage
-            images={listImage}
+            images={[...listImage, video]}
             onPress={() => console.log('image')}
             style={{ width: '100%', height: 300, marginBottom: 8 }}
           ></GridImage>
@@ -249,8 +363,7 @@ const CreatePostScreen = ({ route }: CreatePostScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    marginBottom: 60
+    backgroundColor: 'white'
   },
   wrapMode: {
     flex: 1,
