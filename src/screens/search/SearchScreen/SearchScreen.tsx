@@ -146,7 +146,7 @@ function SearchScreen() {
     };
     const fetchData = async (data: IGetSavedSearch) => {
       try {
-        const listResult = [];
+        const listResult: any[] = [];
         const result = await getSaveSearchApi(data);
         setListAllSavedSearch(result.data);
         for (let i = 0; i < result.data.length; i++) {
