@@ -29,8 +29,25 @@ import BaseButton from 'src/components/BaseButton';
 import { addPost } from 'src/services/post.services';
 import { setMessage } from 'src/redux/slices/appSlice';
 
+export type File = {
+  uri?: string;
+  type?: string;
+  name?: string;
+  data?: string;
+};
+export type MediaFileType = {
+  base64?: File;
+  fileName?: string;
+  fileSize?: number;
+  height?: number;
+  originalPath?: string;
+  type?: string;
+  uri?: string;
+  width?: number;
+};
 const CreatePostScreen = () => {
   const [listImage, setListImage] = useState(['']);
+  const [mediaFiles, setMediaFiles] = useState<MediaFileType[]>([]);
   const [video, setVideo] = useState('');
   const [described, setDescribed] = useState('');
   const dispatch = useAppDispatch();
@@ -125,13 +142,17 @@ const CreatePostScreen = () => {
     const options = {
       mediaType: 'mixed' as MediaType,
       includeBase64: true,
-      quality: 0.4 as PhotoQuality,
+      base64: true,
+      allowsEditing: true,
+      quality: 1 as PhotoQuality,
+      multiple: true,
       maxWidth: 800,
       maxHeight: 800
     };
     await launchImageLibrary(options, response => {
       const src = response && response?.assets ? response?.assets[0]?.uri : '';
       const type = response && response?.assets ? response?.assets[0]?.type : '';
+      const assets = response && response?.assets ? response?.assets[0] : {};
       if (src) {
         if (type === 'video/mp4') {
           if (listImage.length === 1) {
@@ -144,9 +165,30 @@ const CreatePostScreen = () => {
           }
         } else {
           if (video === '') {
-            listImage.length <= 4
-              ? setListImage([...listImage, src])
-              : Alert.alert('Lỗi!', 'Vui lòng không đăng quá 4 ảnh.');
+            if (type === 'image/png' || type === 'image/jpg') {
+              const file = {
+                uri: src,
+                type: 'image/png/jpg',
+                name: 'image.png/jpg',
+                data: response && response?.assets ? response?.assets[0]?.base64 : ''
+              };
+              listImage.length <= 4
+                ? (setMediaFiles([{ ...assets, base64: file }, ...mediaFiles]),
+                  setListImage([...listImage, src]))
+                : Alert.alert('Lỗi!', 'Vui lòng không đăng quá 4 ảnh.');
+            }
+            if (type === 'image/jpeg') {
+              const file = {
+                uri: src,
+                type: 'image/jpeg',
+                name: 'image.jpeg',
+                data: response && response?.assets ? response?.assets[0]?.base64 : ''
+              };
+              listImage.length <= 4
+                ? (setMediaFiles([{ ...assets, base64: file }, ...mediaFiles]),
+                  setListImage([...listImage, src]))
+                : Alert.alert('Lỗi!', 'Vui lòng không đăng quá 4 ảnh.');
+            }
           } else {
             Alert.alert('Lỗi!', 'Vui lòng chỉ đăng ảnh hoặc video.');
           }
@@ -170,13 +212,6 @@ const CreatePostScreen = () => {
           ? `- Đang ${selectedItem.emoji} cảm thấy ${selectedItem.label.toLowerCase()}`
           : `- Đang ${selectedItem.emoji} ${selectedItem.label.slice(5)}`
         : '';
-      const image = listImage.map(item => {
-        return {
-          uri: item,
-          type: 'image/png',
-          name: 'image.png'
-        };
-      });
       const formData = new FormData();
       formData.append('described', described);
       if (video) {
@@ -186,13 +221,11 @@ const CreatePostScreen = () => {
           name: 'video.mp4'
         } as never);
       }
-      if (image.length > 1) {
-        formData.append('image', image as never);
-      }
+      mediaFiles.forEach(file => {
+        formData.append(`image`, file.base64 as never);
+      });
       formData.append('status', status);
       formData.append('auto_accept', 'true');
-      console.log(formData);
-      console.log(image);
       const res = await addPost(formData);
       console.log(res);
       if (res.success) {
