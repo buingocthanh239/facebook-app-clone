@@ -11,7 +11,9 @@ type AppNavigationType = {
         params: { user_id: string; username: string };
       }
     | { screen: ProfileNavigationName.EditProfile };
-  PostNavigation: { screen: PostNavigationName };
+  PostNavigation:
+    | { screen: PostNavigationName; params?: { selectedItem?: CardData } }
+    | { screen: PostNavigationName.EnAScreen };
   SearchNavigation: { screen: SearchNavigationName };
   ReportNavigation: { screen: ReportNavigationName; params: { id: string } };
   ChatNavigation: { screen: ChatNavigationName };

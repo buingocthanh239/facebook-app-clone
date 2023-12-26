@@ -14,6 +14,7 @@ export interface BaseButtonProps {
 export interface CustomTouchProps {
   height?: number;
   width?: number;
+  borderRadius?: number;
 }
 export type WraperButtonProp = ButtonProps & BaseButtonProps & CustomTouchProps;
 
@@ -32,7 +33,12 @@ const defaultProps: WraperButtonProp = {
 
 function BaseButton(props: WraperButtonProp): JSX.Element {
   return (
-    <WrapperButton width={props.width} height={props.height} activeOpacity={0.7}>
+    <WrapperButton
+      width={props.width}
+      height={props.height}
+      borderRadius={props.borderRadius}
+      activeOpacity={0.7}
+    >
       <Button
         loading={props.loading}
         buttonColor={props.mode === 'contained' ? props.buttonColor : ''}
