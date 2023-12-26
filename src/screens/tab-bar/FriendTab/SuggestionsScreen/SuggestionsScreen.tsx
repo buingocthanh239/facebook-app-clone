@@ -47,7 +47,7 @@ function SuggestionsScreen() {
         )}
         keyExtractor={item => item.id}
         onEndReached={onEndReadable}
-        onEndReachedThreshold={2 / data.length}
+        onEndReachedThreshold={0.01}
         isFootterLoading={isNextFetchingApi}
         onRefresh={onRefresh}
         refreshing={refreshing}
