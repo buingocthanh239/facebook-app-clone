@@ -12,7 +12,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 import { ProfileNavigationName } from 'src/common/constants/nameScreen';
-import { IUser } from 'src/interfaces/common.interface';
+import { IUser } from 'src/components/interfaces/common.interface';
 import { getAvatarUri } from 'src/utils/helper';
 import { getUserInfoApi } from 'src/services/profile.services';
 import ButtonField0 from './component/ButtonField0';
@@ -21,7 +21,7 @@ import ButtonField2 from './component/ButtonField2';
 import ButtonField3 from './component/ButtonField3';
 import InforDetail from './component/InforDetail';
 import { HeaderWithSearch } from 'src/components/BaseHeader';
-import { IGetUserFriends, IUserFriends } from 'src/interfaces/friends.interface';
+import { IGetUserFriends, IUserFriends } from 'src/components/interfaces/friends.interface';
 import { getUserFriendsApi } from 'src/services/friends.services';
 
 function ProfileScreen() {
@@ -65,7 +65,7 @@ function ProfileScreen() {
       count: 6,
       user_id: !user_id ? '' : user_id
     }).catch(console.error);
-  }, []);
+  }, [auth, isOwnProfile, user_id]);
   const isFriend = profile?.is_friend;
 
   const navigation: NavigationProp<PropfileNavigationType, 'EditProfile'> = useNavigation();

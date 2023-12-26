@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { IErrorData } from 'src/interfaces/common.interface';
-import { IDataFriends, IGetUserFriends, IUnfriend } from 'src/interfaces/friends.interface';
+import { IErrorData } from 'src/components/interfaces/common.interface';
+import {
+  IDataFriends,
+  IGetUserFriends,
+  IUnfriend
+} from 'src/components/interfaces/friends.interface';
 import { getUserFriendsApi, unfriendApi } from 'src/services/friends.services';
 
 interface IFriendState {

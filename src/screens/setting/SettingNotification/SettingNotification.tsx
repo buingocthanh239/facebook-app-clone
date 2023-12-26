@@ -1,6 +1,6 @@
 import { ScrollView } from 'react-native';
 import { IconButton, Text } from 'react-native-paper';
-import { IListItem } from 'src/interfaces/common.interface';
+import { IListItem } from 'src/components/interfaces/common.interface';
 import FunctionItem from '../components/FunctionItem';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import BaseForm from 'src/components/BaseForm';

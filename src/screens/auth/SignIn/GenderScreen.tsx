@@ -11,7 +11,7 @@ import styled from 'styled-components/native';
 import GenderRadioGroup from 'src/components/GenderRadioGroup';
 import { color } from 'src/common/constants/color';
 import BaseForm from 'src/components/BaseForm';
-import { IGenderScreenForm } from 'src/interfaces/auth.interface';
+import { IGenderScreenForm } from 'src/components/interfaces/auth.interface';
 import { genderFormShema } from 'src/validation/signUp.validate';
 
 function GenderScreen() {

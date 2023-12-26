@@ -28,8 +28,8 @@ export enum PostApi {
 
 export enum SearchApi {
   SEARCH = '/search',
-  GET_SAVE_SEARCH = '/get_save_search',
-  DEL_SAVE_SEARCH = '/delete_save_search'
+  GET_SAVE_SEARCH = '/get_saved_search',
+  DEL_SAVE_SEARCH = '/del_saved_search'
 }
 
 export enum FriendApi {

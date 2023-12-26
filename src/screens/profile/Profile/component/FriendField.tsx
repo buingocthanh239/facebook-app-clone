@@ -3,7 +3,7 @@ import FriendCard from './FriendCard';
 import { color } from 'src/common/constants/color';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AppNaviagtionName, TabNavigationName } from 'src/common/constants/nameScreen';
-import { IUserFriends } from 'src/interfaces/friends.interface';
+import { IUserFriends } from 'src/components/interfaces/friends.interface';
 
 interface FriendFieldProps {
   friends: IUserFriends[];

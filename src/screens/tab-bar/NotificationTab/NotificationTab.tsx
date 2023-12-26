@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
 import NotificationItem from './components/NotificationItem';
-import { INotification } from 'src/interfaces/notification.interface';
+import { INotification } from 'src/components/interfaces/notification.interface';
 import { NotificationType } from 'src/common/enum/commom';
 import {
   Avatar,

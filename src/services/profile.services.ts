@@ -1,7 +1,7 @@
 import { ProfileApi } from './clientConstant';
-import { IBodyResponse, IUser } from 'src/interfaces/common.interface';
+import { IBodyResponse, IUser } from 'src/components/interfaces/common.interface';
 import { postMethodApi } from './api';
-import { ISetUserInfoData } from 'src/interfaces/profile.interface';
+import { ISetUserInfoData } from 'src/components/interfaces/profile.interface';
 
 export interface ISetUserInfoResponseData {
   avatar: string;

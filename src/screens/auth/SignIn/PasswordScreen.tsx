@@ -7,7 +7,7 @@ import WraperAuthScreen from 'src/components/WraperScreen';
 import BaseInputPassword from 'src/components/BaseInputPassword';
 import BaseButton from 'src/components/BaseButton';
 import BaseForm from 'src/components/BaseForm';
-import { IPasswordScreenForm } from 'src/interfaces/auth.interface';
+import { IPasswordScreenForm } from 'src/components/interfaces/auth.interface';
 import { passwordFormSchema } from 'src/validation/signUp.validate';
 
 function PasswordScreen() {

@@ -1,6 +1,6 @@
 import Post from 'src/components/Post';
 import NewPostCreate from './components/NewPostCreate/NewPostCreate';
-import { IVideo } from 'src/interfaces/common.interface';
+import { IVideo } from 'src/components/interfaces/common.interface';
 import { useEffect, useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
 import { PanResponder } from 'react-native';
@@ -33,7 +33,7 @@ function HomeTab() {
       ownerName: 'Bùi Ngọc Thành',
       createdAt: '9',
       friendComments: ['Bùi Ngọc Thành', 'Bùi Ngọc Thành', 'Bùi Ngọc Thành'],
-      content: 'hsdjkfhdfkjdhdsjfhdksfhdj',
+      content: 'ssss',
       imageUrl: [
         'https://picsum.photos/700',
         'https://picsum.photos/700',
@@ -45,7 +45,6 @@ function HomeTab() {
     },
     {
       id: '58694a0f-3da1-471f-bd96-145571e29d74',
-
       ownerName: 'Bùi Ngọc Thành',
       createdAt: '9'
     },

@@ -4,7 +4,7 @@ import Post from 'src/components/Post';
 import { Button, IconButton, Text, Divider } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
-import { IVideo } from 'src/interfaces/common.interface';
+import { IVideo } from 'src/components/interfaces/common.interface';
 import { useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
 import { useScrollToTop } from '@react-navigation/native';

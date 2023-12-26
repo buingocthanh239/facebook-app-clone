@@ -14,7 +14,7 @@ import BaseMetaLogo from 'src/components/BaseMetaLogo';
 import WraperAuthScreen from 'src/components/WraperScreen';
 import BaseForm from 'src/components/BaseForm';
 import styles from './styles';
-import { ILoginData } from 'src/interfaces/auth.interface';
+import { ILoginData } from 'src/components/interfaces/auth.interface';
 import { loginFormSchema } from 'src/validation/login.validate';
 import { deleteErrorMessage, login, selectAuth } from 'src/redux/slices/authSlice';
 import { useAppSelector, useAppDispatch } from 'src/redux';

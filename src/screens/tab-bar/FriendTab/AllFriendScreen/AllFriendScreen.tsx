@@ -4,7 +4,7 @@ import { UserFriendCard } from '../../components/FriendCard';
 import Modal from 'react-native-modal';
 import { useEffect, useState } from 'react';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
-import { IGetUserFriends, IUserFriends } from 'src/interfaces/friends.interface';
+import { IGetUserFriends, IUserFriends } from 'src/components/interfaces/friends.interface';
 import { getUserFriendsApi } from 'src/services/friends.services';
 import { selectAuth } from 'src/redux/slices/authSlice';
 import BaseFlatList from 'src/components/BaseFlatList';

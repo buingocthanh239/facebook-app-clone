@@ -4,7 +4,7 @@ import { IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import Modal from 'react-native-modal';
 import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
-import { ISetAcceptFriend } from 'src/interfaces/friends.interface';
+import { ISetAcceptFriend } from 'src/components/interfaces/friends.interface';
 import { setAcceptFriendApi } from 'src/services/friends.services';
 import { getAvatarUri } from 'src/utils/helper';
 

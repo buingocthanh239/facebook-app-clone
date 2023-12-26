@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { IBodyResponse } from 'src/interfaces/common.interface';
+import { IBodyResponse } from 'src/components/interfaces/common.interface';
 import { useAppDispatch } from 'src/redux';
 import { setMessage } from 'src/redux/slices/appSlice';
 import { handShowErrorMessage } from 'src/utils/helper';

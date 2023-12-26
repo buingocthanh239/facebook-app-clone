@@ -2,7 +2,7 @@ import {
   IBodyResponse,
   ICommonListQuery,
   IListBodyResponse
-} from 'src/interfaces/common.interface';
+} from 'src/components/interfaces/common.interface';
 import { postMethodApi } from './api';
 import { BlockApi } from './clientConstant';
 

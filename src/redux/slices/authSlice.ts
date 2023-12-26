@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ILoginData } from 'src/interfaces/auth.interface';
-import { IBodyResponse, IErrorData, IUser } from 'src/interfaces/common.interface';
+import { ILoginData } from 'src/components/interfaces/auth.interface';
+import { IBodyResponse, IErrorData, IUser } from 'src/components/interfaces/common.interface';
 import { ILoginResponseData, loginApi, logoutApi } from 'src/services/auth.services';
 import { RootState } from '..';
 import { saveTokenIntoKeychain } from 'src/utils/kechain';
@@ -11,7 +11,7 @@ import {
   ISetUserInfoResponseData,
   setUserInfoApi
 } from 'src/services/profile.services';
-import { ISetUserInfoData } from 'src/interfaces/profile.interface';
+import { ISetUserInfoData } from 'src/components/interfaces/profile.interface';
 
 interface IAuthState {
   isLoading: boolean;

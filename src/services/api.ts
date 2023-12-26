@@ -3,7 +3,7 @@ import {
   type IBodyResponse,
   type ICommonListQuery,
   type IGetListResponse
-} from 'src/interfaces/common.interface';
+} from 'src/components/interfaces/common.interface';
 import { trimData } from 'src/utils/helper';
 import axiosInstance from './axiosInstance';
 

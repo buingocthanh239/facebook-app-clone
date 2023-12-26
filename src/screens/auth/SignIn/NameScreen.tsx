@@ -11,7 +11,7 @@ import BaseTextTitle from 'src/components/BaseTextTitle';
 import { color } from 'src/common/constants/color';
 import BaseForm from 'src/components/BaseForm';
 import { nameFormSchema } from 'src/validation/signUp.validate';
-import { INameScreenForm } from 'src/interfaces/auth.interface';
+import { INameScreenForm } from 'src/components/interfaces/auth.interface';
 
 function NameScreen() {
   const naviagtion: NavigationProp<AuthNavigationType, 'BirthdayScreen'> = useNavigation();
