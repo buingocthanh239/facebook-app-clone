@@ -1,8 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CreatePostScreen from 'src/screens/post/CreatePostScreen';
 import EnAScreen from 'src/screens/post/EmojiAndAction/EnAScreen';
-import { Button, Text } from 'react-native-paper';
-import { color } from 'src/common/constants/color';
+import { Text } from 'react-native-paper';
 import WraperScreen from 'src/components/WraperScreen';
 import { TransitionPresets } from '@react-navigation/stack';
 import { PostNavigationName } from 'src/common/constants/nameScreen';
@@ -23,20 +22,7 @@ function PostNavigation() {
         name={PostNavigationName.CreatePostScreen}
         component={CreatePostScreen}
         options={{
-          headerTitle: () => (
-            <Text style={{ fontSize: 18, marginLeft: -15, fontWeight: '500' }}>Tạo bài viết</Text>
-          ),
-          headerRight: () => (
-            <Button
-              onPress={() => {
-                alert('Đăng bài viết!');
-              }}
-              labelStyle={{ color: 'white' }}
-              style={{ borderRadius: 4, backgroundColor: color.primary }}
-            >
-              Đăng
-            </Button>
-          )
+          headerShown: false
         }}
       />
       <Stack.Screen

@@ -1,7 +1,6 @@
 import { ProfileApi } from './clientConstant';
 import { IBodyResponse, IUser } from 'src/components/interfaces/common.interface';
 import { postMethodApi } from './api';
-import { ISetUserInfoData } from 'src/components/interfaces/profile.interface';
 
 export interface ISetUserInfoResponseData {
   avatar: string;
@@ -22,7 +21,7 @@ export const getUserInfoApi = async (data: { user_id: string }): Promise<IBodyRe
 };
 
 export const setUserInfoApi = async (
-  data: ISetUserInfoData
+  data: MyFormData
 ): Promise<IBodyResponse<ISetUserInfoResponseData>> => {
-  return postMethodApi(ProfileApi.SET_USER_INFO, data);
+  return postMethodWithFormDataApi(ProfileApi.SET_USER_INFO, data);
 };

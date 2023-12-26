@@ -3,7 +3,7 @@ import NewPostCreate from './components/NewPostCreate/NewPostCreate';
 import { IVideo } from 'src/components/interfaces/common.interface';
 import { useEffect, useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
-import { PanResponder } from 'react-native';
+// import { PanResponder } from 'react-native';
 import {
   NavigationProp,
   useIsFocused,
@@ -96,7 +96,8 @@ function HomeTab() {
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.TabNavigation> =
     useNavigation();
 
-  const [isShowHeader, setIsShowHeader] = useState(true);
+  // const [isShowHeader, setIsShowHeader] = useState(true);
+  const isShowHeader = true;
   const isFocus = useIsFocused();
   useEffect(() => {
     if (isShowHeader && isFocus) {
@@ -106,24 +107,24 @@ function HomeTab() {
     }
   }, [isShowHeader, isFocus, navigation]);
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (event, gestureState) => {
-        const { dy } = gestureState;
-        if (dy < 0) {
-          setIsShowHeader(false);
-        } else {
-          setIsShowHeader(true);
-        }
-      }
-    })
-  ).current;
+  // const panResponder = useRef(
+  //   PanResponder.create({
+  //     onStartShouldSetPanResponder: () => true,
+  //     onMoveShouldSetPanResponder: () => true,
+  //     onPanResponderMove: (event, gestureState) => {
+  //       const { dy } = gestureState;
+  //       if (dy < 0) {
+  //         setIsShowHeader(false);
+  //       } else {
+  //         setIsShowHeader(true);
+  //       }
+  //     }
+  //   })
+  // ).current;
 
   return (
     <BaseFlatList
-      {...panResponder.panHandlers}
+      // {...panResponder.panHandlers}
       ref={ref}
       ListHeaderComponent={<NewPostCreate />}
       data={data}

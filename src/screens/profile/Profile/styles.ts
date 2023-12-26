@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 10,
+    marginBottom: 10,
     textAlign: 'center',
     color: color.textColor
   },
@@ -24,7 +25,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'gray',
     marginTop: 5,
-    marginBottom: 20
+    marginBottom: 20,
+    textAlign: 'center'
   },
   section: {
     paddingTop: 20,
@@ -91,7 +93,6 @@ const styles = StyleSheet.create({
     color: 'black'
   },
   detailsContainer: {
-    marginTop: 20,
     marginLeft: 20
   },
   detailLabel: {

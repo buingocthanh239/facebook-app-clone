@@ -11,7 +11,7 @@ import {
   ISetUserInfoResponseData,
   setUserInfoApi
 } from 'src/services/profile.services';
-import { ISetUserInfoData } from 'src/components/interfaces/profile.interface';
+import { MyFormData } from 'src/common/type/type';
 
 interface IAuthState {
   isLoading: boolean;
@@ -68,13 +68,14 @@ export const getProfile = createAsyncThunk('auth/getProfile', async (data: { use
 
 export const setProfile = createAsyncThunk(
   'auth/setProfile',
-  async (data: ISetUserInfoData, { rejectWithValue }) => {
+  async (data: MyFormData, { rejectWithValue }) => {
     try {
       const res = await setUserInfoApi(data);
       if (!res.success) {
         return rejectWithValue(res.message);
       }
-      return { ...res.data, username: data.username };
+      console.log(res);
+      return { ...res.data };
     } catch (err) {
       return rejectWithValue('Vui lòng kiểm tra lại kết nối internet');
     }

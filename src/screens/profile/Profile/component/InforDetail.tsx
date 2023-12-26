@@ -6,9 +6,10 @@ import styles from '../styles';
 interface InforDetailProps {
   address?: string;
   city?: string;
+  country?: string;
   isOwnProfile?: boolean;
 }
-const InforDetail = ({ address, city, isOwnProfile }: InforDetailProps) => {
+const InforDetail = ({ address, city, isOwnProfile, country }: InforDetailProps) => {
   return (
     <View>
       <View style={styles.detailsContainer}>
@@ -32,7 +33,9 @@ const InforDetail = ({ address, city, isOwnProfile }: InforDetailProps) => {
           {city ? (
             <>
               <Text style={styles.detailLabel}>Đến từ</Text>
-              <Text style={styles.detailText}>{city}</Text>
+              <Text style={styles.detailText}>
+                {city}, {country}
+              </Text>
             </>
           ) : (
             <Text style={styles.detailLabel}>không có thông tin</Text>

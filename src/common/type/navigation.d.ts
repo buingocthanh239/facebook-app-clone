@@ -6,8 +6,14 @@ type AppNavigationType = {
   FriendNavigation: { screen: FriendNavigationName };
   ProfileNavigation:
     | { screen: ProfileNavigationName.Profile; params: { user_id: string } }
+    | {
+        screen: ProfileNavigationName.SettingProfile;
+        params: { user_id: string; username: string };
+      }
     | { screen: ProfileNavigationName.EditProfile };
-  PostNavigation: { screen: PostNavigationName };
+  PostNavigation:
+    | { screen: PostNavigationName; params?: { selectedItem?: CardData } }
+    | { screen: PostNavigationName.EnAScreen };
   SearchNavigation: { screen: SearchNavigationName };
   ReportNavigation: { screen: ReportNavigationName; params: { id: string } };
   ChatNavigation: { screen: ChatNavigationName };
@@ -40,6 +46,7 @@ type AuthNavigationType = {
 type PropfileNavigationType = {
   Profile: { user_id: string };
   EditProfile: undefined;
+  SettingProfile: { user_id: string; username: string };
 };
 
 type SettingNavigationType = {
