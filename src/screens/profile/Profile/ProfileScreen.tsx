@@ -12,7 +12,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
-import { IUser } from 'src/interfaces/common.interface';
+import { IUser } from 'src/components/interfaces/common.interface';
 import { getAvatarUri, getCoverUri } from 'src/utils/helper';
 import { getUserInfoApi } from 'src/services/profile.services';
 import ButtonField0 from './component/ButtonField0';
