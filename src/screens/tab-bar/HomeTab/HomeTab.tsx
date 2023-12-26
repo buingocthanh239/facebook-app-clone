@@ -33,7 +33,7 @@ function HomeTab() {
       ownerName: 'Bùi Ngọc Thành',
       createdAt: '9',
       friendComments: ['Bùi Ngọc Thành', 'Bùi Ngọc Thành', 'Bùi Ngọc Thành'],
-      content: 'hsdjkfhdfkjdhdsjfhdksfhdj',
+      content: 'ssss',
       imageUrl: [
         'https://picsum.photos/700',
         'https://picsum.photos/700',
@@ -45,7 +45,6 @@ function HomeTab() {
     },
     {
       id: '58694a0f-3da1-471f-bd96-145571e29d74',
-
       ownerName: 'Bùi Ngọc Thành',
       createdAt: '9'
     },

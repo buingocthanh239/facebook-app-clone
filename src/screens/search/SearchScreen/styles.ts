@@ -180,6 +180,53 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: color.primary
+  },
+  //Search Result
+  containers: {
+    flex: 1,
+    justifyContent: 'center'
+    // padding: 10
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 10
+  },
+  image: {
+    height: 40,
+    width: 40
+  },
+
+  ListSearchResult: {
+    height: 55,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  ListSearchResultText: {
+    flexDirection: 'row',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10
+  },
+  username: {
+    lineHeight: 55,
+    color: color.black,
+    marginBottom: 2
+  },
+  searchFriend: {
+    padding: 8
+  },
+  allFriendBtn: {
+    marginHorizontal: 10
+
+    // backgroundColor: '#E9F1FE',
+    // padding: 10,
+    // borderRadius: 7
+  },
+  noSearchText: {
+    marginLeft: 10,
+    marginTop: 10
   }
 });
 export default styles;
