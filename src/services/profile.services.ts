@@ -1,5 +1,5 @@
 import { ProfileApi } from './clientConstant';
-import { IBodyResponse, IUser } from 'src/components/interfaces/common.interface';
+import { IBodyResponse, IUser } from 'src/interfaces/common.interface';
 import { postMethodApi } from './api';
 
 export interface ISetUserInfoResponseData {

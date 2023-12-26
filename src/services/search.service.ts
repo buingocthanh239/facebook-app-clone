@@ -3,10 +3,10 @@ import {
   IDeleteSavedSearch,
   ISearch,
   ISearchResult
-} from 'src/components/interfaces/search.interface';
+} from 'src/interfaces/search.interface';
 import { postMethodApi } from './api';
 import { SearchApi } from './clientConstant';
-import { IBodyResponse, IListBodyResponse } from 'src/components/interfaces/common.interface';
+import { IBodyResponse, IListBodyResponse } from 'src/interfaces/common.interface';
 export const getSaveSearchApi = async (data: IGetSavedSearch): Promise<IBodyResponse<any>> => {
   return postMethodApi(SearchApi.GET_SAVE_SEARCH, data);
 };

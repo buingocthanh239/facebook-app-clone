@@ -4,7 +4,7 @@ import Modal from 'react-native-modal';
 import { IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import BaseFlatList from 'src/components/BaseFlatList';
-import { IGetSavedSearch, ISavedSearch } from 'src/components/interfaces/search.interface';
+import { IGetSavedSearch, ISavedSearch } from 'src/interfaces/search.interface';
 import { deleteSavedSearchApi, getSaveSearchApi } from 'src/services/search.service';
 
 // import FriendCard from './FriendCard';

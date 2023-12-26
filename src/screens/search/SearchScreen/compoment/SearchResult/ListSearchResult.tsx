@@ -4,7 +4,7 @@ import { color } from 'src/common/constants/color';
 import BaseFlatList from 'src/components/BaseFlatList';
 import { useEffect, useState } from 'react';
 import Post from 'src/components/Post';
-import { IGetSavedSearch, ISavedSearch } from 'src/components/interfaces/search.interface';
+import { IGetSavedSearch, ISavedSearch } from 'src/interfaces/search.interface';
 import { getSaveSearchApi } from 'src/services/search.service';
 // import FriendCard from './FriendCard';
 interface ListSearchResultProps {

@@ -1,6 +1,6 @@
 import Post from 'src/components/Post';
 import NewPostCreate from './components/NewPostCreate/NewPostCreate';
-import { IVideo } from 'src/components/interfaces/common.interface';
+import { IVideo } from 'src/interfaces/common.interface';
 import { useEffect, useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
 // import { PanResponder } from 'react-native';

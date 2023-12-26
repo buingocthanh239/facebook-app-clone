@@ -5,7 +5,7 @@ import CommentTab from '../../../components/Post/components/Comment/CommentModal
 import { Appbar, Divider, IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import HistorySearch from './compoment/HistorySearch';
-import { IGetSavedSearch, ISavedSearch, ISearch } from 'src/components/interfaces/search.interface';
+import { IGetSavedSearch, ISavedSearch, ISearch } from 'src/interfaces/search.interface';
 import { getSaveSearchApi, deleteSavedSearchApi, searchApi } from 'src/services/search.service';
 import BaseFlatList from 'src/components/BaseFlatList';
 import Post from 'src/components/Post';

@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { color } from 'src/common/constants/color';
-import {
-  IDeleteRequestFriend,
-  ISetRequestFriend
-} from 'src/components/interfaces/friends.interface';
+import { IDeleteRequestFriend, ISetRequestFriend } from 'src/interfaces/friends.interface';
 import { deleteRequestFriendApi, setRequestFriendApi } from 'src/services/friends.services';
 import { getAvatarUri } from 'src/utils/helper';
 

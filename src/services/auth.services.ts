@@ -4,10 +4,10 @@ import {
   IEmailScreenForm,
   ILoginData,
   IResetPasswordBody
-} from 'src/components/interfaces/auth.interface';
+} from 'src/interfaces/auth.interface';
 import { postMethodApi } from './api';
 import { AuthAPi } from './clientConstant';
-import { IBodyResponse, IUser } from 'src/components/interfaces/common.interface';
+import { IBodyResponse, IUser } from 'src/interfaces/common.interface';
 import { ExistedEmail } from 'src/common/enum/commom';
 
 export interface ILoginResponseData extends IUser {

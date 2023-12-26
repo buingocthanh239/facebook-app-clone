@@ -8,7 +8,7 @@ import { color } from 'src/common/constants/color';
 import globalStyles from 'src/common/styles/globalStyles';
 import { useEffect, useState } from 'react';
 import GridImage from '../GridImages/GridImage';
-import { IVideo } from 'src/components/interfaces/common.interface';
+import { IVideo } from 'src/interfaces/common.interface';
 import BaseVideo from '../BaseVideo';
 import ReportModal from './ReportModal';
 const MAX_LENGTH_CONTENT = 500;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { COUNT_ITEM } from 'src/common/constants';
-import { IListBodyResponse } from 'src/components/interfaces/common.interface';
+import { IListBodyResponse } from 'src/interfaces/common.interface';
 
 function useLoadingListApi<T>(
   // eslint-disable-next-line no-unused-vars

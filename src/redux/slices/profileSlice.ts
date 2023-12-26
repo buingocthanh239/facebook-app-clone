@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { changeInfoAfterSignupApi } from 'src/services/profile.services';
-import { IUserInfo } from 'src/components/interfaces/profile.interface';
-import { IErrorData } from 'src/components/interfaces/common.interface';
+import { IUserInfo } from 'src/interfaces/profile.interface';
+import { IErrorData } from 'src/interfaces/common.interface';
 import { MyFormData } from 'src/common/type/type';
 
 interface IProfileState {

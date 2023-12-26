@@ -2,10 +2,7 @@ import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import RequestFriendCard from '../components/FriendCard/RequestFriendCard';
 import { color } from 'src/common/constants/color';
 import { useEffect, useState } from 'react';
-import {
-  IGetRequestedFriends,
-  IRequestedFriends
-} from 'src/components/interfaces/friends.interface';
+import { IGetRequestedFriends, IRequestedFriends } from 'src/interfaces/friends.interface';
 import { getRequestedFriendsApi } from 'src/services/friends.services';
 import { NavigationProp, useNavigation, useScrollToTop } from '@react-navigation/native';
 import {

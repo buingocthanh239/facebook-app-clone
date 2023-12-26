@@ -7,7 +7,7 @@ import BaseButton from 'src/components/BaseButton';
 import BaseInputEmail from 'src/components/BaseInputEmail';
 import { color } from 'src/common/constants/color';
 import BaseForm from 'src/components/BaseForm';
-import { IEmailScreenForm } from 'src/components/interfaces/auth.interface';
+import { IEmailScreenForm } from 'src/interfaces/auth.interface';
 import WraperAuthScreen from 'src/components/WraperScreen';
 import { emailFormSchema } from 'src/validation/signUp.validate';
 import { useState } from 'react';

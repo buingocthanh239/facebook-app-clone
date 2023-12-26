@@ -9,7 +9,7 @@ import BaseButton from 'src/components/BaseButton';
 import { color } from 'src/common/constants/color';
 import BaseForm from 'src/components/BaseForm';
 import { otpFormSchema } from 'src/validation/signUp.validate';
-import { IVerifyOtpSceenForm } from 'src/components/interfaces/auth.interface';
+import { IVerifyOtpSceenForm } from 'src/interfaces/auth.interface';
 import { useCallback, useEffect, useState } from 'react';
 import { checkVerifyCodeApi, getVerifyCodeApi } from 'src/services/auth.services';
 import BaseModalError from 'src/components/BaseModalError';

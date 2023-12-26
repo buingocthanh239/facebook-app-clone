@@ -1,5 +1,5 @@
 import { HttpStatus } from 'src/common/constants';
-import { type IBodyResponse } from 'src/components/interfaces/common.interface';
+import { type IBodyResponse } from 'src/interfaces/common.interface';
 import axios, {
   type AxiosRequestConfig,
   type AxiosRequestHeaders,

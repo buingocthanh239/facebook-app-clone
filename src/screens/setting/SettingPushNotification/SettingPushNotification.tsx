@@ -1,7 +1,7 @@
 import BaseSwitch from 'src/components/BaseSwitch';
 import BaseForm from 'src/components/BaseForm';
 import { useForm } from 'react-hook-form';
-import { IListItem } from 'src/components/interfaces/common.interface';
+import { IListItem } from 'src/interfaces/common.interface';
 import { IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 

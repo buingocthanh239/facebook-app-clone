@@ -19,7 +19,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { nameFormSchema } from 'src/validation/signUp.validate';
 import { useAppDispatch } from 'src/redux';
-import { IChangeInfoScreen } from 'src/components/interfaces/profile.interface';
+import { IChangeInfoScreen } from 'src/interfaces/profile.interface';
 import { changeInfoAfterSignupApi } from 'src/services/profile.services';
 import { modifyAccountAtivity } from 'src/redux/slices/authSlice';
 import { AccountStatus } from 'src/common/enum/commom';

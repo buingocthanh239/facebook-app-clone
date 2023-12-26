@@ -1,11 +1,11 @@
-import { IBodyResponse, IListBodyResponse } from 'src/components/interfaces/common.interface';
+import { IBodyResponse, IListBodyResponse } from 'src/interfaces/common.interface';
 import {
   IDeleteRequestFriend,
   IGetRequestedFriends,
   ISetAcceptFriend,
   ISetRequestFriend,
   ISuggestedFriends
-} from 'src/components/interfaces/friends.interface';
+} from 'src/interfaces/friends.interface';
 import { postMethodApi } from './api';
 import { FriendApi } from './clientConstant';
 
