@@ -74,7 +74,6 @@ export const setProfile = createAsyncThunk(
       if (!res.success) {
         return rejectWithValue(res.message);
       }
-      console.log(res);
       return { ...res.data };
     } catch (err) {
       return rejectWithValue('Vui lòng kiểm tra lại kết nối internet');

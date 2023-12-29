@@ -4,78 +4,40 @@ import Post from 'src/components/Post';
 import { Button, IconButton, Text, Divider } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
-import { IVideo } from 'src/interfaces/common.interface';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
 import { useScrollToTop } from '@react-navigation/native';
-
-export interface IPost {
-  id: string;
-  ownerAvatar?: string;
-  ownerName: string;
-  createdAt: string;
-  content?: string;
-  imageUrl?: string[];
-  video?: IVideo;
-  numberLikes?: number;
-  numberComments?: number;
-  numberShares?: number;
-  friendComments?: string[];
-}
+import { useAppDispatch, useAppSelector } from 'src/redux';
+import { getListVideos, getNextListVideos, selectVideo } from 'src/redux/slices/videoSlice';
+const COUNT_ITEM = 5;
 
 function VideoTab() {
-  const Data: IPost[] = [
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      ownerName: 'Bùi Ngọc Thành',
-      createdAt: '9',
-      content: 'hsdjkfhdfkjdhdsjfhdksfhdj',
-      video: {
-        videoUri:
-          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        thumnail: 'https://i.picsum.photos/id/866/1600/900.jpg'
-      }
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f64',
-      ownerName: 'Bùi Ngọc Thành',
-      createdAt: '9',
-      content: 'hsdjkfhdfkjdhdsjfhdksfhdj',
-      video: {
-        videoUri:
-          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        thumnail: 'https://i.picsum.photos/id/866/1600/900.jpg'
-      }
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f65',
-      ownerName: 'Bùi Ngọc Thành',
-      createdAt: '9',
-      content: 'hsdjkfhdfkjdhdsjfhdksfhdj',
-      video: {
-        videoUri:
-          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        thumnail: 'https://i.picsum.photos/id/866/1600/900.jpg'
-      }
-    }
-  ];
-  const [data, setdata] = useState(Data);
+  // video api
+  const dispatch = useAppDispatch();
+  const [skip, setSkip] = useState<number>(0);
+
+  const videoStore = useAppSelector(selectVideo);
+
   const [refreshing, setrefreshing] = useState(false);
   const onRefresh = async () => {
     setrefreshing(true);
-    setTimeout(() => {
-      setdata(data => [
-        ...data,
-        {
-          id: '58694a0f-3da1-471f-bd96-145571e29d72' + Math.floor(Math.random() * 100),
-
-          ownerName: 'Bùi Ngọc Thành',
-          createdAt: '9'
-        }
-      ]);
-      setrefreshing(false);
-    }, 2000);
+    setSkip(Math.floor(Math.random() * (videoStore.videos.length ?? 1)));
+    dispatch(getListVideos({ index: skip, count: COUNT_ITEM }));
+    setSkip(skip => skip + COUNT_ITEM);
+    setrefreshing(false);
   };
+
+  async function onEndReadable() {
+    if (videoStore.isNextFetch) {
+      dispatch(getNextListVideos({ index: skip, count: COUNT_ITEM }));
+      setSkip(skip => skip + COUNT_ITEM);
+    }
+  }
+
+  useEffect(() => {
+    dispatch(getListVideos({ index: 0, count: COUNT_ITEM }));
+    setSkip(skip => skip + COUNT_ITEM);
+  }, [dispatch]);
 
   //scroll to top
   const ref = useRef(null);
@@ -111,25 +73,31 @@ function VideoTab() {
       <Divider />
       <BaseFlatList
         ref={ref}
-        data={data}
+        data={videoStore.videos}
         renderItem={({ item }) => (
           <Post
             id={item.id}
-            ownerName={item.ownerName}
-            createdAt={item.createdAt}
-            friendComments={item.friendComments}
-            content={item.content}
-            imageUrl={item.imageUrl}
-            ownerAvatar={item.ownerAvatar}
+            author={item.author}
+            created={item.created}
+            comment_mark={item.comment_mark}
+            described={item.described}
+            image={item.image}
             video={item.video}
-            numberComments={item.numberComments}
-            numberLikes={item.numberLikes}
+            name={item.name}
+            feel={item.feel}
             numberShares={item.numberShares}
+            banned={item.banned}
+            can_edit={item.can_edit}
+            is_blocked={item.is_blocked}
+            is_felt={item.is_felt}
+            status={item.status}
           />
         )}
         keyExtractor={item => item.id}
         onRefresh={onRefresh}
         refreshing={refreshing}
+        onEndReached={onEndReadable}
+        onEndReachedThreshold={0.01}
       />
     </SafeAreaView>
   );

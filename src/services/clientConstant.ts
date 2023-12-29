@@ -19,11 +19,13 @@ export enum ProfileApi {
 export enum PostApi {
   ADD_POST = '/add_post',
   GET_POST = '/get_post',
-  GET_LIST_POST = '/get_list_post',
+  GET_LIST_POSTS = '/get_list_posts',
   EDIT_POST = '/edit_post',
   GET_LIST_VIDEOS = '/get_list_videos',
   DELETE_POST = '/delete_post',
-  REPORT_POST = '/report_post'
+  REPORT_POST = '/report_post',
+  GET_NEW_POSTS = '/get_new_posts',
+  SET_VIEWED_POST = '/set_viewed_post'
 }
 
 export enum SearchApi {

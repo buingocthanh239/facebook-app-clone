@@ -13,6 +13,7 @@ dayjs.extend(customParseFormat);
 dayjs.extend(relativeTime);
 dayjs.locale(vi);
 
-export const coverTimeToNow = (date: string) => dayjs(date).toNow();
+export const coverTimeToNow = (date: string) => dayjs(date).fromNow(true);
+export const coverTimeToNowAgo = (date: string) => dayjs(date).fromNow();
 
 export default dayjs;

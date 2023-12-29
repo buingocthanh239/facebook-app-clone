@@ -8,30 +8,49 @@ import { color } from 'src/common/constants/color';
 import globalStyles from 'src/common/styles/globalStyles';
 import { useEffect, useState } from 'react';
 import GridImage from '../GridImages/GridImage';
-import { IVideo } from 'src/interfaces/common.interface';
 import BaseVideo from '../BaseVideo';
 import ReportModal from './ReportModal';
+import { getAvatarUri } from 'src/utils/helper';
+import { coverTimeToNow } from 'src/utils/dayjs';
 const MAX_LENGTH_CONTENT = 500;
 
 // define props
 export interface PostProps {
   id: string;
-  ownerAvatar?: string;
-  ownerName: string;
-  createdAt: string;
-  content?: string;
-  imageUrl?: string[];
-  video?: IVideo;
-  numberLikes?: number;
-  numberComments?: number;
+  name: string;
+  image: [{ id: string; url: string }];
+  video: {
+    url: string;
+    thumb: string;
+  };
+  described: string;
+  created: string;
+  feel: string;
+  comment_mark: string;
+  is_felt: string;
+  is_blocked: string;
+  can_edit: string;
+  banned: string;
+  status: string;
+  author: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
   numberShares?: number;
-  friendComments?: string[];
 }
 
 function Post(props: PostProps) {
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
-  const { friendComments, content, imageUrl, video, id } = props;
+  const { described, name, image, video, id } = props;
+  const urls: string[] = [];
+  useEffect(() => {
+    if (image) {
+      image.forEach(image => urls.push(image.url));
+    }
+  }, [image, urls]);
+  const content = described;
   useEffect(() => {
     if (content) {
       setDisplayContent(content);
@@ -62,39 +81,33 @@ function Post(props: PostProps) {
     setModalVisible(false);
   };
 
-  const isInteract: boolean = !!props.numberComments || !!props.numberLikes || !!props.numberShares;
-  const AvatarSource = props.ownerAvatar
-    ? { url: props.ownerAvatar }
-    : require('src/assets/avatar-default.jpg');
+  const isInteract: boolean =
+    props.feel !== '0' || props.comment_mark !== '0' || !!props.numberShares;
   return (
     <View style={styles.postContainer}>
-      {friendComments && friendComments?.length !== 0 && (
+      {name && (
         <View style={styles.userComments}>
           <View
             style={[globalStyles.flexRow, globalStyles.centerAlignItem, styles.userCommentsContent]}
           >
-            {friendComments?.length === 1 ? (
-              <Text variant='titleSmall'>{friendComments[0]}</Text>
-            ) : (
-              <Text variant='titleSmall'>
-                {friendComments[0]}, {friendComments[1]}
-              </Text>
-            )}
+            <Text variant='titleSmall'>{name}</Text>
             <Text>đã bình luận</Text>
           </View>
           <Divider />
         </View>
       )}
       <Card.Title
-        title={props.ownerName}
+        title={props.author?.name}
         titleVariant='titleMedium'
         subtitle={
           <View style={[globalStyles.flexRow, globalStyles.centerAlignItem, styles.gap]}>
-            <Text>{props.createdAt} giờ</Text>
+            <Text>{coverTimeToNow(props.created)}</Text>
             <MaterialIcon name='public' />
           </View>
         }
-        left={props => <Avatar.Image {...props} source={AvatarSource} />}
+        left={Aprops => (
+          <Avatar.Image {...Aprops} source={getAvatarUri(props.author.avatar as string)} />
+        )}
         right={props => (
           <View style={globalStyles.flexRow}>
             <IconButton {...props} icon='dots-horizontal' onPress={showModal} />
@@ -102,7 +115,7 @@ function Post(props: PostProps) {
           </View>
         )}
       />
-      {props?.content && (
+      {content && (
         <Card.Content style={{ marginBottom: 10 }}>
           <Text onPress={onPressContent}>
             {displayContent}
@@ -117,29 +130,27 @@ function Post(props: PostProps) {
           </Text>
         </Card.Content>
       )}
-      {imageUrl?.length !== 0 && imageUrl && (
+      {urls?.length ? (
         <GridImage
-          images={imageUrl as string[]}
+          images={urls}
           onPress={() => console.log('image')}
           style={{ width: '100%', height: 300, marginBottom: 8 }}
         />
-      )}
-      {video ? (
-        <BaseVideo video={{ uri: video.videoUri }} thumbnail={{ uri: video.thumnail }} />
       ) : null}
+      {video ? <BaseVideo video={{ uri: video?.url }} thumbnail={{ uri: video?.thumb }} /> : null}
       <Divider />
       {isInteract && (
         <>
           <View style={[globalStyles.flexRow, globalStyles.spaceBetweenJustify, styles.padding]}>
-            {props.numberLikes && (
+            {props.feel !== '0' && (
               <View style={[globalStyles.flexRow, globalStyles.centerAlignItem]}>
                 <AntdIcon name='like1' size={15} color={color.primary} />
-                <Text>{props?.numberLikes}</Text>
+                <Text>{props?.feel}</Text>
               </View>
             )}
-            {(props.numberComments || props.numberShares) && (
+            {(props.comment_mark !== '0' || props.numberShares) && (
               <View style={[globalStyles.flexRow, styles.gap]}>
-                {props?.numberComments && <Text>{props?.numberComments} bình luận</Text>}
+                {props?.comment_mark !== '0' && <Text>{props?.comment_mark} bình luận</Text>}
                 {props?.numberShares && <Text>{props?.numberShares} lượt chia sẻ</Text>}
               </View>
             )}
