@@ -1,74 +1,87 @@
+import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import BaseFlatList from 'src/components/BaseFlatList';
+import { IGetSavedSearch, ISavedSearch } from 'src/interfaces/search.interface';
+import { deleteSavedSearchApi, getSaveSearchApi } from 'src/services/search.service';
+
 // import FriendCard from './FriendCard';
 interface HistorySearchProps {
   openModal: boolean;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  isRefresh: boolean;
+  listSavedSearch: ISavedSearch[];
+  setListSavedSearch: React.Dispatch<React.SetStateAction<ISavedSearch[]>>;
 }
 const HistorySearch = (props: HistorySearchProps) => {
-  const HistorySearch = [
-    {
-      id: '1',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền1'
-    },
-    {
-      id: '2',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền2'
-    },
-    {
-      id: '3',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền3'
-    },
-    {
-      id: '4',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền4'
-    },
-    {
-      id: '5',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền5'
-    },
-    {
-      id: '6',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền6'
-    },
-    {
-      id: '7',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền7'
-    },
-    {
-      id: '8',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền8'
-    },
-    {
-      id: '9',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền9'
-    },
-    {
-      id: '10',
-      // avatarUrl: avatarUrl,
-      keyword: 'Nguyễn Hữu Truyền10'
-    }
-  ];
+  const { openModal, setOpenModal, isRefresh, listSavedSearch, setListSavedSearch } = props;
+  const [listAllSavedSearch, setListAllSavedSearch] = useState<ISavedSearch[]>([]);
+
+  useEffect(() => {
+    const data: IGetSavedSearch = {
+      index: 0,
+      count: 20
+    };
+    const fetchData = async (data: IGetSavedSearch) => {
+      try {
+        const result = await getSaveSearchApi(data);
+        // setTotalRequestFriend(result.data.total);
+        setListAllSavedSearch(result.data);
+        // setRefreshing(false);
+        console.log(result);
+        return result;
+      } catch (error) {
+        return console.log({ message: 'sever availability' });
+      }
+    };
+
+    fetchData(data).catch(console.error);
+  }, [isRefresh]);
+
+  const handleDeleteSearch = async (IdSearch: number, keyword: any) => {
+    const duplicateKeywords = listAllSavedSearch.filter(item => item.keyword === keyword);
+    const idArray = duplicateKeywords.map(item => item.id);
+    // console.log('duplicateKeywords',idArray)
+    const updatedList = listSavedSearch.filter(item => item.id !== IdSearch);
+    setListSavedSearch(updatedList);
+
+    let currentIndex = 0;
+
+    const deleteSearchWithInterval = async () => {
+      const id = idArray[currentIndex];
+
+      try {
+        // Gọi API để xóa đối tượng từ server
+        const result = await deleteSavedSearchApi({ search_id: id, all: 0 });
+        console.log(result);
+      } catch (error) {
+        console.log(error);
+      }
+
+      // Chuyển sang phần tử tiếp theo trong mảng
+      currentIndex++;
+
+      // Nếu đã xử lý hết mọi phần tử trong mảng, dừng vòng lặp
+      if (currentIndex === idArray.length) {
+        clearInterval(intervalId);
+
+        // Xóa đối tượng cụ thể từ listSavedSearch
+      }
+    };
+    // Chuyển sang phần tử tiếp theo trong mảng
+    const intervalId = setInterval(deleteSearchWithInterval, 100);
+    // Nếu đã xử lý hết mọi phần tử trong mảng, dừng vòng lặ
+  };
 
   const handleCancel = () => {
-    props.setOpenModal(false);
+    setOpenModal(false);
   };
   return (
     <View style={styles.container}>
       <Modal
-        isVisible={props.openModal}
+        isVisible={openModal}
         style={styles.container}
         animationIn='slideInUp'
         animationOut='slideOutDown'
@@ -93,7 +106,7 @@ const HistorySearch = (props: HistorySearchProps) => {
           style={{
             marginTop: 20
           }}
-          data={HistorySearch}
+          data={listSavedSearch}
           renderItem={({ item }) => (
             <View key={item.id} style={styles.ListSearchResult}>
               <IconButton
@@ -101,6 +114,7 @@ const HistorySearch = (props: HistorySearchProps) => {
                 size={25}
                 iconColor={color.white}
                 containerColor={color.primary}
+                style={styles.iconSearch}
               />
               <View style={styles.ListSearchResultText}>
                 {/* <Text>{item.username}</Text> */}
@@ -137,8 +151,8 @@ const HistorySearch = (props: HistorySearchProps) => {
                 iconColor={color.activeOutlineColor}
                 containerColor='#fff'
                 size={26}
-
                 // onPress={showModalCover}
+                onPress={() => handleDeleteSearch(item.id, item.keyword)}
               />
             </View>
           )}
@@ -189,6 +203,9 @@ const styles = StyleSheet.create({
     // backgroundColor: '#E9F1FE',
     // padding: 10,
     // borderRadius: 7
+  },
+  iconSearch: {
+    marginBottom: 20
   }
 });
 

@@ -56,12 +56,7 @@ function Post(props: PostProps) {
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
   const { described, name, image, video, id } = props;
-  const urls: string[] = [];
-  useEffect(() => {
-    if (image) {
-      image.forEach(image => urls.push(image.url));
-    }
-  }, [image, urls]);
+  const urls = image?.map(imageObj => imageObj.url) ?? [];
   const content = described;
   useEffect(() => {
     if (content) {

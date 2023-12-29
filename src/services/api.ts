@@ -88,7 +88,8 @@ export const postMethodWithFormDataApi = async function <P, T>(
 ): Promise<IBodyResponse<T>> {
   return await axiosInstance.post(client, data, {
     headers: {
-      'Content-Type': 'multipart/form-data'
+      'Content-Type': 'multipart/form-data',
+      Accept: '/'
     }
   });
 };
