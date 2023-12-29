@@ -1,9 +1,8 @@
 import Post from 'src/components/Post';
 import NewPostCreate from './components/NewPostCreate/NewPostCreate';
-import { IVideo } from 'src/interfaces/common.interface';
 import { useEffect, useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
-// import { PanResponder } from 'react-native';
+import { PanResponder } from 'react-native';
 import {
   NavigationProp,
   useIsFocused,
@@ -11,84 +10,31 @@ import {
   useScrollToTop
 } from '@react-navigation/native';
 import { AppNaviagtionName } from 'src/common/constants/nameScreen';
-
-export interface IPost {
-  id: string;
-  ownerAvatar?: string;
-  ownerName: string;
-  createdAt: string;
-  content?: string;
-  imageUrl?: string[];
-  video?: IVideo;
-  numberLikes?: number;
-  numberComments?: number;
-  numberShares?: number;
-  friendComments?: string[];
-}
+import { useAppDispatch, useAppSelector } from 'src/redux';
+import { getListPosts, getNextListPosts, selectPost } from 'src/redux/slices/postSlice';
+const COUNT_ITEM = 10;
 
 function HomeTab() {
-  const Data: IPost[] = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      ownerName: 'Bùi Ngọc Thành',
-      createdAt: '9',
-      friendComments: ['Bùi Ngọc Thành', 'Bùi Ngọc Thành', 'Bùi Ngọc Thành'],
-      content: 'ssss',
-      imageUrl: [
-        'https://picsum.photos/700',
-        'https://picsum.photos/700',
-        'https://picsum.photos/700',
-        'https://picsum.photos/700',
-        'https://picsum.photos/700',
-        'https://picsum.photos/700'
-      ]
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d74',
-      ownerName: 'Bùi Ngọc Thành',
-      createdAt: '9'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d75',
+  const dispatch = useAppDispatch();
+  const [skip, setSkip] = useState<number>(0);
 
-      ownerName: 'Bùi Ngọc Thành',
-      createdAt: '9'
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      ownerName: 'Bùi Ngọc Thành',
-      createdAt: '9',
-      content: 'hsdjkfhdfkjdhdsjfhdksfhdj',
-      video: {
-        videoUri:
-          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        thumnail: 'https://i.picsum.photos/id/866/1600/900.jpg'
-      }
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
+  const postStore = useAppSelector(selectPost);
 
-      ownerName: 'Bùi Ngọc Thành',
-      createdAt: '9'
-    }
-  ];
-  const [data, setdata] = useState(Data);
   const [refreshing, setrefreshing] = useState(false);
   const onRefresh = async () => {
     setrefreshing(true);
-    setTimeout(() => {
-      setdata(data => [
-        ...data,
-        {
-          id: '58694a0f-3da1-471f-bd96-145571e29d72' + Math.floor(Math.random() * 100),
-
-          ownerName: 'Bùi Ngọc Thành',
-          createdAt: '9'
-        }
-      ]);
-      setrefreshing(false);
-    }, 2000);
+    setSkip(Math.floor(Math.random() * (postStore.post.length ?? 1)));
+    dispatch(getListPosts({ index: skip, count: COUNT_ITEM }));
+    setSkip(skip => skip + COUNT_ITEM);
+    setrefreshing(false);
   };
+
+  async function onEndReadable() {
+    if (postStore.isNextFetch) {
+      dispatch(getNextListPosts({ index: skip, count: COUNT_ITEM }));
+      setSkip(skip => skip + COUNT_ITEM);
+    }
+  }
 
   const ref = useRef(null);
   useScrollToTop(ref);
@@ -96,8 +42,8 @@ function HomeTab() {
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.TabNavigation> =
     useNavigation();
 
-  // const [isShowHeader, setIsShowHeader] = useState(true);
-  const isShowHeader = true;
+  // header handle
+  const [isShowHeader, setIsShowHeader] = useState(true);
   const isFocus = useIsFocused();
   useEffect(() => {
     if (isShowHeader && isFocus) {
@@ -107,45 +53,58 @@ function HomeTab() {
     }
   }, [isShowHeader, isFocus, navigation]);
 
-  // const panResponder = useRef(
-  //   PanResponder.create({
-  //     onStartShouldSetPanResponder: () => true,
-  //     onMoveShouldSetPanResponder: () => true,
-  //     onPanResponderMove: (event, gestureState) => {
-  //       const { dy } = gestureState;
-  //       if (dy < 0) {
-  //         setIsShowHeader(false);
-  //       } else {
-  //         setIsShowHeader(true);
-  //       }
-  //     }
-  //   })
-  // ).current;
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (event, gestureState) => {
+        const { dy } = gestureState;
+        if (dy < 0) {
+          setIsShowHeader(false);
+        } else {
+          setIsShowHeader(true);
+        }
+      }
+    })
+  ).current;
+
+  // get post handle
+  useEffect(() => {
+    dispatch(getListPosts({ index: 0, count: COUNT_ITEM }));
+    setSkip(skip => skip + COUNT_ITEM);
+  }, [dispatch]);
 
   return (
     <BaseFlatList
-      // {...panResponder.panHandlers}
+      {...panResponder.panHandlers}
       ref={ref}
       ListHeaderComponent={<NewPostCreate />}
-      data={data}
+      data={postStore.post}
       renderItem={({ item }) => (
         <Post
           id={item.id}
-          ownerName={item.ownerName}
-          createdAt={item.createdAt}
-          friendComments={item.friendComments}
-          content={item.content}
-          imageUrl={item.imageUrl}
-          ownerAvatar={item.ownerAvatar}
+          author={item.author}
+          created={item.created}
+          comment_mark={item.comment_mark}
+          described={item.described}
+          image={item.image}
           video={item.video}
-          numberComments={item.numberComments}
-          numberLikes={item.numberLikes}
+          name={item.name}
+          feel={item.feel}
           numberShares={item.numberShares}
+          banned={item.banned}
+          can_edit={item.can_edit}
+          is_blocked={item.is_blocked}
+          is_felt={item.is_felt}
+          status={item.status}
         />
       )}
       keyExtractor={item => item.id}
       onRefresh={onRefresh}
       refreshing={refreshing}
+      onEndReached={onEndReadable}
+      onEndReachedThreshold={0.01}
+      isFootterLoading={postStore.getPostloading}
     />
   );
 }

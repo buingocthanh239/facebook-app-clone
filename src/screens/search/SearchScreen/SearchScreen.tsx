@@ -9,7 +9,6 @@ import { IGetSavedSearch, ISavedSearch, ISearch } from 'src/interfaces/search.in
 import { getSaveSearchApi, deleteSavedSearchApi, searchApi } from 'src/services/search.service';
 import BaseFlatList from 'src/components/BaseFlatList';
 import Post from 'src/components/Post';
-import { coverTimeToNow } from 'src/utils/dayjs';
 import NetInfo from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
 export interface ISearchResult {
@@ -74,12 +73,12 @@ function SearchScreen() {
       const searchResult: any = [];
       response.forEach(item => {
         const newData = {
-          ...item, // Sao chép tất cả các trường từ data cũ
-          image: item.image.map((imageObj: any) => imageObj.url) // Thay đổi trường image thành mảng các URL
+          ...item // Sao chép tất cả các trường từ data cũ
+          //image: item.image.map((imageObj: any) => imageObj.url) // Thay đổi trường image thành mảng các URL
         };
         searchResult.push(newData);
       });
-      console.log('searchResult', searchResult);
+      //console.log('searchResult', searchResult);
       setListSearch(searchResult);
       // setCurrentIndex(0)
     } catch (error) {
@@ -166,80 +165,6 @@ function SearchScreen() {
     fetchData(data).catch(console.error);
   }, []);
 
-  // const Data: ISearchResult[] = [
-  //   {
-  //     id: '385',
-  //     name: '',
-  //     image: [
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg',
-  //     ],
-  //     video: {
-  //       // url: "https://it4788.catan.io.vn/files/video-1702317454498-420558351.mp4"
-  //     },
-  //     described: 'chơi đàn nào',
-  //     created: '2023-12-11T17:57:34.613Z',
-  //     feel: '0',
-  //     mark_comment: '0',
-  //     is_felt: '0',
-  //     state: '',
-  //     author: {
-  //       id: '608',
-  //       name: 'mai van tien',
-  //       avatar: 'https://it4788.catan.io.vn/files/avatar-1702280227278-455237500.jpg'
-  //     }
-  //   },
-  //   {
-  //     id: '372',
-  //     name: '',
-  //     video: {
-  //       videoUri: "https://www.youtube.com/watch?v=HA5D3YwxJIk"
-  //     },
-  //     image: [
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg'
-  //     ],
-  //     described: 'thịt lợn và thịt bò?',
-  //     created: '2023-12-11T14:43:00.320Z',
-  //     feel: '1',
-  //     mark_comment: '0',
-  //     is_felt: '0',
-  //     state: 'Hyped',
-  //     author: {
-  //       id: '608',
-  //       name: 'mai van tien',
-  //       avatar: 'https://it4788.catan.io.vn/files/avatar-1702280227278-455237500.jpg'
-  //     }
-  //   },
-  //   {
-  //     id: '367',
-  //     name: '',
-  //     video: {},
-  //     image: [
-  //       'https://media.baoquangninh.vn/upload/image/202307/medium/2100199_5fc049b4e26927b1f8e9720acdec299c.jpg'
-  //     ],
-  //     described: 'chuối ngon mỗi ngày',
-  //     created: '2023-12-11T07:38:30.774Z',
-  //     feel: '1',
-  //     mark_comment: '0',
-  //     is_felt: '0',
-  //     state: 'tuyệt',
-  //     author: {
-  //       id: '608',
-  //       name: 'mai van tien',
-  //       avatar: 'https://it4788.catan.io.vn/files/avatar-1702280227278-455237500.jpg'
-  //     }
-  //   }
-  // ];
   const handleDeleteSearch = async (IdSearch: number, keyword: any) => {
     const duplicateKeywords = listAllSavedSearch.filter(item => item.keyword === keyword);
     const idArray = duplicateKeywords.map(item => item.id);
@@ -352,16 +277,20 @@ function SearchScreen() {
                   renderItem={({ item }) => (
                     <Post
                       id={item.id}
-                      ownerName={item.author?.name}
-                      createdAt={coverTimeToNow(item.created)}
-                      friendComments={item.friendComments}
-                      content={item.described}
-                      imageUrl={item?.image}
-                      ownerAvatar={item.author?.avatar}
-                      // video={item.video.url}
-                      numberComments={item.numberComments}
-                      numberLikes={item.numberLikes}
+                      author={item.author}
+                      created={item.created}
+                      comment_mark={item.comment_mark}
+                      described={item.described}
+                      image={item.image}
+                      video={item.video}
+                      name={item.name}
+                      feel={item.feel}
                       numberShares={item.numberShares}
+                      banned={item.banned}
+                      can_edit={item.can_edit}
+                      is_blocked={item.is_blocked}
+                      is_felt={item.is_felt}
+                      status={item.status}
                     />
                   )}
                   keyExtractor={item => item.id}
