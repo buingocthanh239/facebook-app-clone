@@ -1,5 +1,5 @@
 import { View, TouchableHighlight, StyleSheet } from 'react-native';
-import { Avatar, Card, IconButton, Text, Divider } from 'react-native-paper';
+import { Avatar, Card, IconButton, Text, Divider, TouchableRipple } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons';
@@ -12,6 +12,8 @@ import BaseVideo from '../BaseVideo';
 import ReportModal from './ReportModal';
 import { getAvatarUri } from 'src/utils/helper';
 import { coverTimeToNow } from 'src/utils/dayjs';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 const MAX_LENGTH_CONTENT = 500;
 
 // define props
@@ -41,6 +43,16 @@ export interface PostProps {
 }
 
 function Post(props: PostProps) {
+  // Navigation profile
+  const navigationProfile: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
+
+  const handleNavigationProfile = () =>
+    navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id: props.author.id }
+    });
+
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
   const { described, name, image, video, id } = props;
@@ -101,12 +113,14 @@ function Post(props: PostProps) {
         titleVariant='titleMedium'
         subtitle={
           <View style={[globalStyles.flexRow, globalStyles.centerAlignItem, styles.gap]}>
-            <Text>{coverTimeToNow(props.created)}</Text>
+            <Text variant='bodySmall'>{coverTimeToNow(props.created)}</Text>
             <MaterialIcon name='public' />
           </View>
         }
         left={Aprops => (
-          <Avatar.Image {...Aprops} source={getAvatarUri(props.author.avatar as string)} />
+          <TouchableRipple onPress={handleNavigationProfile}>
+            <Avatar.Image {...Aprops} source={getAvatarUri(props.author.avatar as string)} />
+          </TouchableRipple>
         )}
         right={props => (
           <View style={globalStyles.flexRow}>
