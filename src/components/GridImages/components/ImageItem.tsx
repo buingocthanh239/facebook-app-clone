@@ -1,21 +1,33 @@
-import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { IconButton, TouchableRipple } from 'react-native-paper';
 
 export interface IImageItemProps {
   onPress: () => any;
   image: string;
   index: number;
+  isHideCloseIcon?: boolean;
+  onPressCloseIcon?: () => any;
 }
-function ImageItem({ onPress, image }: IImageItemProps) {
+function ImageItem({ onPress, image, isHideCloseIcon, onPressCloseIcon }: IImageItemProps) {
   return image ? (
-    <TouchableOpacity style={styles.image_view} onPress={onPress} activeOpacity={0.8}>
-      <Image
-        style={styles.image}
-        resizeMode='cover'
-        source={{
-          uri: image
-        }}
-      />
-    </TouchableOpacity>
+    <View style={styles.image_view}>
+      <TouchableRipple onPress={onPress}>
+        <Image
+          style={styles.image}
+          resizeMode='cover'
+          source={{
+            uri: image
+          }}
+        />
+      </TouchableRipple>
+      {isHideCloseIcon ? (
+        <IconButton
+          icon='close'
+          style={{ position: 'absolute', right: 2 }}
+          onPress={onPressCloseIcon}
+        />
+      ) : null}
+    </View>
   ) : null;
 }
 
