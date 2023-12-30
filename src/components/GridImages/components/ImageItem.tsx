@@ -5,10 +5,10 @@ export interface IImageItemProps {
   onPress: () => any;
   image: string;
   index: number;
-  isHideCloseIcon?: boolean;
+  isShowCloseIcon?: boolean;
   onPressCloseIcon?: () => any;
 }
-function ImageItem({ onPress, image, isHideCloseIcon, onPressCloseIcon }: IImageItemProps) {
+function ImageItem({ onPress, image, isShowCloseIcon, onPressCloseIcon }: IImageItemProps) {
   return image ? (
     <View style={styles.image_view}>
       <TouchableRipple onPress={onPress}>
@@ -20,7 +20,7 @@ function ImageItem({ onPress, image, isHideCloseIcon, onPressCloseIcon }: IImage
           }}
         />
       </TouchableRipple>
-      {isHideCloseIcon ? (
+      {isShowCloseIcon ? (
         <IconButton
           icon='close'
           style={{ position: 'absolute', right: 2 }}
