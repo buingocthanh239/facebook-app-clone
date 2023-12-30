@@ -21,3 +21,7 @@ export const getListBlockApi = async (
 export const setBlockApi = async (data: { user_id: string }): Promise<IBodyResponse<any>> => {
   return postMethodApi(BlockApi.SET_BLOCK, data);
 };
+
+export const unBlockApi = async (data: { user_id: string }): Promise<IBodyResponse<any>> => {
+  return postMethodApi(BlockApi.UN_BLOCK, data);
+};

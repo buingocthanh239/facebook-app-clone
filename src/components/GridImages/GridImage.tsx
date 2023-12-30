@@ -5,20 +5,21 @@ export interface IGridImageProps {
   images: string[];
   style?: any;
   onPress: () => void;
-  isHideCloseIcon?: boolean;
+  isShowCloseIcon?: boolean;
   onPressCloseIcon?: () => any;
 }
-function GridImage({ images, style, onPress, isHideCloseIcon, onPressCloseIcon }: IGridImageProps) {
-  return images?.length > 0 && images ? (
+function GridImage({ images, style, onPress, isShowCloseIcon, onPressCloseIcon }: IGridImageProps) {
+  const length = images.length;
+  return length > 0 && images ? (
     <View style={[styles.container_row, style]}>
-      {images?.length < 5 ? (
-        images?.length < 3 ? (
+      {length < 5 ? (
+        length < 3 ? (
           <>
             <ImageItem
               image={images[0]}
               onPress={onPress}
               index={0}
-              isHideCloseIcon={isHideCloseIcon}
+              isShowCloseIcon={isShowCloseIcon && length < 2}
               onPressCloseIcon={onPressCloseIcon}
             />
             <ImageItem image={images[1]} onPress={onPress} index={1} />
@@ -38,12 +39,7 @@ function GridImage({ images, style, onPress, isHideCloseIcon, onPressCloseIcon }
             <ImageItem image={images[1]} onPress={onPress} index={1} />
           </View>
           <View style={styles.container}>
-            <RenderImages
-              start={2}
-              overflow={images?.length > 5}
-              images={images}
-              onPress={onPress}
-            />
+            <RenderImages start={2} overflow={length > 5} images={images} onPress={onPress} />
           </View>
         </>
       )}

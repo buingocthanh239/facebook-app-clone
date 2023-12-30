@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useEffect, useState } from 'react';
 import styles from './styles';
 import CommentTab from '../../../components/Post/components/Comment/CommentModal';
@@ -234,7 +234,7 @@ function SearchScreen() {
         <Appbar.Action icon='magnify' onPress={() => handleSearch(currentIndex, searchText)} />
         {/* <Appbar.Action icon='dots-vertical' onPress={_handleMore} /> */}
       </Appbar.Header>
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         {isSearching && searchText !== '' ? (
           <View style={styles.headerSearchresult}>
             <Text style={styles.All}>Tất cả</Text>
@@ -360,7 +360,7 @@ function SearchScreen() {
           listSavedSearch={listSavedSearch}
           setListSavedSearch={setListSavedSearch}
         />
-      </ScrollView>
+      </View>
     </>
   );
 }

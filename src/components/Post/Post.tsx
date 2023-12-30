@@ -40,6 +40,7 @@ export interface PostProps {
     avatar: string;
   };
   numberShares?: number;
+  isShowCloseIcon?: boolean;
 }
 
 function Post(props: PostProps) {
@@ -144,6 +145,7 @@ function Post(props: PostProps) {
           images={urls}
           onPress={() => console.log('image')}
           style={{ width: '100%', height: 300, marginBottom: 8 }}
+          isShowCloseIcon={props.isShowCloseIcon}
         />
       ) : null}
       {video ? <BaseVideo video={{ uri: video?.url }} thumbnail={{ uri: video?.thumb }} /> : null}
