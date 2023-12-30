@@ -19,7 +19,7 @@ function Header() {
     });
   const handleNaviagtionChatScreen = () =>
     navigationChatScreen.navigate(AppNaviagtionName.ChatNavigation, {
-      screen: ChatNavigationName.InboxListScreen
+      screen: ChatNavigationName.InboxScreen
     });
   return (
     <Appbar.Header style={{ height: 40, marginTop: 8 }}>

@@ -1,34 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { IconButton, TextInput, Avatar, Surface, TouchableRipple } from 'react-native-paper';
+import database from '@react-native-firebase/database';
 
-const avatarsData = [
-  'Tuấn',
-  'Văn',
-  'Truyền',
-  'Trí',
-  'Thành'
-  // Thêm tên các avatar khác ở đây
-];
-
-const contactsData = [
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' },
-  { name: 'Trần Anh Tuấn', message: 'Hello bạn 23:57' }
-  // Thêm dữ liệu của các người liên lạc khác ở đây
-];
-
+const avatarsData = ['Tuấ', 'Văn', 'Truyền', 'Trí', 'Thành'];
+interface Contact {
+  Name: string;
+  lastMsg: string;
+  avatar_url: string;
+}
 function AvatarList() {
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
@@ -47,9 +27,26 @@ function AvatarList() {
 }
 
 function ContactList() {
+  const [chatlist, setChatlist] = useState<Contact[]>([]);
+
+  useEffect(() => {
+    getChatlist();
+  }, []);
+
+  const getChatlist = async () => {
+    database()
+      .ref('/chatlist/')
+      .on('value', snapshot => {
+        if (snapshot.val()) {
+          const chatlistData = snapshot.val();
+          setChatlist(Object.values(chatlistData));
+        }
+      });
+  };
+
   return (
     <>
-      {contactsData.map((contact, index) => (
+      {chatlist.map((contact, index) => (
         <TouchableRipple
           key={index}
           style={{ marginVertical: 10 }}
@@ -60,13 +57,13 @@ function ContactList() {
             <Avatar.Image
               size={60}
               style={{ marginTop: 10, marginLeft: 10 }}
-              source={require('../../assets/avatar-default.png')}
+              source={{ uri: contact.avatar_url }}
             />
             <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 10 }}>
               <Text style={{ fontWeight: '500', fontSize: 15, color: '#000', marginBottom: 5 }}>
-                {contact.name}
+                {contact.Name}
               </Text>
-              <Text style={{ fontWeight: '500', color: '#000' }}> Bạn: {contact.message}</Text>
+              <Text style={{ fontWeight: '500', color: '#000' }}> Bạn: {contact.lastMsg}</Text>
             </View>
             <IconButton icon={'check-circle-outline'} style={{ marginLeft: 'auto' }} size={20} />
           </View>
@@ -75,7 +72,6 @@ function ContactList() {
     </>
   );
 }
-
 function InboxScreen() {
   const [text, setText] = useState('');
 
