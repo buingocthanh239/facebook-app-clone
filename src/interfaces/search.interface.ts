@@ -33,3 +33,9 @@ export interface ISearchResult {
   state: string;
   author: any;
 }
+
+export interface IGetSearchUser {
+  keyword: string;
+  index: number;
+  count: number;
+}

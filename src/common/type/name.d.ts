@@ -43,7 +43,8 @@ export enum SettingNavigationName {
   SettingPushNotification = 'SettingPushNotification',
   SettingSecurityLogin = 'SettingSecurityLogin',
   SettingInfoName = 'SettingInfoName',
-  BlockFriendScreen = 'BlockFriendScreen'
+  BlockFriendScreen = 'BlockFriendScreen',
+  SearchUserScreen = 'SearchUserScreen'
 }
 
 export enum FriendNavigationName {

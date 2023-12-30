@@ -31,7 +31,8 @@ export enum PostApi {
 export enum SearchApi {
   SEARCH = '/search',
   GET_SAVE_SEARCH = '/get_saved_search',
-  DEL_SAVE_SEARCH = '/del_saved_search'
+  DEL_SAVE_SEARCH = '/del_saved_search',
+  SEARCH_USER = '/search_user'
 }
 
 export enum FriendApi {
@@ -46,7 +47,8 @@ export enum FriendApi {
 
 export enum BlockApi {
   GET_LIST_BLOCKS = '/get_list_blocks',
-  SET_BLOCK = '/set_block'
+  SET_BLOCK = '/set_block',
+  UN_BLOCK = '/unblock'
 }
 
 export enum SettingsApi {

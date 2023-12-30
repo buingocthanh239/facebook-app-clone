@@ -58,6 +58,7 @@ type SettingNavigationType = {
   SettingPushNotification: undefined;
   SettingSecurityLogin: undefined;
   SettingInfoName: undefined;
+  SearchUserScreen: undefined;
 };
 
 type FriendNavigationType = {

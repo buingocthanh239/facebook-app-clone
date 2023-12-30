@@ -10,7 +10,8 @@ import {
   SettingNotification,
   SettingPassword,
   SettingPushNotification,
-  SettingSecurityLogin
+  SettingSecurityLogin,
+  SearchUserScreen
 } from 'src/screens/setting';
 
 const Stack = createNativeStackNavigator();
@@ -64,6 +65,11 @@ function SettingNavigation() {
         name={SettingNavigationName.SettingSecurityLogin}
         component={SettingSecurityLogin}
         options={{ title: '' }}
+      />
+      <Stack.Screen
+        name={SettingNavigationName.SearchUserScreen}
+        component={SearchUserScreen}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
