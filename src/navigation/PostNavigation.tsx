@@ -5,6 +5,7 @@ import { Text } from 'react-native-paper';
 import WraperScreen from 'src/components/WraperScreen';
 import { TransitionPresets } from '@react-navigation/stack';
 import { PostNavigationName } from 'src/common/constants/nameScreen';
+import ListImageScreen from 'src/screens/post/ListImage/ListImageScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,13 @@ function PostNavigation() {
               Bạn đang cảm thấy thế nào?
             </Text>
           )
+        }}
+      />
+      <Stack.Screen
+        name={PostNavigationName.ListImageScreen}
+        component={ListImageScreen}
+        options={{
+          headerShown: false
         }}
       />
     </Stack.Navigator>

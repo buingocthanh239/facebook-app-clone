@@ -1,6 +1,8 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { color } from 'src/common/constants/color';
+import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
 import { getAvatarUri } from 'src/utils/helper';
 
 export interface CreatePostCardProps {
@@ -8,8 +10,14 @@ export interface CreatePostCardProps {
 }
 
 const CreatePostCard = (props: CreatePostCardProps) => {
+  const navigation2: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
+    useNavigation();
+  const handleNavigateCreatePost = () =>
+    navigation2.navigate(AppNaviagtionName.PostNavigation, {
+      screen: PostNavigationName.CreatePostScreen
+    });
   return (
-    <View style={styles.containerCreatePost}>
+    <TouchableOpacity style={styles.containerCreatePost} onPress={handleNavigateCreatePost}>
       <TouchableOpacity activeOpacity={0.8}>
         <Image source={getAvatarUri(props.avatar)} style={styles.avatar} />
       </TouchableOpacity>
@@ -19,7 +27,7 @@ const CreatePostCard = (props: CreatePostCardProps) => {
       <TouchableOpacity style={styles.iconContainer}>
         <Icon name='image-multiple' size={24} color={color.green}></Icon>
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
