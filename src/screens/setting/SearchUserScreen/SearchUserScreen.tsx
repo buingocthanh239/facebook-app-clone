@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, TextInput, View, Keyboard } from 'react-native';
 import { Appbar, Divider, IconButton, Text } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import BaseFlatList from 'src/components/BaseFlatList';
@@ -33,6 +33,7 @@ function SearchUserScreen() {
   const handleSearch = async () => {
     if (searchText !== '') {
       try {
+        Keyboard.dismiss();
         setIsSearching(true);
         setIsStartSearch(true);
         const res = await searchUserAPi({ keyword: searchText, index: 0, count: COUNT_ITEM });
@@ -56,6 +57,7 @@ function SearchUserScreen() {
     if (searchText !== '' && isNextFetch) {
       try {
         setIsNextSearch(true);
+        setSkip(skip => skip + COUNT_ITEM);
         const res = await searchUserAPi({ keyword: searchText, index: skip, count: COUNT_ITEM });
         if (res.success) {
           if (!res.data.length) {
@@ -63,9 +65,9 @@ function SearchUserScreen() {
             return;
           }
           setData(data => [...data, ...res.data]);
-          setSkip(skip => skip + COUNT_ITEM);
         }
       } catch (e) {
+        setSkip(skip => skip - COUNT_ITEM);
         return;
       } finally {
         setIsNextSearch(false);
@@ -77,7 +79,7 @@ function SearchUserScreen() {
   const onPressUser = (item: ISearchUserItem) => {
     Alert.alert(
       'XÁC NHẬN',
-      `Bạn có chắc chắn chặn  ${item.username} hay không?. Nếu có mọi thông tin về bạn sẽ ẩn với  ${item.username}`,
+      `Bạn có chắc chắn chặn  ${item.username} hay không?. Nếu có mọi thông tin về bạn sẽ ẩn với ${item.username}`,
       [
         {
           text: 'Hủy',
