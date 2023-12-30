@@ -13,6 +13,14 @@ type AppNavigationType = {
     | { screen: ProfileNavigationName.EditProfile };
   PostNavigation:
     | { screen: PostNavigationName; params?: { selectedItem?: CardData } }
+    | {
+        screen: PostNavigationName.ListImageScreen;
+        params: {
+          imageList: string[];
+          mediaFiles: MediaFileType[];
+          onUpdate: (updateImageList: string[], updateMediaFiles: MediaFileType[]) => void;
+        };
+      }
     | { screen: PostNavigationName.EnAScreen };
   SearchNavigation: { screen: SearchNavigationName };
   ReportNavigation: { screen: ReportNavigationName; params: { id: string } };
@@ -68,6 +76,11 @@ type FriendNavigationType = {
 type PostNavigationType = {
   CreatePostScreen: { selectedItem: CardData } | undefined;
   EnAScreen: undefined;
+  ListImageScreen: {
+    imageList: string[];
+    mediaFiles: MediaFileType[];
+    onUpdate: (updateImageList: string[], updateMediaFiles: MediaFileType[]) => void;
+  };
 };
 
 type TabNavigationType = {

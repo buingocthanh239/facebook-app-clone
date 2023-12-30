@@ -128,3 +128,23 @@ export const handShowErrorMessage = (code: number): string => {
       return 'Vui lòng kiểm tra kết nối internet';
   }
 };
+
+export const formatDate = (date: string) => {
+  const dateObject = new Date(date);
+  const dayOfYear = Math.floor(
+    (Date.UTC(dateObject.getUTCFullYear(), dateObject.getUTCMonth(), dateObject.getUTCDate()) -
+      Date.UTC(dateObject.getUTCFullYear(), 0, 0)) /
+      86400000
+  );
+  if (dateObject.getUTCDay() < 5) {
+    return `T${dateObject.getUTCDay()} LÚC ${dateObject.getUTCHours()}:${dateObject.getUTCMinutes()}`;
+  } else if (dayOfYear === 365) {
+    return `${dateObject.getUTCDate()} THG ${
+      dateObject.getUTCMonth() + 1
+    } LÚC ${dateObject.getUTCHours()}:${dateObject.getUTCMinutes()}`;
+  } else {
+    return `${dateObject.getUTCDate()} THG ${
+      dateObject.getUTCMonth() + 1
+    }, ${dateObject.getUTCFullYear()}`;
+  }
+};
