@@ -1,16 +1,24 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Keyboard } from 'react-native';
 import { useEffect, useState } from 'react';
 import styles from './styles';
 import CommentTab from '../../../components/Post/components/Comment/CommentModal';
-import { Appbar, Divider, IconButton } from 'react-native-paper';
+import { ActivityIndicator, Appbar, Divider, IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import HistorySearch from './compoment/HistorySearch';
 import { IGetSavedSearch, ISavedSearch, ISearch } from 'src/interfaces/search.interface';
-import { getSaveSearchApi, deleteSavedSearchApi, searchApi } from 'src/services/search.service';
+import {
+  getSaveSearchApi,
+  deleteSavedSearchApi,
+  searchApi,
+  searchUserAPi,
+  ISearchUserItem
+} from 'src/services/search.service';
 import BaseFlatList from 'src/components/BaseFlatList';
 import Post from 'src/components/Post';
 import NetInfo from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
+import BaseFlatListSearch from 'src/components/BaseFlatListSearch';
+import UserItem from 'src/screens/setting/SearchUserScreen/components/UserItem';
 export interface ISearchResult {
   id: string;
   name: string;
@@ -25,14 +33,29 @@ export interface ISearchResult {
   author: any;
 }
 function SearchScreen() {
+  const ListTab = {
+    POST: 'Bài viết',
+    USER: 'Mọi người'
+  };
+  const COUNT_ITEM = 10;
   const [openModal, setOpenModal] = useState(false);
   const [openModalHistorySearch, setOpenModalHistorySearch] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [isRefresh, setIsRefresh] = useState(false);
+  const [isRefreshSaveSearch, setIsRefreshSaveSearch] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [listSearch, setListSearch] = useState<ISearchResult[]>([]);
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
+  const [isLoadingFirstApi, setIsLoadingFirstAPi] = useState<boolean>(false);
+  const [tab, setTab] = useState(ListTab.POST);
+  const [data, setData] = useState<ISearchUserItem[]>([]);
+  const [skip, setSkip] = useState<number>(0);
+  const [skipPost, setSkipPost] = useState<number>(0);
+  const [isNextFetch, setIsNextFetch] = useState<boolean>(true);
+  const [isNextFetchPost, setIsNextFetchPost] = useState<boolean>(true);
+  const [isNextSearch, setIsNextSearch] = useState<boolean>(false);
+  const [isNextSearchPost, setIsNextSearchPost] = useState<boolean>(false);
   const navigation = useNavigation();
   // const [onSearch, setOnSearch] = useState(false)
   // const handleOpenCommentTab = () => {
@@ -58,34 +81,115 @@ function SearchScreen() {
   };
 
   const handleSearch = async (index: any, keyword: any) => {
-    // if (searchText !== "") {
+    Keyboard.dismiss();
+    setIsRefreshSaveSearch(!isRefreshSaveSearch);
+    setIsLoadingFirstAPi(true);
     setIsSearching(true);
-    // }
     const data: ISearch = {
       keyword: keyword,
       user_id: null,
       index: index,
-      count: 20
+      count: COUNT_ITEM
     };
     try {
       const result = await searchApi(data);
-      const response = result.data;
-      const searchResult: any = [];
-      response.forEach(item => {
-        const newData = {
-          ...item // Sao chép tất cả các trường từ data cũ
-          //image: item.image.map((imageObj: any) => imageObj.url) // Thay đổi trường image thành mảng các URL
-        };
-        searchResult.push(newData);
-      });
-      //console.log('searchResult', searchResult);
-      setListSearch(searchResult);
+      if (result.success) {
+        const response = result.data;
+        const searchResult: any = [];
+        if (!response.length) {
+          setIsNextFetchPost(false);
+          return;
+        }
+        response.forEach(item => {
+          const newData = {
+            ...item // Sao chép tất cả các trường từ data cũ
+            //image: item.image.map((imageObj: any) => imageObj.url) // Thay đổi trường image thành mảng các URL
+          };
+          searchResult.push(newData);
+        });
+        //console.log('searchResult', searchResult);
+        setListSearch(searchResult);
+        setIsNextFetchPost(true);
+        setSkipPost(COUNT_ITEM);
+      }
+
+      const res = await searchUserAPi({ keyword: searchText, index: 0, count: COUNT_ITEM });
+      if (res.success) {
+        if (!res.data.length) {
+          setIsNextFetch(false);
+          return;
+        }
+        setData(res.data);
+        setIsNextFetch(true);
+        setSkipPost(COUNT_ITEM);
+      }
+      setTimeout(() => {
+        setIsLoadingFirstAPi(false);
+      }, 200);
+
       // setCurrentIndex(0)
     } catch (error) {
-      return console.log({ message: 'sever availabilitye' });
+      return console.log({ message: 'sever availability' });
     }
   };
+  async function onEndReadable() {
+    if (searchText !== '' && isNextFetch) {
+      try {
+        setIsNextSearch(true);
+        setSkip(skip => skip + COUNT_ITEM);
+        const res = await searchUserAPi({ keyword: searchText, index: skip, count: COUNT_ITEM });
+        if (res.success) {
+          if (!res.data.length) {
+            setIsNextFetch(false);
+            return;
+          }
+          setData(data => [...data, ...res.data]);
+        }
+      } catch (e) {
+        setSkip(skip => skip - COUNT_ITEM);
+        return;
+      } finally {
+        setIsNextSearch(false);
+      }
+    }
+  }
 
+  async function onEndReadablePost() {
+    if (searchText !== '' && isNextFetchPost) {
+      try {
+        setIsNextSearchPost(true);
+        setSkipPost(skipPost => skipPost + COUNT_ITEM);
+        const res = await searchApi({
+          keyword: searchText,
+          user_id: null,
+          index: skipPost,
+          count: COUNT_ITEM
+        });
+        if (res.success) {
+          if (!res.data.length) {
+            setIsNextFetchPost(false);
+            return;
+          }
+          const response = res.data;
+          const searchResult: any = [];
+          response.forEach(item => {
+            const newData = {
+              ...item // Sao chép tất cả các trường từ data cũ
+              //image: item.image.map((imageObj: any) => imageObj.url) // Thay đổi trường image thành mảng các URL
+            };
+            searchResult.push(newData);
+          });
+          //console.log('searchResult', searchResult);
+          setListSearch(listSearch => [...listSearch, ...searchResult]);
+        }
+      } catch (e) {
+        setSkipPost(skipPost => skipPost - COUNT_ITEM);
+        return;
+      } finally {
+        setIsNextSearchPost(false);
+      }
+    }
+  }
   // const onEndReadable = async () => {
   //   try {
   //     const result = await searchApi(
@@ -163,7 +267,7 @@ function SearchScreen() {
     };
 
     fetchData(data).catch(console.error);
-  }, []);
+  }, [isRefreshSaveSearch]);
 
   const handleDeleteSearch = async (IdSearch: number, keyword: any) => {
     const duplicateKeywords = listAllSavedSearch.filter(item => item.keyword === keyword);
@@ -238,8 +342,30 @@ function SearchScreen() {
         {isSearching && searchText !== '' ? (
           <View style={styles.headerSearchresult}>
             <Text style={styles.All}>Tất cả</Text>
-            <Text style={styles.post}>Bài viết</Text>
-            <Text style={styles.All}>Mọi người</Text>
+            <Text
+              style={tab === ListTab.POST ? styles.post : styles.All}
+              onPress={() => {
+                setTab(ListTab.POST);
+                setIsLoadingFirstAPi(true);
+                setTimeout(() => {
+                  setIsLoadingFirstAPi(false);
+                }, 200);
+              }}
+            >
+              Bài viết
+            </Text>
+            <Text
+              style={tab === ListTab.USER ? styles.post : styles.All}
+              onPress={() => {
+                setTab(ListTab.USER);
+                setIsLoadingFirstAPi(true);
+                setTimeout(() => {
+                  setIsLoadingFirstAPi(false);
+                }, 200);
+              }}
+            >
+              Mọi người
+            </Text>
             <Text style={styles.All}>Nhóm</Text>
             <Text style={styles.All}>Reals</Text>
           </View>
@@ -272,35 +398,64 @@ function SearchScreen() {
             {isSearching && searchText !== '' ? (
               // Hiển thị data.data khi searchText khác rỗng
               isConnected ? (
-                <BaseFlatList
-                  data={listSearch}
-                  renderItem={({ item }) => (
-                    <Post
-                      id={item.id}
-                      author={item.author}
-                      created={item.created}
-                      comment_mark={item.comment_mark}
-                      described={item.described}
-                      image={item.image}
-                      video={item.video}
-                      name={item.name}
-                      feel={item.feel}
-                      numberShares={item.numberShares}
-                      banned={item.banned}
-                      can_edit={item.can_edit}
-                      is_blocked={item.is_blocked}
-                      is_felt={item.is_felt}
-                      status={item.status}
-                    />
-                  )}
-                  keyExtractor={item => item.id}
-                  // onEndReached={onEndReadable}
-                  onEndReachedThreshold={2 / listSearch.length}
-                  // onEndReached={fetchMoreResult}
-                  // onEndReachedThreshold={0.1}
-                  // onRefresh={onRefresh}
-                  // refreshing={refreshing}
-                />
+                isLoadingFirstApi ? (
+                  <ActivityIndicator
+                    color={color.activeOutlineColor}
+                    style={{ marginTop: '50%' }}
+                  />
+                ) : tab == ListTab.POST ? (
+                  <BaseFlatListSearch
+                    data={listSearch}
+                    renderItem={({ item }) => (
+                      <Post
+                        id={item.id}
+                        author={item.author}
+                        created={item.created}
+                        comment_mark={item.comment_mark}
+                        described={item.described}
+                        image={item.image}
+                        video={item.video}
+                        name={item.name}
+                        feel={item.feel}
+                        numberShares={item.numberShares}
+                        banned={item.banned}
+                        can_edit={item.can_edit}
+                        is_blocked={item.is_blocked}
+                        is_felt={item.is_felt}
+                        status={item.status}
+                      />
+                    )}
+                    keyExtractor={item => item.id}
+                    isFootterLoading={isNextSearchPost}
+                    onEndReached={onEndReadablePost}
+                    onEndReachedThreshold={0.001}
+                  />
+                ) : (
+                  <BaseFlatList
+                    ListEmptyComponent={
+                      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <IconButton icon='account-off' size={100} iconColor={color.borderColor} />
+                        <Text style={{ color: color.borderColor }}>Không tìm thấy người dùng</Text>
+                      </View>
+                    }
+                    data={data}
+                    keyExtractor={item => item.id}
+                    refreshing={false}
+                    renderItem={({ item }) => (
+                      <>
+                        <UserItem
+                          title={item.username}
+                          avatar={item.avatar}
+                          // onPress={() => onPressUser(item)}
+                        />
+                        <Divider />
+                      </>
+                    )}
+                    isFootterLoading={isNextSearch}
+                    onEndReached={onEndReadable}
+                    onEndReachedThreshold={0.001}
+                  />
+                )
               ) : (
                 // Handle the case when isConnected is false
                 <>
