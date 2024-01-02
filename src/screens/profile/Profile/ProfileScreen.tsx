@@ -24,6 +24,8 @@ import { IGetUserFriends, IUserFriends } from 'src/interfaces/friends.interface'
 import { getUserFriendsApi } from 'src/services/friends.services';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ButtonField2 from './component/ButtonField2';
+import PullDownModal from 'src/components/PullDownModal/PullDownModal';
+import PostImageDetail from 'src/screens/post/PostDetail/PostImageDetail';
 
 function ProfileScreen() {
   const [modalAvatarVisible, setModalAvatarVisible] = useState(false);
@@ -110,26 +112,61 @@ function ProfileScreen() {
     setModalCoverVisible(false);
   };
 
-  const optionsAvatar = [
-    {
-      icon: 'account-circle',
-      title: 'Xem ảnh đại diện'
-    },
-    {
-      icon: 'photo-library',
-      title: 'Chọn ảnh đại diện'
-    }
-  ];
-  const optionsCover = [
-    {
-      icon: 'account-circle',
-      title: 'Xem ảnh bìa'
-    },
-    {
-      icon: 'photo-library',
-      title: 'Chọn ảnh bìa'
-    }
-  ];
+  const [avatarVisible, setAvatarVisible] = useState(false);
+  const [coverVisible, setCoverVisible] = useState(false);
+  const showAvatar = () => {
+    setAvatarVisible(true);
+    hideModalAvatar();
+    hideModalCover();
+  };
+
+  const hideAvatar = () => {
+    setAvatarVisible(false);
+  };
+  const showCover = () => {
+    setCoverVisible(true);
+    hideModalCover();
+    hideModalCover();
+  };
+
+  const hideCover = () => {
+    setCoverVisible(false);
+  };
+
+  const optionsAvatar = isOwnProfile
+    ? [
+        {
+          icon: 'account-circle',
+          title: 'Xem ảnh đại diện'
+        },
+        {
+          icon: 'photo-library',
+          title: 'Chọn ảnh đại diện'
+        }
+      ]
+    : [
+        {
+          icon: 'account-circle',
+          title: 'Xem ảnh đại diện'
+        }
+      ];
+  const optionsCover = isOwnProfile
+    ? [
+        {
+          icon: 'account-circle',
+          title: 'Xem ảnh bìa'
+        },
+        {
+          icon: 'photo-library',
+          title: 'Chọn ảnh bìa'
+        }
+      ]
+    : [
+        {
+          icon: 'account-circle',
+          title: 'Xem ảnh bìa'
+        }
+      ];
 
   const totalHeight = 2 * 25;
   return (
@@ -139,7 +176,7 @@ function ProfileScreen() {
         <TouchableOpacity style={styles.coverPhoto} onPress={showModalCover} activeOpacity={0.8}>
           <Image style={styles.coverPhoto} source={getCoverUri(profile?.cover_image as string)} />
         </TouchableOpacity>
-        {isOwnProfile && (
+        {isOwnProfile && profile?.avatar && (
           <View style={styles.cameraIconWrapper}>
             <TouchableOpacity
               style={styles.cameraIcon}
@@ -250,12 +287,14 @@ function ProfileScreen() {
         ></FriendField>
       </View>
       {/* Post Field */}
-      <View style={styles.section}>
-        <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'black', marginLeft: 20 }}>
-          Bài viết
-        </Text>
-        <CreatePostCard avatar={profile?.avatar as string} />
-      </View>
+      {isOwnProfile && (
+        <View style={styles.section}>
+          <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'black', marginLeft: 20 }}>
+            Bài viết
+          </Text>
+          <CreatePostCard avatar={profile?.avatar as string} />
+        </View>
+      )}
       <Modal
         isVisible={modalAvatarVisible}
         animationIn='slideInUp'
@@ -269,7 +308,9 @@ function ProfileScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               key={index}
-              onPress={() => console.log(`Selected: ${option.title}`)}
+              onPress={() =>
+                index === 0 ? showAvatar() : console.log(`Selected: ${option.title}`)
+              }
             >
               <View style={[styles.option, { height: totalHeight }]}>
                 <OptionCard icon={option.icon} title={option.title} />
@@ -291,7 +332,7 @@ function ProfileScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               key={index}
-              onPress={() => console.log(`Selected: ${option.title}`)}
+              onPress={() => (index === 0 ? showCover() : console.log(`Selected: ${option.title}`))}
             >
               <View style={[styles.option, { height: totalHeight }]}>
                 <OptionCard icon={option.icon} title={option.title} />
@@ -300,6 +341,28 @@ function ProfileScreen() {
           ))}
         </View>
       </Modal>
+      <PullDownModal visible={avatarVisible} onClose={hideAvatar}>
+        <PostImageDetail
+          image={{ url: profile?.avatar as string }}
+          author={{
+            name: profile?.username as string,
+            avatar: profile?.avatar as string,
+            id: user_id
+          }}
+          created={profile?.created}
+        />
+      </PullDownModal>
+      <PullDownModal visible={coverVisible} onClose={hideCover}>
+        <PostImageDetail
+          image={{ url: profile?.cover_image as string }}
+          author={{
+            name: profile?.username as string,
+            avatar: profile?.avatar as string,
+            id: user_id
+          }}
+          created={profile?.created}
+        />
+      </PullDownModal>
     </ScrollView>
   );
 }

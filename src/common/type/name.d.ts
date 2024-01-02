@@ -54,7 +54,8 @@ export enum FriendNavigationName {
 
 export enum PostNavigationName {
   CreatePostScreen = 'CreatePostScreen',
-  EnAScreen = 'EnAScreen'
+  EnAScreen = 'EnAScreen',
+  ListImageScreen = 'ListImageScreen'
 }
 
 export enum TabNavigationName {

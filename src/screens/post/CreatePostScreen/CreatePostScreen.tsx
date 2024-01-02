@@ -22,12 +22,12 @@ import Modal from 'react-native-modal';
 import { MediaType, PhotoQuality, launchImageLibrary } from 'react-native-image-picker';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { getAvatarUri, handShowErrorMessage } from 'src/utils/helper';
-import { PostNavigationName } from 'src/common/type/name';
 import { useAppDispatch, useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 import BaseButton from 'src/components/BaseButton';
 import { addPost } from 'src/services/post.services';
 import { setMessage } from 'src/redux/slices/appSlice';
+import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
 
 export type File = {
   uri?: string;
@@ -56,6 +56,8 @@ const CreatePostScreen = () => {
   const selectedItem = route?.params?.selectedItem;
 
   const navigation: NavigationProp<PostNavigationType, PostNavigationName.EnAScreen> =
+    useNavigation();
+  const navigation2: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
     useNavigation();
   const auth = useAppSelector(selectAuth);
   const avatar = auth.user?.avatar;
@@ -204,6 +206,19 @@ const CreatePostScreen = () => {
   const handleBackPress = () => {
     navigationGoBack.goBack();
   };
+  const navigateToListImageScreen = () => {
+    navigation2.navigate(AppNaviagtionName.PostNavigation, {
+      screen: PostNavigationName.ListImageScreen,
+      params: {
+        imageList: listImage,
+        mediaFiles: mediaFiles,
+        onUpdate: (updateImageList: string[], updateMediaFiles: MediaFileType[]) => {
+          setListImage(updateImageList);
+          setMediaFiles(updateMediaFiles);
+        }
+      }
+    });
+  };
 
   const handleCreatePost = async () => {
     try {
@@ -317,8 +332,9 @@ const CreatePostScreen = () => {
         />
         <View>
           <GridImage
+            isHideCloseIcon
             images={[...listImage, video]}
-            onPress={() => console.log('image')}
+            onPress={navigateToListImageScreen}
             style={{ width: '100%', height: 300, marginBottom: 8 }}
           ></GridImage>
         </View>

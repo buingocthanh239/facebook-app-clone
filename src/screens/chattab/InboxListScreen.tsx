@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { TextInput, IconButton, Avatar } from 'react-native-paper';
+import { TextInput, IconButton, Avatar, useTheme } from 'react-native-paper';
 
 interface MyMessageProps {
   message: string;
@@ -27,8 +27,10 @@ const TheirMessage: React.FC<TheirMessageProps> = ({ message }: TheirMessageProp
 
 const InboxListScreen: React.FC = () => {
   const [text, setText] = useState('');
+  const theme = useTheme();
+  const { colors } = theme;
 
-  const [, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState([
     { type: 'their', content: '1' },
     { type: 'mine', content: 'ádasasdadasdads' },
@@ -71,56 +73,56 @@ const InboxListScreen: React.FC = () => {
           )
         )}
       </ScrollView>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-        <IconButton
-          icon={'dots-grid'}
-          size={30}
-          iconColor='#0066FF'
-          onPress={() => {}}
-          style={{ marginRight: -5 }}
-        />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          maxHeight: 250
+        }}
+      >
+        <IconButton icon={'dots-grid'} size={30} iconColor='#0066FF' onPress={() => {}} />
         <IconButton
           icon={'camera'}
           size={30}
           iconColor='#0066FF'
           onPress={() => {}}
-          style={{ marginRight: -5 }}
+          style={isTyping && { display: 'none' }}
         />
         <IconButton
           icon={'file-image'}
           size={30}
           iconColor='#0066FF'
           onPress={() => {}}
-          style={{ marginRight: -5 }}
+          style={isTyping && { display: 'none' }}
         />
         <IconButton
           icon={'microphone'}
           size={30}
           iconColor='#0066FF'
           onPress={() => {}}
-          style={{ marginRight: -5 }}
+          style={isTyping && { display: 'none' }}
         />
+        <View style={{ flex: 1, borderRadius: 10, maxHeight: 250 }}>
+          <TextInput
+            placeholder='Nhắn tin'
+            multiline
+            value={text}
+            onFocus={() => setIsTyping(true)}
+            onBlur={!text ? () => setIsTyping(false) : () => {}}
+            onChangeText={text => setText(text)}
+            right={<TextInput.Icon icon='sticker-emoji' color={'#0066FF'} />}
+            onSubmitEditing={handleSendMessage}
+            theme={{ ...theme, colors: { ...colors, primary: 'transparent' }, roundness: 20 }}
+            style={{
+              backgroundColor: '#DCDCDC',
+              flex: 1,
+              borderRadius: 20,
+              textAlign: 'left'
+            }}
+            underlineColor='transparent'
+          />
+        </View>
 
-        <TextInput
-          label='Nhắn tin'
-          value={text}
-          onFocus={() => setIsTyping(true)}
-          onChangeText={text => setText(text)}
-          right={<TextInput.Icon icon='sticker-emoji' color={'#0066FF'} />}
-          onSubmitEditing={handleSendMessage}
-          style={{
-            paddingBottom: -20,
-            paddingTop: -20,
-            borderColor: '#fff',
-            backgroundColor: '#DCDCDC',
-            margin: 15,
-            marginTop: 20,
-            borderBottomLeftRadius: 30,
-            borderBottomRightRadius: 30,
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30
-          }}
-        />
         <IconButton size={30} icon={'thumb-up'} iconColor='#0066FF' />
       </View>
     </>
