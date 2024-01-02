@@ -36,7 +36,7 @@ const PullDownModal = ({ visible, onClose, children }: props) => {
 
   return (
     <Modal transparent visible={visible} animationType='slide' onRequestClose={onClose}>
-      <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0)' }}>
         <Animated.View
           style={{
             flex: 1,

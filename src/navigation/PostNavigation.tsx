@@ -6,6 +6,7 @@ import WraperScreen from 'src/components/WraperScreen';
 import { TransitionPresets } from '@react-navigation/stack';
 import { PostNavigationName } from 'src/common/constants/nameScreen';
 import ListImageScreen from 'src/screens/post/ListImage/ListImageScreen';
+import { ListImageDetail } from 'src/screens/post/PostDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,13 @@ function PostNavigation() {
       <Stack.Screen
         name={PostNavigationName.ListImageScreen}
         component={ListImageScreen}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name={PostNavigationName.ListImageScreen}
+        component={ListImageDetail}
         options={{
           headerShown: false
         }}

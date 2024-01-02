@@ -13,6 +13,7 @@ type AppNavigationType = {
     | { screen: ProfileNavigationName.EditProfile };
   PostNavigation:
     | { screen: PostNavigationName; params?: { selectedItem?: CardData } }
+    | { screen: PostNavigationName.ListImageDetail; params: { data: PostProps } }
     | {
         screen: PostNavigationName.ListImageScreen;
         params: {
@@ -28,6 +29,7 @@ type AppNavigationType = {
   VerifyOTPAfterLogin: undefined;
   ChangeProfileAfterSign: undefined;
   NotFoundScreen: undefined;
+  AddMoneyNavigation: { screen: AddMoneyNavigationName };
 };
 
 type AuthNavigationType = {
@@ -81,6 +83,7 @@ type PostNavigationType = {
     mediaFiles: MediaFileType[];
     onUpdate: (updateImageList: string[], updateMediaFiles: MediaFileType[]) => void;
   };
+  ListImageDetail: { data: PostProps };
 };
 
 type TabNavigationType = {
@@ -98,4 +101,7 @@ type SearchNavigationType = {
 type ChatNavigationType = {
   InboxScreen: undefined;
   InboxListScreen: undefined;
+};
+type AddMoneyNavigationType = {
+  AddMoneyScreen: undefined;
 };

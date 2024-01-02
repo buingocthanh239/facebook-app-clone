@@ -332,7 +332,6 @@ const CreatePostScreen = () => {
         />
         <View>
           <GridImage
-            isHideCloseIcon
             images={[...listImage, video]}
             onPress={navigateToListImageScreen}
             style={{ width: '100%', height: 300, marginBottom: 8 }}
