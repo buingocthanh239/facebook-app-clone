@@ -1,8 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
 import NotificationItem from './components/NotificationItem';
-import { INotification } from 'src/interfaces/notification.interface';
-import { NotificationType } from 'src/common/enum/commom';
 import {
   Avatar,
   Card,
@@ -16,12 +14,23 @@ import BaseModal from 'src/components/BaseModal';
 import { color } from 'src/common/constants/color';
 import { View } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import {
+  getNextNotifications,
+  getNotifications,
+  selectNotification
+} from 'src/redux/slices/notificationSlice';
+import { useAppDispatch } from 'src/redux';
+import { INotificationItem } from 'src/services/notification.service';
+import { ReadNotification } from 'src/common/enum/commom';
+const COUNT_ITEM = 10;
+
 function NotificationTab() {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
-  const [modalContent, setModalContent] = useState<INotification | null>(null);
+  const [modalContent, setModalContent] = useState<INotificationItem | null>(null);
   const [isVisibleSnackbar, setIsVisibleSnackbar] = useState<boolean>(false);
   const onDismissSnackBar = () => setIsVisibleSnackbar(false);
-  const visibaleModal = (item: INotification) => {
+  const visibaleModal = (item: INotificationItem) => {
     setModalContent(item);
     setIsVisibleModal(true);
   };
@@ -34,49 +43,34 @@ function NotificationTab() {
     hideModal();
     setIsVisibleSnackbar(true);
   };
-  const oldData: INotification[] = [
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d74',
-      description: 'Bùi Ngọc Thành đã đăng trong một nhóm mà bạn tham gia',
-      time: '9 h',
-      isLook: false,
-      type: NotificationType.COMMENT
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d75',
-      description: 'Bùi Ngọc Thành',
-      time: '9 h',
-      isLook: false,
-      type: NotificationType.COMMENT
-    }
-  ];
-  const newData: INotification[] = [
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d75',
-      description: 'Bùi Ngọc Thành',
-      time: '9 h',
-      isLook: false,
-      type: NotificationType.COMMENT
-    }
-  ];
-  const [data, setdata] = useState(oldData);
+
+  // call api
+  const dispatch = useAppDispatch();
+  const notificationStore = useSelector(selectNotification);
+
+  const [skip, setSkip] = useState<number>(0);
   const [refreshing, setrefreshing] = useState(false);
+
+  // const [data, setdata] = useState(oldData);
+
+  useEffect(() => {
+    dispatch(getNotifications({ index: 0, count: COUNT_ITEM }));
+    setSkip(COUNT_ITEM);
+  }, [dispatch]);
+
   const onRefresh = async () => {
     setrefreshing(true);
-    setTimeout(() => {
-      setdata(data => [
-        ...data,
-        {
-          id: '58694a0f-3da1-471f-bd96-145571e29d72' + Math.floor(Math.random() * 100),
-          description: 'Bùi Ngọc Thành',
-          time: '9 h',
-          isLook: true,
-          type: NotificationType.COMMENT
-        }
-      ]);
-      setrefreshing(false);
-    }, 2000);
+    dispatch(getNotifications({ index: 0, count: COUNT_ITEM }));
+    setSkip(COUNT_ITEM);
+    setrefreshing(false);
   };
+
+  async function onEndReadable() {
+    if (notificationStore.isNextFetch) {
+      dispatch(getNextNotifications({ index: skip, count: COUNT_ITEM }));
+      setSkip(skip => skip + COUNT_ITEM);
+    }
+  }
 
   // scroll to top
   const ref = useRef(null);
@@ -86,46 +80,51 @@ function NotificationTab() {
     <>
       <BaseFlatList
         ref={ref}
-        ListHeaderComponent={
-          <>
-            {newData.length !== 0 && (
-              <Text
-                variant='titleMedium'
-                style={{ marginLeft: 10, marginTop: 10, marginBottom: 5 }}
-              >
-                Hôm nay
-              </Text>
-            )}
-            {newData.map((item, i) => (
-              <NotificationItem
-                key={i}
-                description={item.description}
-                isLook={item.isLook}
-                time={item.time}
-                type={item.type}
-                onPressRightIcon={() => visibaleModal(item)}
-                onLongPress={() => visibaleModal(item)}
-              />
-            ))}
-            {oldData.length !== 0 && (
-              <Text
-                variant='titleMedium'
-                style={{ marginLeft: 10, marginTop: 10, marginBottom: 5 }}
-              >
-                Trước đó
-              </Text>
-            )}
-          </>
-        }
-        data={data}
-        renderItem={({ item }) => (
+        // ListHeaderComponent={
+        //   <>
+        //     {newData.length !== 0 && (
+        //       <Text
+        //         variant='titleMedium'
+        //         style={{ marginLeft: 10, marginTop: 10, marginBottom: 5 }}
+        //       >
+        //         Hôm nay
+        //       </Text>
+        //     )}
+        //     {newData.map((item, i) => (
+        //       <NotificationItem
+        //         key={i}
+        //         description={item.description}
+        //         isLook={item.isLook}
+        //         time={item.time}
+        //         type={item.type}
+        //         onPressRightIcon={() => visibaleModal(item)}
+        //         onLongPress={() => visibaleModal(item)}
+        //       />
+        //     ))}
+        //     {oldData.length !== 0 && (
+        //       <Text
+        //         variant='titleMedium'
+        //         style={{ marginLeft: 10, marginTop: 10, marginBottom: 5 }}
+        //       >
+        //         Trước đó
+        //       </Text>
+        //     )}
+        //   </>
+        // }
+        data={notificationStore.notification}
+        renderItem={({ item }: { item: INotificationItem }) => (
           <NotificationItem
-            description={item.description}
-            isLook={item.isLook}
-            time={item.time}
+            ownerUri={item.avatar}
+            isLook={item.read === ReadNotification.Read}
+            time={item.created}
             type={item.type}
             onPressRightIcon={() => visibaleModal(item)}
             onLongPress={() => visibaleModal(item)}
+            user={item.user}
+            mark={item.mark}
+            feel={item.feel}
+            post={item.post}
+            key={item.notification_id}
           />
         )}
         ListEmptyComponent={
@@ -134,17 +133,18 @@ function NotificationTab() {
           </Text>
         }
         ItemSeparatorComponent={Divider}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.notification_id}
         onRefresh={onRefresh}
         refreshing={refreshing}
+        onEndReached={onEndReadable}
+        onEndReachedThreshold={0.005}
+        isFootterLoading={notificationStore.loading}
       />
       <BaseModal isVisible={isVisibleModal} onBackdropPress={hideModal}>
         <View style={{ display: 'flex', alignItems: 'center', marginBottom: 20, gap: 10 }}>
           <Avatar.Image
             source={
-              modalContent?.ownerUri
-                ? { uri: modalContent?.ownerUri }
-                : require('src/assets/logo.png')
+              modalContent?.avatar ? { uri: modalContent?.avatar } : require('src/assets/logo.png')
             }
             size={40}
           />
@@ -157,7 +157,7 @@ function NotificationTab() {
               paddingHorizontal: 24
             }}
           >
-            {modalContent?.description}
+            {modalContent?.title}
           </Text>
         </View>
         <TouchableRipple rippleColor={color.borderColor} onPress={onRemoveNotification}>
