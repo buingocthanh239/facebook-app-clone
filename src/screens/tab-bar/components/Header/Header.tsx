@@ -10,7 +10,7 @@ import {
   SearchNavigationName
 } from 'src/common/constants/nameScreen';
 import { useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 function Header() {
@@ -52,27 +52,35 @@ function Header() {
         onPress={() => setClick(!click)}
         style={click && { display: 'none' }}
       />
-      <IconButton
-        mode='contained'
-        icon={() => <IconFont name='plus' color={color.iconButtonColor} size={20} />}
-        containerColor={color.iconButtonBackgroundColor}
-        size={25}
-        style={!click && { display: 'none' }}
-        onPress={onPressAddMoney}
-      />
-      <TouchableOpacity
-        style={[
+      <View
+        style={
           !click
             ? { display: 'none' }
-            : { flexDirection: 'row', alignItems: 'center', gap: 7, paddingHorizontal: 5 }
-        ]}
-        onPress={() => setClick(!click)}
+            : {
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: color.backgroundButton,
+                borderRadius: 25
+              }
+        }
       >
-        <Text style={{ color: color.iconButtonColor, fontWeight: 'bold', fontSize: 16 }}>
-          {coins?.toLocaleString()}
-        </Text>
-        <IconFont name='coins' color={color.iconButtonColor} size={16} />
-      </TouchableOpacity>
+        <IconButton
+          icon={() => <IconFont name='plus' color={color.iconButtonColor} size={20} />}
+          containerColor={color.iconButtonBackgroundColor}
+          size={20}
+          onPress={onPressAddMoney}
+        />
+        <TouchableOpacity
+          style={[{ flexDirection: 'row', alignItems: 'center', gap: 7, paddingRight: 10 }]}
+          onPress={() => setClick(!click)}
+          activeOpacity={0.8}
+        >
+          <Text style={{ color: color.iconButtonColor, fontWeight: 'bold', fontSize: 16 }}>
+            {parseFloat(coins).toLocaleString('en-US')}
+          </Text>
+          <IconFont name='coins' color={color.iconButtonColor} size={16} />
+        </TouchableOpacity>
+      </View>
       <IconButton
         mode='contained'
         icon={() => <Icon name='search' color={color.iconButtonColor} size={20} />}
