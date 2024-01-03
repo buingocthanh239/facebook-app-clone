@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { Alert, Text, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import { color } from 'src/common/constants/color';
 import BaseForm from 'src/components/BaseForm';
 import * as yup from 'yup';
@@ -10,6 +10,7 @@ import BaseInputNumber from 'src/components/BaseInputNumber';
 import { IAddMoney } from 'src/interfaces/setting.interface';
 import { buyCoins } from 'src/services/setting.service';
 import { useNavigation } from '@react-navigation/native';
+import IconM from 'react-native-vector-icons/MaterialIcons';
 
 const AddMoneyScreen = () => {
   const schema = yup.object({
@@ -35,7 +36,6 @@ const AddMoneyScreen = () => {
             };
             const res = await buyCoins(data);
             Alert.alert('Thành công!', `Bạn có ${res.data.coins} coins trong tài khoản`);
-            navigation.goBack();
             return res;
           } catch (error) {
             console.log(error);
@@ -48,12 +48,21 @@ const AddMoneyScreen = () => {
     <WraperAuthScreen spaceBetween linnerGradient>
       <View style={{ flex: 1, paddingTop: 30 }}>
         <BaseForm methods={methods}>
-          <Text
-            style={{ fontSize: 24, fontWeight: 'bold', color: color.textColor, paddingBottom: 10 }}
-          >
-            Nạp tiền
-          </Text>
-          <Text style={{ fontSize: 16, color: color.textColor }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={0.8}>
+              <IconM name='arrow-back' size={26} color={color.textColor} />
+            </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: color.textColor
+              }}
+            >
+              Nạp tiền
+            </Text>
+          </View>
+          <Text style={{ fontSize: 16, color: color.textColor, paddingTop: 10 }}>
             Nạp thêm tiền để có thể tiếp tục thực hiện các tác vụ nâng cao.
           </Text>
           <View style={{ paddingTop: 10 }}>

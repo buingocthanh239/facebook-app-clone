@@ -46,7 +46,7 @@ function PostNavigation() {
         }}
       />
       <Stack.Screen
-        name={PostNavigationName.ListImageScreen}
+        name={PostNavigationName.ListImageDetail}
         component={ListImageDetail}
         options={{
           headerShown: false

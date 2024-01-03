@@ -13,7 +13,11 @@ import ReportModal from './ReportModal';
 import { getAvatarUri } from 'src/utils/helper';
 import { coverTimeToNow } from 'src/utils/dayjs';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
+import {
+  AppNaviagtionName,
+  PostNavigationName,
+  ProfileNavigationName
+} from 'src/common/constants/nameScreen';
 const MAX_LENGTH_CONTENT = 500;
 
 // define props
@@ -47,12 +51,21 @@ function Post(props: PostProps) {
   // Navigation profile
   const navigationProfile: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
     useNavigation();
+  const navigationPostDetail: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
+    useNavigation();
 
   const handleNavigationProfile = () =>
     navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
       screen: ProfileNavigationName.Profile,
       params: { user_id: props.author.id }
     });
+
+  const handleNavigationPostDetail = () => {
+    navigationPostDetail.navigate(AppNaviagtionName.PostNavigation, {
+      screen: PostNavigationName.ListImageDetail,
+      params: { data: props }
+    });
+  };
 
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
@@ -143,7 +156,7 @@ function Post(props: PostProps) {
       {urls?.length ? (
         <GridImage
           images={urls}
-          onPress={() => console.log('image')}
+          onPress={handleNavigationPostDetail}
           style={{ width: '100%', height: 300, marginBottom: 8 }}
           isShowCloseIcon={props.isShowCloseIcon}
         />
