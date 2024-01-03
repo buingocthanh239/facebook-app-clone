@@ -119,9 +119,9 @@ function Post(props: PostProps) {
       )}
       <Card.Title
         title={
-          <Text variant='titleMedium' style={{ fontSize: 16 }}>
+          <Text style={{ fontSize: 16, alignItems: 'center', fontWeight: '700' }}>
             {props.author?.name}
-            <Text variant='bodyMedium'>{' ' + status}</Text>
+            <Text style={{ fontSize: 15, textAlign: 'center' }}>{' ' + status}</Text>
           </Text>
         }
         titleVariant='titleMedium'
