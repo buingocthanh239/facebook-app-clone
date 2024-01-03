@@ -157,7 +157,7 @@ function Post(props: PostProps) {
         <GridImage
           images={urls}
           onPress={handleNavigationPostDetail}
-          style={{ width: '100%', height: 300, marginBottom: 8 }}
+          style={{ width: '100%', height: 300, marginBottom: 10 }}
           isShowCloseIcon={props.isShowCloseIcon}
         />
       ) : null}
