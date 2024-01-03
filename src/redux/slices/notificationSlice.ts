@@ -42,7 +42,7 @@ export const getNextNotifications = createAsyncThunk(
 );
 
 export const getNotifications = createAsyncThunk(
-  'post/getNotifications',
+  'notification/getNotifications',
   async (data: IGetNotification, { rejectWithValue }) => {
     try {
       const res = await getNotificationApi(data);

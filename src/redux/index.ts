@@ -16,7 +16,7 @@ import rootReducer from './slices/index';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['auth', 'post', 'video']
+  whitelist: ['auth', 'post', 'video', 'notification', 'setting']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

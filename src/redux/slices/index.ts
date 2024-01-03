@@ -6,6 +6,7 @@ import postReducer from './postSlice';
 import videoReducer from './videoSlice';
 import appSlice from './appSlice';
 import notificationReducer from './notificationSlice';
+import settingReducer from './settingSlice';
 
 const rootReducer = combineReducers({
   app: appSlice,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   friend: friendReducer,
   post: postReducer,
   video: videoReducer,
-  notification: notificationReducer
+  notification: notificationReducer,
+  setting: settingReducer
 });
 
 export default rootReducer;

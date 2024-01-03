@@ -73,3 +73,8 @@ export enum ReadNotification {
   Read = '1',
   UnRead = '0'
 }
+
+export enum booleanReponse {
+  False = '0',
+  True = '1'
+}
