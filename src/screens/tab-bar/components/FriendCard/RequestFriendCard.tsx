@@ -7,6 +7,7 @@ import OptionCard from 'src/screens/profile/Profile/component/OptionCard';
 import { ISetAcceptFriend } from 'src/interfaces/friends.interface';
 import { setAcceptFriendApi } from 'src/services/friends.services';
 import { getAvatarUri } from 'src/utils/helper';
+import { setBlockApi } from 'src/services/block.service';
 
 interface RequestFriendCardProps {
   id: string;
@@ -121,91 +122,127 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
       }
     ]);
   };
+  const handleBlockUser = async (id: string) => {
+    Alert.alert(
+      `Chặn trang cá nhân của ${username}`,
+      `Những người bạn chặn sẽ không thể bắt đầu trò chuyện, thêm bạn vào danh sách bạn bè hoặc xem nội dung của bạn đăng trên dòng thời gian của mình nữa. Nếu bạn chặn ai đó khi hai người đang là bạn bè thì hành động này cũng sẽ hủy kết bạn với họ.`,
+      [
+        {
+          text: 'Hủy',
+          onPress: () => {},
+          style: 'cancel'
+        },
+        {
+          text: 'Chặn',
+          onPress: async () => {
+            try {
+              await setBlockApi({ user_id: id });
+              setStatus('Block');
+              hideModal();
+            } catch (error) {
+              return;
+            }
+          }
+        }
+      ]
+    );
+  };
 
   return (
-    <View style={styles.cardContainer}>
-      <View style={styles.avatarContainer}>
-        <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
-      </View>
+    status !== 'Block' && (
+      <View style={styles.cardContainer}>
+        <View style={styles.avatarContainer}>
+          <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
+        </View>
 
-      {status === '' ? (
-        <View style={styles.infoContainer}>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-          >
-            <Text style={styles.username}>{username}</Text>
-            <Text style={styles.timeText}>{timeDisplay}</Text>
-          </View>
-          {parseInt(same_friends) < 1 ? (
-            <></>
-          ) : (
-            <Text
-              style={{ marginBottom: 7, marginTop: -8, fontSize: 15 }}
-            >{`${same_friends} bạn chung`}</Text>
-          )}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.acceptButton}
-              onPress={() => onPressAccept({ user_id: id, is_accept: '1' })}
-            >
-              <Text style={styles.buttonText}>Chấp nhận</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={() => onPressDelete({ user_id: id, is_accept: '0' })}
-            >
-              <Text style={[styles.buttonText, { color: color.textColor }]}>Xóa</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : status === 'Accept' ? (
-        <View style={styles.infoContainer}>
-          <View style={styles.usernameField}>
-            <Text style={styles.username}>{username}</Text>
-          </View>
-          <Text style={{ marginBottom: 20 }}>Các bạn đã là bạn bè</Text>
-        </View>
-      ) : status === 'Failed' ? (
-        <View style={styles.infoContainer}>
-          <View style={styles.usernameField}>
-            <Text style={styles.username}>{username}</Text>
-          </View>
-          <Text style={{ marginBottom: 20 }}>Lời mời kết bạn đã hết hạn</Text>
-        </View>
-      ) : (
-        <View style={styles.infoContainer}>
-          <View style={styles.usernameField}>
-            <Text style={styles.username}>{username}</Text>
-            <IconButton
-              icon={require('../../../../assets/three-dot.png')}
-              onPress={() => {
-                showModal();
-                console.log('detail');
+        {status === '' ? (
+          <View style={styles.infoContainer}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center'
               }}
-            ></IconButton>
+            >
+              <Text style={styles.username}>{username}</Text>
+              <Text style={styles.timeText}>{timeDisplay}</Text>
+            </View>
+            {parseInt(same_friends) < 1 ? (
+              <></>
+            ) : (
+              <Text
+                style={{ marginBottom: 7, marginTop: -8, fontSize: 15 }}
+              >{`${same_friends} bạn chung`}</Text>
+            )}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.acceptButton}
+                onPress={() => onPressAccept({ user_id: id, is_accept: '1' })}
+              >
+                <Text style={styles.buttonText}>Chấp nhận</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => onPressDelete({ user_id: id, is_accept: '0' })}
+              >
+                <Text style={[styles.buttonText, { color: color.textColor }]}>Xóa</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <Text style={{ marginBottom: 20 }}>Đã gỡ lời mời</Text>
-        </View>
-      )}
-      <Modal
-        isVisible={modalVisible}
-        animationIn='slideInUp'
-        animationOut='slideOutDown'
-        backdropOpacity={0.5}
-        onBackdropPress={hideModal}
-        style={styles.modal}
-      >
-        <View style={styles.modalContent}>
-          {options.map((option, index) => (
-            <TouchableOpacity key={index} onPress={() => console.log(`Selected: ${option.title}`)}>
-              <View style={[styles.option, { height: 19 * 3 }]}>
-                <OptionCard icon={option.icon} title={option.title} />
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </Modal>
-    </View>
+        ) : status === 'Accept' ? (
+          <View style={styles.infoContainer}>
+            <View style={styles.usernameField}>
+              <Text style={styles.username}>{username}</Text>
+            </View>
+            <Text style={{ marginBottom: 20 }}>Các bạn đã là bạn bè</Text>
+          </View>
+        ) : status === 'Failed' ? (
+          <View style={styles.infoContainer}>
+            <View style={styles.usernameField}>
+              <Text style={styles.username}>{username}</Text>
+            </View>
+            <Text style={{ marginBottom: 20 }}>Lời mời kết bạn đã hết hạn</Text>
+          </View>
+        ) : status === 'Delete' ? (
+          <View style={styles.infoContainer}>
+            <View style={styles.usernameField}>
+              <Text style={styles.username}>{username}</Text>
+              <IconButton
+                icon={require('../../../../assets/three-dot.png')}
+                onPress={() => {
+                  showModal();
+                  console.log('detail');
+                }}
+              ></IconButton>
+            </View>
+            <Text style={{ marginBottom: 20 }}>Đã gỡ lời mời</Text>
+          </View>
+        ) : (
+          <></>
+        )}
+        <Modal
+          isVisible={modalVisible}
+          animationIn='slideInUp'
+          animationOut='slideOutDown'
+          backdropOpacity={0.5}
+          onBackdropPress={hideModal}
+          style={styles.modal}
+        >
+          <View style={styles.modalContent}>
+            {options.map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={index === 1 ? () => handleBlockUser(id) : hideModal}
+              >
+                <View style={[styles.option, { height: 19 * 3 }]}>
+                  <OptionCard icon={option.icon} title={option.title} />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Modal>
+      </View>
+    )
   );
 };
 

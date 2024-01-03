@@ -14,11 +14,18 @@ import ButtonField0 from './ButtonField0';
 import Modal from 'react-native-modal';
 import OptionCard from './OptionCard';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
+import {
+  AppNaviagtionName,
+  ProfileNavigationName,
+  TabNavigationName
+} from 'src/common/constants/nameScreen';
+import { setBlockApi } from 'src/services/block.service';
 
 const ButtonField1 = ({ user_id, username }: { user_id: string; username: string }) => {
   const [status, setStatus] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const navigationHome: NavigationProp<AppNavigationType, AppNaviagtionName.TabNavigation> =
+    useNavigation();
   const showModal = () => {
     setModalVisible(true);
   };
@@ -28,12 +35,12 @@ const ButtonField1 = ({ user_id, username }: { user_id: string; username: string
   };
   const options = [
     {
-      icon: 'person-off',
-      title: `Chặn trang cá nhân`
-    },
-    {
       icon: 'person-remove',
       title: `Hủy kết bạn`
+    },
+    {
+      icon: 'person-off',
+      title: `Chặn trang cá nhân`
     }
   ];
   const handleUnfriend = (data: IUnfriend) => {
@@ -57,6 +64,44 @@ const ButtonField1 = ({ user_id, username }: { user_id: string; username: string
         }
       }
     ]);
+  };
+  const handleBlockUser = async () => {
+    Alert.alert(
+      `Chặn trang cá nhân của ${username}`,
+      `Những người bạn chặn sẽ không thể bắt đầu trò chuyện, thêm bạn vào danh sách bạn bè hoặc xem nội dung của bạn đăng trên dòng thời gian của mình nữa. Nếu bạn chặn ai đó khi hai người đang là bạn bè thì hành động này cũng sẽ hủy kết bạn với họ.`,
+      [
+        {
+          text: 'Hủy',
+          onPress: () => {},
+          style: 'cancel'
+        },
+        {
+          text: 'Chặn',
+          onPress: async () => {
+            try {
+              await setBlockApi({ user_id });
+              hideModal();
+              Alert.alert(
+                `Thành công`,
+                `Bạn đã chặn ${username}.\n${username} sẽ không nhận được thông báo về hành động này.`,
+                [
+                  {
+                    text: 'Đóng',
+                    onPress: () =>
+                      navigationHome.navigate(AppNaviagtionName.TabNavigation, {
+                        screen: TabNavigationName.Home
+                      }),
+                    style: 'cancel'
+                  }
+                ]
+              );
+            } catch (error) {
+              return;
+            }
+          }
+        }
+      ]
+    );
   };
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
     useNavigation();
@@ -135,9 +180,11 @@ const ButtonField1 = ({ user_id, username }: { user_id: string; username: string
             <TouchableOpacity
               key={index}
               onPress={() =>
-                index === 1
+                index === 0
                   ? handleUnfriend({ user_id: user_id })
-                  : console.log(`Selected: ${option.title}`)
+                  : index === 1
+                  ? handleBlockUser()
+                  : hideModal()
               }
             >
               <View style={[styles.option, { height: 19 * 3 }]}>
