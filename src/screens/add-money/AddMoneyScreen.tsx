@@ -11,6 +11,8 @@ import { IAddMoney } from 'src/interfaces/setting.interface';
 import { buyCoins } from 'src/services/setting.service';
 import { useNavigation } from '@react-navigation/native';
 import IconM from 'react-native-vector-icons/MaterialIcons';
+import { useAppDispatch } from 'src/redux';
+import { changeCoins } from 'src/redux/slices/authSlice';
 
 const AddMoneyScreen = () => {
   const schema = yup.object({
@@ -19,6 +21,7 @@ const AddMoneyScreen = () => {
   const methods = useForm({ resolver: yupResolver(schema) });
   const { handleSubmit } = methods;
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
   const onPressNextButton = (values: IAddMoney) => {
     Alert.alert('Xác nhận', `Bạn có muốn nạp ${values.coins} coins vào tài khoản?`, [
       {
@@ -35,7 +38,13 @@ const AddMoneyScreen = () => {
               coins: values.coins
             };
             const res = await buyCoins(data);
-            Alert.alert('Thành công!', `Bạn có ${res.data.coins} coins trong tài khoản`);
+            dispatch(changeCoins(res.data.coins));
+            Alert.alert('Thành công!', `Bạn có ${res.data.coins} coins trong tài khoản`, [
+              {
+                text: 'OK',
+                onPress: () => navigation.goBack()
+              }
+            ]);
             return res;
           } catch (error) {
             console.log(error);

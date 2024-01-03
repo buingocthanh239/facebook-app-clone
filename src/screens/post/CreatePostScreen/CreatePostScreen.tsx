@@ -23,7 +23,7 @@ import { MediaType, PhotoQuality, launchImageLibrary } from 'react-native-image-
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { getAvatarUri, handShowErrorMessage } from 'src/utils/helper';
 import { useAppDispatch, useAppSelector } from 'src/redux';
-import { selectAuth } from 'src/redux/slices/authSlice';
+import { changeCoins, selectAuth } from 'src/redux/slices/authSlice';
 import BaseButton from 'src/components/BaseButton';
 import { addPost } from 'src/services/post.services';
 import { setMessage } from 'src/redux/slices/appSlice';
@@ -244,6 +244,9 @@ const CreatePostScreen = () => {
       const res = await addPost(formData);
       console.log(res);
       if (res.success) {
+        dispatch(setMessage('Đăng bài thành công'));
+        dispatch(changeCoins(res.data.coins));
+        navigationGoBack.goBack();
         return res;
       } else {
         dispatch(setMessage(handShowErrorMessage(parseInt(res.code as unknown as string))));

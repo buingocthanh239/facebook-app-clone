@@ -158,9 +158,14 @@ const authSlice = createSlice({
     modifyAccountAtivity: (state, action: PayloadAction<AccountStatus>) => ({
       ...state,
       user: { ...state.user, active: action.payload } as IUser
-    })
+    }),
+    changeCoins: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.coins = action.payload;
+      }
+    }
   }
 });
 export const selectAuth = (state: RootState) => state.auth;
-export const { deleteErrorMessage, reset, modifyAccountAtivity } = authSlice.actions;
+export const { deleteErrorMessage, reset, modifyAccountAtivity, changeCoins } = authSlice.actions;
 export default authSlice.reducer;
