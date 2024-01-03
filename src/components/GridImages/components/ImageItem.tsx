@@ -5,12 +5,13 @@ export interface IImageItemProps {
   onPress: () => any;
   image: string;
   index: number;
+  style?: any;
   isShowCloseIcon?: boolean;
   onPressCloseIcon?: () => any;
 }
-function ImageItem({ onPress, image, isShowCloseIcon, onPressCloseIcon }: IImageItemProps) {
+function ImageItem({ onPress, style, image, isShowCloseIcon, onPressCloseIcon }: IImageItemProps) {
   return image ? (
-    <View style={styles.image_view}>
+    <View style={[styles.image_view, style]}>
       <TouchableRipple onPress={onPress}>
         <Image
           style={styles.image}
@@ -34,7 +35,7 @@ function ImageItem({ onPress, image, isShowCloseIcon, onPressCloseIcon }: IImage
 const styles = StyleSheet.create({
   image: {
     width: '100%',
-    height: 500,
+    height: '100%',
     borderRadius: 1
   },
 
