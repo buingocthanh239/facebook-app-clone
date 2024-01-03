@@ -121,10 +121,11 @@ function Post(props: PostProps) {
         title={
           <Text variant='titleMedium' style={{ fontSize: 16 }}>
             {props.author?.name}
-            <Text variant='bodyMedium'>{status}</Text>
+            <Text variant='bodyMedium'>{' ' + status}</Text>
           </Text>
         }
         titleVariant='titleMedium'
+        titleNumberOfLines={2}
         subtitle={
           <View style={[globalStyles.flexRow, globalStyles.centerAlignItem, styles.gap]}>
             <Text variant='bodySmall'>{coverTimeToNow(props.created)}</Text>

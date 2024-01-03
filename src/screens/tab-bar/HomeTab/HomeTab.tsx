@@ -96,7 +96,7 @@ function HomeTab() {
           can_edit={item.can_edit}
           is_blocked={item.is_blocked}
           is_felt={item.is_felt}
-          status={item.status}
+          status={item.state}
         />
       )}
       keyExtractor={item => item.id}

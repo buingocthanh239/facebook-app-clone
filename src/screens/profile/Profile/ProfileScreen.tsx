@@ -248,7 +248,7 @@ function ProfileScreen() {
     <BaseFlatList
       data={data}
       ListHeaderComponent={
-        <>
+        <View style={styles.container}>
           <HeaderWithSearch title={profile?.username as string} titleIsCenter={true} />
           <View style={styles.header}>
             <TouchableOpacity
@@ -452,7 +452,7 @@ function ProfileScreen() {
               created={profile?.created}
             />
           </PullDownModal>
-        </>
+        </View>
       }
       ListEmptyComponent={
         <Text style={{ textAlign: 'center', color: color.black, fontSize: 16, fontWeight: '500' }}>
@@ -475,7 +475,7 @@ function ProfileScreen() {
           can_edit={item.can_edit}
           is_blocked={item.is_blocked}
           is_felt={item.is_felt}
-          status={item.status}
+          status={item.state}
         />
       )}
       keyExtractor={item => item.id}
