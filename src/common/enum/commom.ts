@@ -32,7 +32,7 @@ export enum CategoryType {
 }
 
 export const Costs = {
-  reatePost: 10,
+  createPost: 10,
   editPost: 10,
   deletePost: 10,
   createMark: 2,

@@ -69,7 +69,7 @@ function Post(props: PostProps) {
 
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
-  const { described, name, image, video, id } = props;
+  const { described, name, image, video, id, status } = props;
   const urls = image?.map(imageObj => imageObj.url) ?? [];
   const content = described;
   useEffect(() => {
@@ -118,8 +118,14 @@ function Post(props: PostProps) {
         </View>
       )}
       <Card.Title
-        title={props.author?.name}
+        title={
+          <Text variant='titleMedium' style={{ fontSize: 16 }}>
+            {props.author?.name}
+            <Text variant='bodyMedium'>{' ' + status}</Text>
+          </Text>
+        }
         titleVariant='titleMedium'
+        titleNumberOfLines={2}
         subtitle={
           <View style={[globalStyles.flexRow, globalStyles.centerAlignItem, styles.gap]}>
             <Text variant='bodySmall'>{coverTimeToNow(props.created)}</Text>

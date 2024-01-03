@@ -19,7 +19,7 @@ export interface IPost {
   is_blocked: string;
   can_edit: string;
   banned: string;
-  status: string;
+  state: string;
   author: {
     id: string;
     name: string;
