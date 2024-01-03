@@ -47,3 +47,7 @@ export const setPushSettingsApi = (data: ISetPushSettings): Promise<IBodyRespons
 export const getPushSettingsApi = async (): Promise<IBodyResponse<IGetPushSettingResponse>> => {
   return postMethodApi(SettingsApi.GET_PUSH_SETTINGS, {});
 };
+
+export const buyCoins = async (data: { code: string; coins: string }): Promise<any> => {
+  return postMethodApi(SettingsApi.BUY_COINS, data);
+};

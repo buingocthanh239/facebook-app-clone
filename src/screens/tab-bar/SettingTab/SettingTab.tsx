@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux';
 import { logout, selectAuth } from 'src/redux/slices/authSlice';
 import BaseModalLoading from 'src/components/BaseModalLoading/BaseModalLoading';
 import {
+  AddMoneyNavigationName,
   AppNaviagtionName,
   ProfileNavigationName,
   SettingNavigationName
@@ -51,6 +52,12 @@ function SettingTab() {
     navigation.navigate(AppNaviagtionName.SettingNavigation, {
       screen: SettingNavigationName.SettingNotification
     });
+
+  const onPressAddMoney = () =>
+    navigation.navigate(AppNaviagtionName.AddMoneyNavigation, {
+      screen: AddMoneyNavigationName.AddMoneyScreen
+    });
+
   const navigaProfileScreen = () =>
     navigation.navigate(AppNaviagtionName.ProfileNavigation, {
       screen: ProfileNavigationName.Profile,
@@ -75,6 +82,11 @@ function SettingTab() {
       title: 'Thông báo',
       iconName: 'volume-up',
       onPress: onPressNotificationItem
+    },
+    {
+      title: 'Nạp tiền',
+      iconName: 'coins',
+      onPress: onPressAddMoney
     }
   ];
 
