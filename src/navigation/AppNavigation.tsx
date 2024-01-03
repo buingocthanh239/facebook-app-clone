@@ -23,6 +23,7 @@ import { AccountStatus } from 'src/common/enum/commom';
 import BaseModalError from 'src/components/BaseModalError';
 import { deleteMessage, selectApp } from 'src/redux/slices/appSlice';
 import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp/ChangeInfoAfterSignUp';
+import AddMoneyNavigationWrapper from './AddMoneyNavigation';
 
 const Stack = createNativeStackNavigator();
 
@@ -72,6 +73,10 @@ function AppNavigation() {
                 name={AppNaviagtionName.TabNavigation}
                 options={{ headerShown: false, header: () => <Header /> }}
                 component={TabNavigationWrapper}
+              />
+              <Stack.Screen
+                name={AppNaviagtionName.AddMoneyNavigation}
+                component={AddMoneyNavigationWrapper}
               />
               <Stack.Screen
                 name={AppNaviagtionName.SettingNavigation}

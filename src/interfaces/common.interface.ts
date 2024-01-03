@@ -34,7 +34,7 @@ export interface IUser {
   username: string;
   avatar: string;
   active: string;
-  coin: string;
+  coins: string;
   email: string;
   description: string;
   cover_image: string;

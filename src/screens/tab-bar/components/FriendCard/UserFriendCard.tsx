@@ -15,6 +15,7 @@ import {
   unfriendApi
 } from 'src/services/friends.services';
 import { getAvatarUri } from 'src/utils/helper';
+import { setBlockApi } from 'src/services/block.service';
 
 interface UserFriendCardProps {
   id: string;
@@ -112,86 +113,116 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
     }
   };
 
+  const handleBlockUser = async (id: string) => {
+    Alert.alert(
+      `Chặn trang cá nhân của ${username}`,
+      `Những người bạn chặn sẽ không thể bắt đầu trò chuyện, thêm bạn vào danh sách bạn bè hoặc xem nội dung của bạn đăng trên dòng thời gian của mình nữa. Nếu bạn chặn ai đó khi hai người đang là bạn bè thì hành động này cũng sẽ hủy kết bạn với họ.`,
+      [
+        {
+          text: 'Hủy',
+          onPress: () => {},
+          style: 'cancel'
+        },
+        {
+          text: 'Chặn',
+          onPress: async () => {
+            try {
+              await setBlockApi({ user_id: id });
+              setStatus('Block');
+              hideModal();
+            } catch (error) {
+              return;
+            }
+          }
+        }
+      ]
+    );
+  };
+
   return (
-    <View style={styles.cardContainer}>
-      <View style={styles.avatarContainer}>
-        <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
-      </View>
-      <View style={styles.infoContainer}>
-        <View style={styles.usernameField}>
-          <Text style={styles.username}>{username}</Text>
-          {parseInt(same_friends) < 1 ? (
-            <></>
+    status !== 'Block' && (
+      <View style={styles.cardContainer}>
+        <View style={styles.avatarContainer}>
+          <Image source={getAvatarUri(avatarSource)} style={styles.avatar} />
+        </View>
+        <View style={styles.infoContainer}>
+          <View style={styles.usernameField}>
+            <Text style={styles.username}>{username}</Text>
+            {parseInt(same_friends) < 1 ? (
+              <></>
+            ) : (
+              <Text style={styles.friendCount}>{same_friends} bạn chung</Text>
+            )}
+          </View>
+          {status === '' ? (
+            <IconButton
+              icon={require('../../../../assets/three-dot.png')}
+              onPress={() => {
+                showModal();
+              }}
+            ></IconButton>
+          ) : status === 'unfriended' ? (
+            <TouchableOpacity
+              style={styles.acceptButton}
+              onPress={() => onPressAddFriend({ user_id: id })}
+            >
+              <Text style={styles.buttonText}>Thêm bạn bè</Text>
+            </TouchableOpacity>
           ) : (
-            <Text style={styles.friendCount}>{same_friends} bạn chung</Text>
+            <TouchableOpacity
+              style={styles.acceptButton}
+              onPress={() => onPressCancel({ user_id: id })}
+            >
+              <Text style={styles.buttonText}>Hủy</Text>
+            </TouchableOpacity>
           )}
         </View>
-        {status === '' ? (
-          <IconButton
-            icon={require('../../../../assets/three-dot.png')}
-            onPress={() => {
-              showModal();
-            }}
-          ></IconButton>
-        ) : status === 'unfriended' ? (
-          <TouchableOpacity
-            style={styles.acceptButton}
-            onPress={() => onPressAddFriend({ user_id: id })}
-          >
-            <Text style={styles.buttonText}>Thêm bạn bè</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.acceptButton}
-            onPress={() => onPressCancel({ user_id: id })}
-          >
-            <Text style={styles.buttonText}>Hủy</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-      <Modal
-        isVisible={modalVisible}
-        animationIn='slideInUp'
-        animationOut='slideOutDown'
-        backdropOpacity={0.5}
-        onBackdropPress={hideModal}
-        style={styles.modal}
-      >
-        <View style={styles.modalContent}>
-          <TouchableOpacity
-            style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 10 }}
-            onPress={() => console.log('Go to User Friend Page with id: ' + id)}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 10 }}>
-              <View style={styles.avatarContainer}>
-                <Image
-                  source={getAvatarUri(avatarSource)}
-                  style={{ width: 50, height: 50, borderRadius: 25 }}
-                />
-              </View>
-              <View style={{ alignContent: 'center' }}>
-                <Text style={styles.username}>{username}</Text>
-                <Text>Là bạn bè từ {created}</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          {options.map((option, index) => (
+        <Modal
+          isVisible={modalVisible}
+          animationIn='slideInUp'
+          animationOut='slideOutDown'
+          backdropOpacity={0.5}
+          onBackdropPress={hideModal}
+          style={styles.modal}
+        >
+          <View style={styles.modalContent}>
             <TouchableOpacity
-              key={index}
-              onPress={() =>
-                index === 2
-                  ? handleUnfriend({ user_id: id })
-                  : console.log(`Selected: ${option.title}`)
-              }
+              style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 10 }}
+              onPress={() => console.log('Go to User Friend Page with id: ' + id)}
             >
-              <View style={[styles.option, { height: 19 * 3 }]}>
-                <OptionCard icon={option.icon} title={option.title} />
+              <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 10 }}>
+                <View style={styles.avatarContainer}>
+                  <Image
+                    source={getAvatarUri(avatarSource)}
+                    style={{ width: 50, height: 50, borderRadius: 25 }}
+                  />
+                </View>
+                <View style={{ alignContent: 'center' }}>
+                  <Text style={styles.username}>{username}</Text>
+                  <Text>Là bạn bè từ {created}</Text>
+                </View>
               </View>
             </TouchableOpacity>
-          ))}
-        </View>
-      </Modal>
-    </View>
+            {options.map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  index === 2
+                    ? handleUnfriend({ user_id: id })
+                    : index === 1
+                    ? handleBlockUser(id)
+                    : hideModal()
+                }
+              >
+                <View style={[styles.option, { height: 19 * 3 }]}>
+                  <OptionCard icon={option.icon} title={option.title} />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Modal>
+      </View>
+    )
   );
 };
 

@@ -53,7 +53,7 @@ export enum BlockApi {
 
 export enum SettingsApi {
   SET_DEVTOKEN = '/set_devtoken',
-  BY_COINS = '/by_coins',
+  BUY_COINS = 'buy_coins',
   GET_PUSH_SETTINGS = '/get_push_settings',
   SET_PUSH_SETTINGS = '/set_push_settings'
 }
