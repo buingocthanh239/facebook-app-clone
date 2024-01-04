@@ -56,7 +56,7 @@ export interface IGetNotificationResponse extends IListBodyResponse<INotificatio
   badge: string;
 }
 export interface ICheckNewItemResponseData {
-  new_item: string;
+  new_items: string;
 }
 export const getNotificationApi = (data: IGetNotification): Promise<IGetNotificationResponse> => {
   return axiosInstance.post(NotificationApi.GET_NOTIFICATION, data);
@@ -67,3 +67,12 @@ export const checkNewItemAPi = (
 ): Promise<IBodyResponse<ICheckNewItemResponseData>> => {
   return postMethodApi(NotificationApi.CHECK_NEW_iTEMS, data);
 };
+
+export const checkNewPostItem = () =>
+  checkNewItemAPi({ category_id: CategoryType.Posts, last_id: 2000 });
+export const checkNewVideoItem = () =>
+  checkNewItemAPi({ last_id: 0, category_id: CategoryType.Videos });
+export const checkNewFriendItem = () =>
+  checkNewItemAPi({ last_id: 0, category_id: CategoryType.Friends });
+export const checkNewNotificationItem = () =>
+  checkNewItemAPi({ last_id: 0, category_id: CategoryType.Notifications });
