@@ -66,8 +66,9 @@ const ListImageScreen = () => {
             <View key={index} style={{ marginBottom: 20 }}>
               <ImageItem
                 key={index}
+                style={{ height: 500 }}
                 image={image}
-                isHideCloseIcon
+                isShowCloseIcon
                 onPress={() => {
                   openModal;
                 }}

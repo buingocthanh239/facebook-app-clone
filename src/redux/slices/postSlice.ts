@@ -73,9 +73,10 @@ const postSlice = createSlice({
       if (!action.payload.post?.length) {
         state.isNextFetch = false;
       }
+      state.getPostloading = false;
     });
     builder.addCase(getNextListPosts.rejected, state => {
-      state.getPostloading = true;
+      state.getPostloading = false;
     });
     builder.addCase(getNextListPosts.fulfilled, (state, action) => {
       state.post = [...(state.post as [IPost]), ...action.payload.post];
@@ -84,6 +85,7 @@ const postSlice = createSlice({
       if (!action.payload.post?.length) {
         state.isNextFetch = false;
       }
+      state.getPostloading = false;
     });
     builder.addCase(getNextListPosts.pending, state => {
       state.getPostloading = true;

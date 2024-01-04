@@ -1,13 +1,6 @@
 import { Avatar } from 'react-native-paper';
 import { NotificationType } from 'src/common/enum/commom';
-import {
-  CommentIcon,
-  FriendSuggestionIcon,
-  PostIcon,
-  VideoIcon,
-  BirthdayIcon,
-  SecurityIcon
-} from '../sub-icon';
+import { CommentIcon, FriendSuggestionIcon, PostIcon, VideoIcon } from '../sub-icon';
 
 export type AvatarNotificationItemProps = {
   type: NotificationType;
@@ -18,23 +11,24 @@ function AvatarNotificationItem(props: AvatarNotificationItemProps) {
   const { type, ownerUri, size } = props;
   let SubIcon = CommentIcon;
   switch (type) {
-    case NotificationType.BIRTHDAY:
-      SubIcon = BirthdayIcon;
-      break;
-    case NotificationType.FIREND_SUGGESTION:
+    case NotificationType.FriendAccepted:
+    case NotificationType.FriendRequest:
       SubIcon = FriendSuggestionIcon;
       break;
-    case NotificationType.POST_NOTFICATION:
+    case NotificationType.PostAdded:
+    case NotificationType.PostUpdated:
+    case NotificationType.PostMarked:
+    case NotificationType.PostFelt:
       SubIcon = PostIcon;
       break;
-    case NotificationType.SECURITY_NOTIFICATION:
-      SubIcon = SecurityIcon;
+    case NotificationType.MarkCommented:
+      SubIcon = CommentIcon;
       break;
-    case NotificationType.VIDEO_AVAILABALE:
+    case NotificationType.VideoAdded:
       SubIcon = VideoIcon;
       break;
     default:
-      SubIcon = CommentIcon;
+      SubIcon = PostIcon;
   }
   return (
     <>

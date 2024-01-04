@@ -16,13 +16,17 @@ import ChatNavigationWrapper from './ChatNavigation';
 
 import Header from 'src/screens/tab-bar/components/Header';
 import { useAppDispatch, useAppSelector } from 'src/redux';
-import { getProfile, selectAuth } from 'src/redux/slices/authSlice';
+import { getProfile, selectAuth, setAuthentication } from 'src/redux/slices/authSlice';
 import { AppNaviagtionName } from 'src/common/constants/nameScreen';
 import { useEffect } from 'react';
 import { AccountStatus } from 'src/common/enum/commom';
 import BaseModalError from 'src/components/BaseModalError';
-import { deleteMessage, selectApp } from 'src/redux/slices/appSlice';
+import { deleteMessage, selectApp, setMessage } from 'src/redux/slices/appSlice';
 import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp/ChangeInfoAfterSignUp';
+import AddMoneyNavigationWrapper from './AddMoneyNavigation';
+import axiosInstance from 'src/services/axiosInstance';
+import { Snackbar } from 'react-native-paper';
+import { useNetInfoInstance } from '@react-native-community/netinfo';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +34,19 @@ function AppNavigation() {
   const auth = useAppSelector(selectAuth);
   const appRedux = useAppSelector(selectApp);
   const dispatch = useAppDispatch();
+
+  // handle token expiration
+  axiosInstance.interceptors.response.use((response: any) => {
+    if (response?.code === '9998') {
+      dispatch(setAuthentication(false));
+      dispatch(setMessage('Phiên đăng nhập hết hạn'));
+    }
+    return {
+      ...response
+    };
+  });
+
+  // handle wifi info
 
   useEffect(() => {
     if (auth.user?.active === AccountStatus.Active) {
@@ -41,6 +58,11 @@ function AppNavigation() {
   const onBackdropPress = () => {
     dispatch(deleteMessage());
   };
+
+  const {
+    netInfo: { isConnected },
+    refresh
+  } = useNetInfoInstance();
 
   return (
     <>
@@ -72,6 +94,10 @@ function AppNavigation() {
                 name={AppNaviagtionName.TabNavigation}
                 options={{ headerShown: false, header: () => <Header /> }}
                 component={TabNavigationWrapper}
+              />
+              <Stack.Screen
+                name={AppNaviagtionName.AddMoneyNavigation}
+                component={AddMoneyNavigationWrapper}
               />
               <Stack.Screen
                 name={AppNaviagtionName.SettingNavigation}
@@ -121,8 +147,21 @@ function AppNavigation() {
         onBackdropPress={onBackdropPress}
         title={appRedux.message}
       />
+      <Snackbar
+        visible={!isConnected as boolean}
+        onDismiss={() => {}}
+        action={{
+          label: 'Thử lại',
+          onPress: () => {
+            refresh();
+          }
+        }}
+      >
+        Không có kết nối internet.Vui lòng thử lại!
+      </Snackbar>
     </>
   );
 }
 
 export default AppNavigation;
+export { axiosInstance };

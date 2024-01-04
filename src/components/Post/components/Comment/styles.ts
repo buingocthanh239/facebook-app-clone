@@ -27,7 +27,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'white'
   },
-
+  containerListComment: {
+    justifyContent: 'flex-start',
+    margin: 0,
+    // marginTop: 40,
+    borderRadius: 10,
+    backgroundColor: 'white'
+  },
   icon: {
     display: 'flex',
     justifyContent: 'flex-start',
@@ -343,7 +349,13 @@ const styles = StyleSheet.create({
     gap: 5
   },
   likeIcon: {
-    zIndex: 2
+    padding: 3,
+    paddingLeft: 4,
+    borderWidth: 1, // Border width
+    borderColor: color.white, // Border color
+    borderRadius: 50,
+    backgroundColor: '#3578E5',
+    color: color.white
   },
   heartIcon: {
     position: 'relative',
@@ -356,6 +368,18 @@ const styles = StyleSheet.create({
   },
   rightIcon: {
     // color: '#3578E5'
+  },
+  headerListFeel: {
+    paddingLeft: 0,
+    height: 43,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  textHeaderListFeel: {
+    fontSize: 20,
+    color: color.black
   }
 });
 export default styles;

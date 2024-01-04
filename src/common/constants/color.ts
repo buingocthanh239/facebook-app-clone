@@ -25,5 +25,7 @@ export const color = {
   heartIcon: '#FF74AE',
   textLike: '#65676b',
   laughtIcon: '#FFF298',
-  Comment: 'rgba(240,242,245,1.0)'
+  Comment: 'rgba(240,242,245,1.0)',
+  backgroundButton: '#E5DFE3',
+  red: 'red'
 };

@@ -9,7 +9,7 @@ export interface ISetMarkComment {
   content: string;
   index: number;
   count: number;
-  mark_id: number;
+  mark_id: number | null;
   type: number;
 }
 

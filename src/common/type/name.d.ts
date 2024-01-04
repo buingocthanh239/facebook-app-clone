@@ -55,7 +55,8 @@ export enum FriendNavigationName {
 export enum PostNavigationName {
   CreatePostScreen = 'CreatePostScreen',
   EnAScreen = 'EnAScreen',
-  ListImageScreen = 'ListImageScreen'
+  ListImageScreen = 'ListImageScreen',
+  ListImageDetail = 'ListImageDetail'
 }
 
 export enum TabNavigationName {
@@ -77,4 +78,8 @@ export enum ReportNavigationName {
 export enum ChatNavigationName {
   InboxScreen = 'InboxScreen',
   InboxListScreen = 'InboxListScreen'
+}
+
+export enum AddMoneyNavigationName {
+  AddMoneyScreen = 'AddMoneyScreen'
 }

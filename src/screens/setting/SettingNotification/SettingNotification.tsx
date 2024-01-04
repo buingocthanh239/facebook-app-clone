@@ -7,6 +7,21 @@ import BaseForm from 'src/components/BaseForm';
 import { useForm } from 'react-hook-form';
 import BaseSwitch from 'src/components/BaseSwitch';
 import { color } from 'src/common/constants/color';
+import { useAppDispatch, useAppSelector } from 'src/redux';
+import { getPushSetting, selectSetting, setPushSetting } from 'src/redux/slices/settingSlice';
+import { useEffect } from 'react';
+import BaseButton from 'src/components/BaseButton';
+import { booleanReponse } from 'src/common/enum/commom';
+
+export interface ISetPushSettingForm {
+  birthday: boolean;
+  comment: boolean;
+  friendInvitaion: boolean;
+  peopleSuggestion: boolean;
+  report: boolean;
+  update: boolean;
+  video: boolean;
+}
 
 interface IReciveListItem extends IListItem {
   name: string;
@@ -16,8 +31,15 @@ interface IReciveListItem extends IListItem {
 
 function SettingNotification() {
   const navigation: NavigationProp<SettingNavigationType> = useNavigation();
+  const dispatch = useAppDispatch();
+  const settingStore = useAppSelector(selectSetting);
+  //  call api ;
+  useEffect(() => {
+    dispatch(getPushSetting({}));
+  }, [dispatch]);
+
   const methods = useForm();
-  const { getValues } = methods;
+  const { getValues, setValue, handleSubmit } = methods;
   const onPressPushNotification = () => navigation.navigate('SettingPushNotification');
   const listReciveNotifcations: IReciveListItem[] = [
     {
@@ -71,6 +93,39 @@ function SettingNotification() {
       turOffIcon: 'sticker-remove-outline'
     }
   ];
+
+  // hiện thị form
+  useEffect(() => {
+    setValue('comment', settingStore.pushSetting?.like_comment === booleanReponse.True);
+    setValue('friendInvitaion', settingStore.pushSetting?.requested_friend === booleanReponse.True);
+    setValue('update', settingStore.pushSetting?.from_friends === booleanReponse.True);
+    setValue(
+      'peopleSuggestion',
+      settingStore.pushSetting?.suggested_friend === booleanReponse.True
+    );
+    setValue('birthday', settingStore.pushSetting?.birthday === booleanReponse.True);
+    setValue('video', settingStore.pushSetting?.video === booleanReponse.True);
+    setValue('report', settingStore.pushSetting?.report === booleanReponse.True);
+  }, [settingStore.pushSetting, setValue]);
+
+  const submitSetting = (data: any) => {
+    dispatch(
+      setPushSetting({
+        birthday: data.birthday ? booleanReponse.True : booleanReponse.False,
+        from_friends: data.update ? booleanReponse.True : booleanReponse.False,
+        like_comment: data.comment ? booleanReponse.True : booleanReponse.False,
+        report: data.report ? booleanReponse.True : booleanReponse.False,
+        suggested_friend: data.peopleSuggestion ? booleanReponse.True : booleanReponse.False,
+        requested_friend: data.friendInvitaion ? booleanReponse.True : booleanReponse.False,
+        video: data.video ? booleanReponse.True : booleanReponse.False,
+        led_on: settingStore.pushSetting?.led_on as booleanReponse,
+        notification_on: settingStore.pushSetting?.notification_on as booleanReponse,
+        sound_on: settingStore.pushSetting?.sound_on as booleanReponse,
+        vibrant_on: settingStore.pushSetting?.vibrant_on as booleanReponse
+      })
+    );
+  };
+
   const listMethodPushNotifications: IListItem[] = [
     {
       title: 'Thông báo đẩy',
@@ -115,6 +170,13 @@ function SettingNotification() {
           />
         ))}
       </BaseForm>
+      <BaseButton
+        onPress={handleSubmit(submitSetting)}
+        style={{ marginTop: 5, marginHorizontal: 10 }}
+        loading={settingStore.loading}
+      >
+        Lưu
+      </BaseButton>
       <Text
         style={{ fontSize: 18, fontWeight: 'bold', paddingVertical: 16, paddingHorizontal: 10 }}
       >

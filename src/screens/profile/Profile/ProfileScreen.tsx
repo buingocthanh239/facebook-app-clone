@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './styles';
 import FriendField from './component/FriendField';
 import OptionCard from './component/OptionCard';
@@ -26,6 +26,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ButtonField2 from './component/ButtonField2';
 import PullDownModal from 'src/components/PullDownModal/PullDownModal';
 import PostImageDetail from 'src/screens/post/PostDetail/PostImageDetail';
+import BaseFlatList from 'src/components/BaseFlatList';
+import { IPost, getListPostAPi } from 'src/services/post.sevices';
+import Post from 'src/components/Post';
+const COUNT_ITEM = 5;
 
 function ProfileScreen() {
   const [modalAvatarVisible, setModalAvatarVisible] = useState(false);
@@ -169,201 +173,318 @@ function ProfileScreen() {
       ];
 
   const totalHeight = 2 * 25;
+
+  // post api
+  const [skip, setSkip] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [refreshing, setrefreshing] = useState(false);
+  const [isNextFetch, setIsNextFetch] = useState(true);
+  const [data, setData] = useState<IPost[]>([]);
+
+  const getFirPost = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await getListPostAPi({ user_id: user_id, index: 0, count: COUNT_ITEM });
+      if (res.success) {
+        if (!res.data.post.length) {
+          return setIsNextFetch(false);
+        }
+        setData(res.data.post);
+        setSkip(COUNT_ITEM);
+      } else {
+        setIsNextFetch(false);
+      }
+    } catch (err) {
+      return;
+    } finally {
+      setLoading(false);
+    }
+  }, [user_id]);
+
+  //get first post
+  useEffect(() => {
+    getFirPost();
+  }, [getFirPost]);
+
+  const onRefresh = async () => {
+    setrefreshing(true);
+    try {
+      setLoading(true);
+      const res = await getListPostAPi({ user_id: user_id, index: 0, count: COUNT_ITEM });
+      if (res.success) {
+        if (!res.data.post.length) {
+          return setIsNextFetch(false);
+        }
+        setData(res.data.post);
+        setSkip(COUNT_ITEM);
+      }
+    } catch (err) {
+      return;
+    } finally {
+      setLoading(false);
+      setrefreshing(false);
+    }
+  };
+  async function onEndReadable() {
+    if (isNextFetch) {
+      try {
+        setLoading(true);
+        const res = await getListPostAPi({ user_id: user_id, index: skip, count: COUNT_ITEM });
+        if (res.success) {
+          if (!res.data.post.length) {
+            return setIsNextFetch(false);
+          }
+          setData(data => [...data, ...res.data.post]);
+          setSkip(skip => skip + COUNT_ITEM);
+        }
+      } catch (err) {
+        return;
+      } finally {
+        setLoading(false);
+      }
+    }
+  }
   return (
-    <ScrollView style={styles.container} ref={scrollViewRef}>
-      <HeaderWithSearch title={profile?.username as string} titleIsCenter={true} />
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.coverPhoto} onPress={showModalCover} activeOpacity={0.8}>
-          <Image style={styles.coverPhoto} source={getCoverUri(profile?.cover_image as string)} />
-        </TouchableOpacity>
-        {isOwnProfile && profile?.avatar && (
-          <View style={styles.cameraIconWrapper}>
+    <BaseFlatList
+      data={data}
+      ListHeaderComponent={
+        <View style={styles.container}>
+          <HeaderWithSearch title={profile?.username as string} titleIsCenter={true} />
+          <View style={styles.header}>
             <TouchableOpacity
-              style={styles.cameraIcon}
+              style={styles.coverPhoto}
               onPress={showModalCover}
               activeOpacity={0.8}
             >
-              <IconButton
-                icon='camera'
-                mode='contained'
-                iconColor='black'
-                containerColor='#E6E6EF'
-                size={28}
-                onPress={showModalCover}
+              <Image
+                style={styles.coverPhoto}
+                source={getCoverUri(profile?.cover_image as string)}
               />
             </TouchableOpacity>
-          </View>
-        )}
-        <TouchableOpacity
-          style={styles.avatarWrapper}
-          onPress={showModalAvatar}
-          activeOpacity={0.8}
-        >
-          <Image style={styles.avatar} source={getAvatarUri(profile?.avatar as string)} />
-        </TouchableOpacity>
-        {isOwnProfile && (
-          <TouchableOpacity
-            style={styles.cameraIconAvatar}
-            onPress={showModalAvatar}
-            activeOpacity={0.8}
-          >
-            <IconButton
-              icon='camera'
-              mode='contained'
-              iconColor={color.textColor}
-              containerColor='#E6E6EF'
-              size={32}
+            {isOwnProfile && profile?.avatar && (
+              <View style={styles.cameraIconWrapper}>
+                <TouchableOpacity
+                  style={styles.cameraIcon}
+                  onPress={showModalCover}
+                  activeOpacity={0.8}
+                >
+                  <IconButton
+                    icon='camera'
+                    mode='contained'
+                    iconColor='black'
+                    containerColor='#E6E6EF'
+                    size={28}
+                    onPress={showModalCover}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.avatarWrapper}
               onPress={showModalAvatar}
-            />
-          </TouchableOpacity>
-        )}
-        <View style={isOwnProfile ? styles.infomation : { ...styles.infomation, marginTop: 100 }}>
-          <Text style={styles.name}>{profile?.username}</Text>
-          {profile?.description !== '' ? (
-            <Text style={styles.bio}>{profile?.description}</Text>
-          ) : (
-            <></>
+              activeOpacity={0.8}
+            >
+              <Image style={styles.avatar} source={getAvatarUri(profile?.avatar as string)} />
+            </TouchableOpacity>
+            {isOwnProfile && (
+              <TouchableOpacity
+                style={styles.cameraIconAvatar}
+                onPress={showModalAvatar}
+                activeOpacity={0.8}
+              >
+                <IconButton
+                  icon='camera'
+                  mode='contained'
+                  iconColor={color.textColor}
+                  containerColor='#E6E6EF'
+                  size={32}
+                  onPress={showModalAvatar}
+                />
+              </TouchableOpacity>
+            )}
+            <View
+              style={isOwnProfile ? styles.infomation : { ...styles.infomation, marginTop: 100 }}
+            >
+              <Text style={styles.name}>{profile?.username}</Text>
+              {profile?.description !== '' ? (
+                <Text style={styles.bio}>{profile?.description}</Text>
+              ) : (
+                <></>
+              )}
+            </View>
+          </View>
+          {/* Button Field */}
+          {isOwnProfile ? (
+            <View
+              style={[
+                styles.section,
+                { flexDirection: 'row', justifyContent: 'space-between', padding: 20 }
+              ]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={{
+                  backgroundColor: color.primary,
+                  padding: 8,
+                  borderRadius: 5,
+                  width: '85%',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onPress={navigateEditProfileScreen}
+              >
+                <Text style={[styles.buttonText]}>Edit Profile</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: color.outlineColor,
+                  padding: 8,
+                  borderRadius: 5,
+                  width: '12%',
+                  alignItems: 'center'
+                }}
+                onPress={navigateSettingProfileScreen}
+              >
+                <Icon name='dots-horizontal' size={20}></Icon>
+              </TouchableOpacity>
+            </View>
+          ) : !isOwnProfile && isFriend === '0' ? (
+            <ButtonField0 user_id={user_id} username={profile?.username as string} />
+          ) : !isOwnProfile && isFriend === '1' ? (
+            <ButtonField1 user_id={user_id} username={profile?.username as string} />
+          ) : !isOwnProfile && isFriend === '2' ? (
+            <ButtonField2 user_id={user_id} username={profile?.username as string} />
+          ) : !isOwnProfile && isFriend === '3' ? (
+            <ButtonField3 user_id={user_id} username={profile?.username as string} />
+          ) : null}
+          {/* Infor Detail */}
+          <InforDetail
+            address={profile?.address}
+            city={profile?.city}
+            country={profile?.country}
+            isOwnProfile={isOwnProfile}
+          />
+          {/* Friend Field */}
+          <View style={styles.section}>
+            <FriendField
+              friends={listFriends}
+              totalFriend={totalFriend}
+              isOwnProfile={isOwnProfile}
+            ></FriendField>
+          </View>
+          {/* Post Field */}
+          {isOwnProfile && (
+            <View style={styles.section}>
+              <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'black', marginLeft: 20 }}>
+                Bài viết
+              </Text>
+              <CreatePostCard avatar={profile?.avatar as string} />
+            </View>
           )}
-        </View>
-      </View>
-      {/* Button Field */}
-      {isOwnProfile ? (
-        <View
-          style={[
-            styles.section,
-            { flexDirection: 'row', justifyContent: 'space-between', padding: 20 }
-          ]}
-        >
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={{
-              backgroundColor: color.primary,
-              padding: 8,
-              borderRadius: 5,
-              width: '85%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onPress={navigateEditProfileScreen}
+          <Modal
+            isVisible={modalAvatarVisible}
+            animationIn='slideInUp'
+            animationOut='slideOutDown'
+            backdropOpacity={0.5}
+            onBackdropPress={hideModalAvatar}
+            style={styles.modal}
           >
-            <Text style={[styles.buttonText]}>Edit Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: color.outlineColor,
-              padding: 8,
-              borderRadius: 5,
-              width: '12%',
-              alignItems: 'center'
-            }}
-            onPress={navigateSettingProfileScreen}
+            <View style={styles.modalContent}>
+              {optionsAvatar.map((option, index) => (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  key={index}
+                  onPress={() =>
+                    index === 0 ? showAvatar() : console.log(`Selected: ${option.title}`)
+                  }
+                >
+                  <View style={[styles.option, { height: totalHeight }]}>
+                    <OptionCard icon={option.icon} title={option.title} />
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </Modal>
+          <Modal
+            isVisible={modalCoverVisible}
+            animationIn='slideInUp'
+            animationOut='slideOutDown'
+            backdropOpacity={0.5}
+            onBackdropPress={hideModalCover}
+            style={styles.modal}
           >
-            <Icon name='dots-horizontal' size={20}></Icon>
-          </TouchableOpacity>
+            <View style={styles.modalContent}>
+              {optionsCover.map((option, index) => (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  key={index}
+                  onPress={() =>
+                    index === 0 ? showCover() : console.log(`Selected: ${option.title}`)
+                  }
+                >
+                  <View style={[styles.option, { height: totalHeight }]}>
+                    <OptionCard icon={option.icon} title={option.title} />
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </Modal>
+          <PullDownModal visible={avatarVisible} onClose={hideAvatar}>
+            <PostImageDetail
+              image={{ url: profile?.avatar as string }}
+              author={{
+                name: profile?.username as string,
+                avatar: profile?.avatar as string,
+                id: user_id
+              }}
+              created={profile?.created}
+            />
+          </PullDownModal>
+          <PullDownModal visible={coverVisible} onClose={hideCover}>
+            <PostImageDetail
+              image={{ url: profile?.cover_image as string }}
+              author={{
+                name: profile?.username as string,
+                avatar: profile?.avatar as string,
+                id: user_id
+              }}
+              created={profile?.created}
+            />
+          </PullDownModal>
         </View>
-      ) : !isOwnProfile && isFriend === '0' ? (
-        <ButtonField0 user_id={user_id} username={profile?.username as string} />
-      ) : !isOwnProfile && isFriend === '1' ? (
-        <ButtonField1 user_id={user_id} username={profile?.username as string} />
-      ) : !isOwnProfile && isFriend === '2' ? (
-        <ButtonField2 user_id={user_id} username={profile?.username as string} />
-      ) : !isOwnProfile && isFriend === '3' ? (
-        <ButtonField3 user_id={user_id} username={profile?.username as string} />
-      ) : null}
-      {/* Infor Detail */}
-      <InforDetail
-        address={profile?.address}
-        city={profile?.city}
-        country={profile?.country}
-        isOwnProfile={isOwnProfile}
-      />
-      {/* Friend Field */}
-      <View style={styles.section}>
-        <FriendField
-          friends={listFriends}
-          totalFriend={totalFriend}
-          isOwnProfile={isOwnProfile}
-        ></FriendField>
-      </View>
-      {/* Post Field */}
-      {isOwnProfile && (
-        <View style={styles.section}>
-          <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'black', marginLeft: 20 }}>
-            Bài viết
-          </Text>
-          <CreatePostCard avatar={profile?.avatar as string} />
-        </View>
+      }
+      ListEmptyComponent={
+        <Text style={{ textAlign: 'center', color: color.black, fontSize: 16, fontWeight: '500' }}>
+          Không có bài viết nào
+        </Text>
+      }
+      renderItem={({ item }) => (
+        <Post
+          id={item.id}
+          author={item.author}
+          created={item.created}
+          comment_mark={item.comment_mark}
+          described={item.described}
+          image={item.image}
+          video={item.video}
+          name={item.name}
+          feel={item.feel}
+          numberShares={item.numberShares}
+          banned={item.banned}
+          can_edit={item.can_edit}
+          is_blocked={item.is_blocked}
+          is_felt={item.is_felt}
+          status={item.state}
+        />
       )}
-      <Modal
-        isVisible={modalAvatarVisible}
-        animationIn='slideInUp'
-        animationOut='slideOutDown'
-        backdropOpacity={0.5}
-        onBackdropPress={hideModalAvatar}
-        style={styles.modal}
-      >
-        <View style={styles.modalContent}>
-          {optionsAvatar.map((option, index) => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              key={index}
-              onPress={() =>
-                index === 0 ? showAvatar() : console.log(`Selected: ${option.title}`)
-              }
-            >
-              <View style={[styles.option, { height: totalHeight }]}>
-                <OptionCard icon={option.icon} title={option.title} />
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </Modal>
-      <Modal
-        isVisible={modalCoverVisible}
-        animationIn='slideInUp'
-        animationOut='slideOutDown'
-        backdropOpacity={0.5}
-        onBackdropPress={hideModalCover}
-        style={styles.modal}
-      >
-        <View style={styles.modalContent}>
-          {optionsCover.map((option, index) => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              key={index}
-              onPress={() => (index === 0 ? showCover() : console.log(`Selected: ${option.title}`))}
-            >
-              <View style={[styles.option, { height: totalHeight }]}>
-                <OptionCard icon={option.icon} title={option.title} />
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </Modal>
-      <PullDownModal visible={avatarVisible} onClose={hideAvatar}>
-        <PostImageDetail
-          image={{ url: profile?.avatar as string }}
-          author={{
-            name: profile?.username as string,
-            avatar: profile?.avatar as string,
-            id: user_id
-          }}
-          created={profile?.created}
-        />
-      </PullDownModal>
-      <PullDownModal visible={coverVisible} onClose={hideCover}>
-        <PostImageDetail
-          image={{ url: profile?.cover_image as string }}
-          author={{
-            name: profile?.username as string,
-            avatar: profile?.avatar as string,
-            id: user_id
-          }}
-          created={profile?.created}
-        />
-      </PullDownModal>
-    </ScrollView>
+      keyExtractor={item => item.id}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+      onEndReached={onEndReadable}
+      onEndReachedThreshold={0.005}
+      isFootterLoading={loading}
+    />
   );
 }
 

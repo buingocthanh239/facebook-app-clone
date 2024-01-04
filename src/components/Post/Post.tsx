@@ -13,7 +13,11 @@ import ReportModal from './ReportModal';
 import { getAvatarUri } from 'src/utils/helper';
 import { coverTimeToNow } from 'src/utils/dayjs';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
+import {
+  AppNaviagtionName,
+  PostNavigationName,
+  ProfileNavigationName
+} from 'src/common/constants/nameScreen';
 import CommentTab from './components/Comment';
 import { setFeelApi } from 'src/services/comment.service';
 const MAX_LENGTH_CONTENT = 500;
@@ -49,17 +53,27 @@ function Post(props: PostProps) {
   // Navigation profile
   const navigationProfile: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
     useNavigation();
+  const navigationPostDetail: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
+    useNavigation();
 
   const handleNavigationProfile = () =>
     navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
       screen: ProfileNavigationName.Profile,
       params: { user_id: props.author.id }
     });
+
+  const handleNavigationPostDetail = () => {
+    navigationPostDetail.navigate(AppNaviagtionName.PostNavigation, {
+      screen: PostNavigationName.ListImageDetail,
+      params: { data: props }
+    });
+  };
+
   const [openCommentModal, setOpenCommentModal] = useState(false);
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
+  const { described, name, image, video, id, status } = props;
   const [openModalFeel, setOpenModalFeel] = useState(false);
-  const { described, name, image, video, id } = props;
   const urls = image?.map(imageObj => imageObj.url) ?? [];
   const content = described;
   useEffect(() => {
@@ -148,8 +162,14 @@ function Post(props: PostProps) {
         </View>
       )}
       <Card.Title
-        title={props.author?.name}
+        title={
+          <Text style={{ fontSize: 16, alignItems: 'center', fontWeight: '700' }}>
+            {props.author?.name}
+            <Text style={{ fontSize: 15, textAlign: 'center' }}>{' ' + status}</Text>
+          </Text>
+        }
         titleVariant='titleMedium'
+        titleNumberOfLines={2}
         subtitle={
           <View style={[globalStyles.flexRow, globalStyles.centerAlignItem, styles.gap]}>
             <Text variant='bodySmall'>{coverTimeToNow(props.created)}</Text>
@@ -186,8 +206,8 @@ function Post(props: PostProps) {
       {urls?.length ? (
         <GridImage
           images={urls}
-          onPress={() => console.log('image')}
-          style={{ width: '100%', height: 300, marginBottom: 8 }}
+          onPress={handleNavigationPostDetail}
+          style={{ width: '100%', height: 300, marginBottom: 10 }}
           isShowCloseIcon={props.isShowCloseIcon}
         />
       ) : null}
@@ -263,7 +283,7 @@ function Post(props: PostProps) {
         >
           <>
             <FontAwesomeICon name='comment-o' size={20} />
-            <Text>Bình luận</Text>
+            <Text onPress={() => setOpenCommentModal(true)}>Bình luận</Text>
           </>
         </TouchableHighlight>
         <TouchableHighlight
