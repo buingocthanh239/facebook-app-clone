@@ -5,8 +5,7 @@ import {
   type IGetListResponse
 } from 'src/interfaces/common.interface';
 import { trimData } from 'src/utils/helper';
-import axiosInstance from './axiosInstance';
-
+import { axiosInstance } from 'src/navigation/AppNavigation';
 interface IServiceOption {
   baseUrl: string;
 }

@@ -39,6 +39,7 @@ export const login = createAsyncThunk(
       await saveTokenIntoKeychain(remainData.id, token);
       return { ...remainData, email: data.email };
     } catch (err) {
+      console.log(err);
       return rejectWithValue({ message: 'sever availability' });
     }
   }
@@ -163,9 +164,13 @@ const authSlice = createSlice({
       if (state.user) {
         state.user.coins = action.payload;
       }
+    },
+    setAuthentication: (state, action: PayloadAction<boolean>) => {
+      state.isAuthenticated = action.payload;
     }
   }
 });
 export const selectAuth = (state: RootState) => state.auth;
-export const { deleteErrorMessage, reset, modifyAccountAtivity, changeCoins } = authSlice.actions;
+export const { deleteErrorMessage, reset, modifyAccountAtivity, changeCoins, setAuthentication } =
+  authSlice.actions;
 export default authSlice.reducer;
