@@ -7,6 +7,8 @@ import { TransitionPresets } from '@react-navigation/stack';
 import { PostNavigationName } from 'src/common/constants/nameScreen';
 import ListImageScreen from 'src/screens/post/ListImage/ListImageScreen';
 import { ListImageDetail } from 'src/screens/post/PostDetail';
+import EditPostScreen from 'src/screens/post/EditPost/EditPostScreen';
+import ListImageEditScreen from 'src/screens/post/ListImage/ListImageEditScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,8 +48,22 @@ function PostNavigation() {
         }}
       />
       <Stack.Screen
+        name={PostNavigationName.ListImageEditScreen}
+        component={ListImageEditScreen}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
         name={PostNavigationName.ListImageDetail}
         component={ListImageDetail}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name={PostNavigationName.EditPostScreen}
+        component={EditPostScreen}
         options={{
           headerShown: false
         }}
