@@ -121,7 +121,9 @@ function Post(props: PostProps) {
         title={
           <Text style={{ fontSize: 16, alignItems: 'center', fontWeight: '700' }}>
             {props.author?.name}
-            <Text style={{ fontSize: 15, textAlign: 'center' }}>{' ' + status}</Text>
+            {status ? (
+              <Text style={{ fontSize: 15, textAlign: 'center' }}>{' ' + status}</Text>
+            ) : null}
           </Text>
         }
         titleVariant='titleMedium'
