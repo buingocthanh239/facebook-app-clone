@@ -25,6 +25,8 @@ import { deleteMessage, selectApp, setMessage } from 'src/redux/slices/appSlice'
 import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp/ChangeInfoAfterSignUp';
 import AddMoneyNavigationWrapper from './AddMoneyNavigation';
 import axiosInstance from 'src/services/axiosInstance';
+import { Snackbar } from 'react-native-paper';
+import { useNetInfoInstance } from '@react-native-community/netinfo';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +35,7 @@ function AppNavigation() {
   const appRedux = useAppSelector(selectApp);
   const dispatch = useAppDispatch();
 
+  // handle token expiration
   axiosInstance.interceptors.response.use((response: any) => {
     if (response?.code === '9998') {
       dispatch(setAuthentication(false));
@@ -42,6 +45,8 @@ function AppNavigation() {
       ...response
     };
   });
+
+  // handle wifi info
 
   useEffect(() => {
     if (auth.user?.active === AccountStatus.Active) {
@@ -53,6 +58,11 @@ function AppNavigation() {
   const onBackdropPress = () => {
     dispatch(deleteMessage());
   };
+
+  const {
+    netInfo: { isConnected },
+    refresh
+  } = useNetInfoInstance();
 
   return (
     <>
@@ -137,6 +147,18 @@ function AppNavigation() {
         onBackdropPress={onBackdropPress}
         title={appRedux.message}
       />
+      <Snackbar
+        visible={!isConnected as boolean}
+        onDismiss={() => {}}
+        action={{
+          label: 'Thử lại',
+          onPress: () => {
+            refresh();
+          }
+        }}
+      >
+        Không có kết nối internet.Vui lòng thử lại!
+      </Snackbar>
     </>
   );
 }
