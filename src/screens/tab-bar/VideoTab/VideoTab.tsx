@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import Post from 'src/components/Post';
 
-import { Button, IconButton, Text, Divider } from 'react-native-paper';
+import { IconButton, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
@@ -9,6 +9,7 @@ import BaseFlatList from 'src/components/BaseFlatList';
 import { useScrollToTop } from '@react-navigation/native';
 import { useAppDispatch, useAppSelector } from 'src/redux';
 import { getListVideos, getNextListVideos, selectVideo } from 'src/redux/slices/videoSlice';
+import globalStyles from 'src/common/styles/globalStyles';
 const COUNT_ITEM = 5;
 
 function VideoTab() {
@@ -44,33 +45,17 @@ function VideoTab() {
   useScrollToTop(ref);
 
   return (
-    <SafeAreaView style={styles.header}>
-      <View style={styles.button}>
-        <Text
-          style={{
-            fontSize: 30,
-            fontWeight: 'bold',
-            padding: 20
-          }}
-        >
-          Watch
-        </Text>
-        <IconButton icon='account-circle' style={{ alignSelf: 'center' }} />
-        <IconButton icon='magnify' style={{ alignSelf: 'center' }} />
+    <SafeAreaView>
+      <View
+        style={[
+          globalStyles.flexRow,
+          globalStyles.spaceBetweenJustify,
+          globalStyles.centerAlignItem
+        ]}
+      >
+        <Text style={styles.menuTitle}>Videos</Text>
+        <IconButton icon='magnify' size={25} />
       </View>
-      <View style={styles.button}>
-        <Button icon='camera' mode='contained-tonal'>
-          Trực tiếp
-        </Button>
-        <Button icon='hamburger' mode='contained-tonal'>
-          Ẩm thực
-        </Button>
-        <Button icon='gamepad-variant' mode='contained-tonal'>
-          Chơi game
-        </Button>
-      </View>
-
-      <Divider />
       <BaseFlatList
         ref={ref}
         data={videoStore.videos}
@@ -104,9 +89,8 @@ function VideoTab() {
 }
 
 const styles = StyleSheet.create({
-  title: {},
-  header: { flex: 1 },
-  button: { flexDirection: 'row' }
+  button: { flexDirection: 'row', justifyContent: 'space-between' },
+  menuTitle: { fontSize: 22, fontWeight: 'bold', marginLeft: 20 }
 });
 
 export default VideoTab;
