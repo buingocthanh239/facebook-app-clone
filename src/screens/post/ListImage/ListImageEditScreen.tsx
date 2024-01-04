@@ -39,7 +39,9 @@ const ListImageEditScreen = () => {
     setUpdateNewMediaFiles([...updateNewMediaFiles].splice(index, 1));
   };
   const handleDeleteOldImage = (index: number) => {
-    setUpdateOldImage([...updateOldImage].splice(index - 1, 1));
+    const listOldImageDeleted = [...updateOldImage];
+    listOldImageDeleted.splice(index, 1);
+    setUpdateOldImage(listOldImageDeleted);
     const oldImageDeleted = updateOldImage[index].id;
     setUpdateImageDel([...updateImageDel, oldImageDeleted]);
   };
@@ -83,7 +85,9 @@ const ListImageEditScreen = () => {
       <ScrollView>
         {updateOldImage.length > 0 && (
           <View>
-            <Text>Ảnh đã thêm trước đó</Text>
+            <Text style={{ margin: 10, fontWeight: 'bold', color: color.textColor }}>
+              Ảnh đã thêm trước đó
+            </Text>
             <View>
               {updateOldImage.map((image, index) => {
                 return (
@@ -112,7 +116,7 @@ const ListImageEditScreen = () => {
         )}
         {updateNewImage.length > 0 && (
           <View>
-            <Text>Ảnh mới</Text>
+            <Text style={{ margin: 10, fontWeight: 'bold', color: color.textColor }}>Ảnh mới</Text>
             <View>
               {updateNewImage.map((image, index) => {
                 return (

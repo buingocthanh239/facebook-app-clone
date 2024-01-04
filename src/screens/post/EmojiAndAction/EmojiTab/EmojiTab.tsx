@@ -77,7 +77,7 @@ function EmojiTab() {
       <Text style={styles.label}>{item.label}</Text>
     </View>
   );
-  const navigation: NavigationProp<CreatePostNavigationType> = useNavigation();
+  const navigation: NavigationProp<PostNavigationType> = useNavigation();
 
   const handleChooseEmoji = (data: CardData) => {
     navigation.navigate('CreatePostScreen', { selectedItem: data });

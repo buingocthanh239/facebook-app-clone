@@ -150,12 +150,14 @@ function ProfileScreen() {
           title: 'Chọn ảnh đại diện'
         }
       ]
-    : [
+    : profile?.avatar
+    ? [
         {
           icon: 'account-circle',
           title: 'Xem ảnh đại diện'
         }
-      ];
+      ]
+    : [];
   const optionsCover = isOwnProfile
     ? [
         {
@@ -167,12 +169,14 @@ function ProfileScreen() {
           title: 'Chọn ảnh bìa'
         }
       ]
-    : [
+    : profile?.cover_image
+    ? [
         {
           icon: 'account-circle',
           title: 'Xem ảnh bìa'
         }
-      ];
+      ]
+    : [];
 
   const totalHeight = 2 * 25;
 
@@ -255,7 +259,7 @@ function ProfileScreen() {
           <View style={styles.header}>
             <TouchableOpacity
               style={styles.coverPhoto}
-              onPress={showModalCover}
+              onPress={isOwnProfile || profile?.cover_image ? showModalCover : () => null}
               activeOpacity={0.8}
             >
               <Image
@@ -283,7 +287,7 @@ function ProfileScreen() {
             )}
             <TouchableOpacity
               style={styles.avatarWrapper}
-              onPress={showModalAvatar}
+              onPress={isOwnProfile || profile?.avatar ? showModalAvatar : () => null}
               activeOpacity={0.8}
             >
               <Image style={styles.avatar} source={getAvatarUri(profile?.avatar as string)} />
@@ -457,8 +461,16 @@ function ProfileScreen() {
         </View>
       }
       ListEmptyComponent={
-        <Text style={{ textAlign: 'center', color: color.black, fontSize: 16, fontWeight: '500' }}>
-          Không có bài viết nào
+        <Text
+          style={{
+            textAlign: 'center',
+            color: color.black,
+            fontSize: 16,
+            fontWeight: '500',
+            padding: 10
+          }}
+        >
+          {profile?.username} chưa có bài viết nào.
         </Text>
       }
       renderItem={({ item }) => (
