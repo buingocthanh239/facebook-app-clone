@@ -77,7 +77,6 @@ function Post(props: PostProps) {
   const [openCommentModal, setOpenCommentModal] = useState(false);
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
-  const { described, name, image, video, status } = props;
   const { described, name, image, video, id, status } = props;
   const [openModalFeel, setOpenModalFeel] = useState(false);
   const urls = image?.map(imageObj => imageObj.url) ?? [];
@@ -316,7 +315,6 @@ function Post(props: PostProps) {
         post={props}
         onDeletePost={onDeletePost}
       />
-      <ReportModal isVisible={modalVisible} onBackdropPress={hideModal} id={id} />
       <CommentTab openModal={openCommentModal} setOpenModal={setOpenCommentModal} id={props.id} />
     </View>
   );
