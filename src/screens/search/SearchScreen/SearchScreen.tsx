@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, TextInput, Keyboard } from 'react-native';
 import { useEffect, useState } from 'react';
 import styles from './styles';
-import CommentTab from '../../../components/Post/components/Comment/CommentModal';
 import { ActivityIndicator, Appbar, Divider, IconButton } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import HistorySearch from './compoment/HistorySearch';
@@ -38,13 +37,12 @@ function SearchScreen() {
     USER: 'Mọi người'
   };
   const COUNT_ITEM = 10;
-  const [openModal, setOpenModal] = useState(false);
   const [openModalHistorySearch, setOpenModalHistorySearch] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [isRefresh, setIsRefresh] = useState(false);
   const [isRefreshSaveSearch, setIsRefreshSaveSearch] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(90);
   const [listSearch, setListSearch] = useState<ISearchResult[]>([]);
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
   const [isLoadingFirstApi, setIsLoadingFirstAPi] = useState<boolean>(false);
@@ -121,17 +119,18 @@ function SearchScreen() {
         }
         setData(res.data);
         setIsNextFetch(true);
-        setSkipPost(COUNT_ITEM);
+        setSkip(COUNT_ITEM);
       }
       setTimeout(() => {
         setIsLoadingFirstAPi(false);
-      }, 200);
+      }, 300);
 
       // setCurrentIndex(0)
     } catch (error) {
       return console.log({ message: 'sever availability' });
     }
   };
+
   async function onEndReadable() {
     if (searchText !== '' && isNextFetch) {
       try {
@@ -245,7 +244,7 @@ function SearchScreen() {
   useEffect(() => {
     const data: IGetSavedSearch = {
       index: 0,
-      count: 100
+      count: 10
     };
     const fetchData = async (data: IGetSavedSearch) => {
       try {
@@ -349,7 +348,7 @@ function SearchScreen() {
                 setIsLoadingFirstAPi(true);
                 setTimeout(() => {
                   setIsLoadingFirstAPi(false);
-                }, 200);
+                }, 300);
               }}
             >
               Bài viết
@@ -361,7 +360,7 @@ function SearchScreen() {
                 setIsLoadingFirstAPi(true);
                 setTimeout(() => {
                   setIsLoadingFirstAPi(false);
-                }, 200);
+                }, 300);
               }}
             >
               Mọi người
@@ -507,7 +506,6 @@ function SearchScreen() {
             )}
           </View>
         </View>
-        <CommentTab openModal={openModal} setOpenModal={setOpenModal} />
         <HistorySearch
           openModal={openModalHistorySearch}
           setOpenModal={setOpenModalHistorySearch}
