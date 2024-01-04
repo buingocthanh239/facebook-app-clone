@@ -26,7 +26,7 @@ import { changeCoins, selectAuth } from 'src/redux/slices/authSlice';
 import BaseButton from 'src/components/BaseButton';
 import { editPost } from 'src/services/post.services';
 import { setMessage } from 'src/redux/slices/appSlice';
-import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
+import { PostNavigationName } from 'src/common/constants/nameScreen';
 import OptionCard from '../CreatePostScreen/component/OptionCard';
 
 export type File = {
@@ -60,7 +60,7 @@ const EditPostScreen = () => {
 
   const navigation: NavigationProp<PostNavigationType, PostNavigationName.EnAScreen> =
     useNavigation();
-  const navigation2: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
+  const navigation1: NavigationProp<PostNavigationType, PostNavigationName.ListImageEditScreen> =
     useNavigation();
   const auth = useAppSelector(selectAuth);
   const avatar = auth.user?.avatar;
@@ -214,27 +214,24 @@ const EditPostScreen = () => {
     navigationGoBack.goBack();
   };
   const navigateToListImageEditScreen = () => {
-    navigation2.navigate(AppNaviagtionName.PostNavigation, {
-      screen: PostNavigationName.ListImageEditScreen,
-      params: {
-        oldImage: oldImages,
-        newImage: newImage,
-        imageList: listImage,
-        newMediaFiles: newMediaFiles,
-        imageDel: imageDel,
-        onUpdate: (
-          updateImageList: string[],
-          updateNewMediaFiles: MediaFileType[],
-          updateImageDel?: string[],
-          updateOldImage?: { id: string; url: string }[],
-          updateNewImage?: string[]
-        ) => {
-          setListImage(updateImageList);
-          setNewMediaFiles(updateNewMediaFiles);
-          setImageDel(updateImageDel as string[]);
-          setOldImages(updateOldImage as { id: string; url: string }[]);
-          setNewImage(updateNewImage as string[]);
-        }
+    navigation1.navigate(PostNavigationName.ListImageEditScreen, {
+      oldImage: oldImages,
+      newImage: newImage,
+      listImage: listImage,
+      newMediaFiles: newMediaFiles,
+      imageDel: imageDel,
+      onUpdate: (
+        updateImageList: string[],
+        updateNewMediaFiles: MediaFileType[],
+        updateImageDel?: string[],
+        updateOldImage?: { id: string; url: string }[],
+        updateNewImage?: string[]
+      ) => {
+        setListImage(updateImageList);
+        setNewMediaFiles(updateNewMediaFiles);
+        setImageDel(updateImageDel as string[]);
+        setOldImages(updateOldImage as { id: string; url: string }[]);
+        setNewImage(updateNewImage as string[]);
       }
     });
   };
