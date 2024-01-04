@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { IconButton, TextInput, Avatar, Surface, TouchableRipple } from 'react-native-paper';
 import database from '@react-native-firebase/database';
-
-const avatarsData = ['Tuấ', 'Văn', 'Truyền', 'Trí', 'Thành'];
+import { NavigationProp, useNavigation } from '@react-navigation/core';
+import { AppNaviagtionName, ChatNavigationName } from 'src/common/constants/nameScreen';
+const avatarsData = ['Tuấn', 'Văn', 'Truyền', 'Trí', 'Thành'];
 interface Contact {
   Name: string;
   lastMsg: string;
@@ -28,7 +29,12 @@ function AvatarList() {
 
 function ContactList() {
   const [chatlist, setChatlist] = useState<Contact[]>([]);
-
+  const navigationChatScreen: NavigationProp<AppNavigationType, AppNaviagtionName.ChatNavigation> =
+    useNavigation();
+  const handleNaviagtionChatScreen = () =>
+    navigationChatScreen.navigate(AppNaviagtionName.ChatNavigation, {
+      screen: ChatNavigationName.InboxListScreen
+    });
   useEffect(() => {
     getChatlist();
   }, []);
@@ -50,7 +56,7 @@ function ContactList() {
         <TouchableRipple
           key={index}
           style={{ marginVertical: 10 }}
-          onPress={() => {}}
+          onPress={handleNaviagtionChatScreen}
           rippleColor='rgba(0, 0, 0, .32)'
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -61,7 +67,7 @@ function ContactList() {
             />
             <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 10 }}>
               <Text style={{ fontWeight: '500', fontSize: 15, color: '#000', marginBottom: 5 }}>
-                {contact.Name}
+                {contact.Name}``
               </Text>
               <Text style={{ fontWeight: '500', color: '#000' }}> Bạn: {contact.lastMsg}</Text>
             </View>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { TextInput, IconButton, Avatar } from 'react-native-paper';
-
+import database from '@react-native-firebase/database';
 interface MyMessageProps {
   message: string;
 }
@@ -35,7 +35,17 @@ const InboxListScreen: React.FC = () => {
     { type: 'their', content: 'adasdasad' }
     // ... (các tin nhắn khác)
   ]);
+  const sendMsg = () => {
+    const msgData = {
+      msgType: 'text',
+      message: messages
+    };
+    const newReference = database().ref('/messages').push();
 
+    console.log('Auto generated key: ', newReference.key);
+
+    newReference.set(msgData).then(() => console.log('Data updated.'));
+  };
   const handleSendMessage = () => {
     if (text.trim() !== '') {
       const newMessage = { type: 'mine', content: text };
@@ -107,6 +117,7 @@ const InboxListScreen: React.FC = () => {
           onFocus={() => setIsTyping(true)}
           onChangeText={text => setText(text)}
           right={<TextInput.Icon icon='sticker-emoji' color={'#0066FF'} />}
+          onPressIn={sendMsg}
           onSubmitEditing={handleSendMessage}
           style={{
             paddingBottom: -20,
