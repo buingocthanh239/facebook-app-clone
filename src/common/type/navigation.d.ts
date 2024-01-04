@@ -14,6 +14,24 @@ type AppNavigationType = {
   PostNavigation:
     | { screen: PostNavigationName; params?: { selectedItem?: CardData } }
     | { screen: PostNavigationName.ListImageDetail; params: { data: PostProps } }
+    | { screen: PostNavigationName.EditPostScreen; params: { data: PostProps } }
+    | {
+        screen: PostNavigationName.ListImageEditScreen;
+        params: {
+          oldImage: { id: string; url: string }[];
+          newImage: string[];
+          newMediaFiles: MediaFileType[];
+          listImage: string[];
+          imageDel?: string[];
+          onUpdate: (
+            updateImageList: string[],
+            updateNewMediaFiles: MediaFileType[],
+            updateImageDel?: string[],
+            updateOldImage?: { id: string; url: string }[],
+            updateNewImage?: string[]
+          ) => void;
+        };
+      }
     | {
         screen: PostNavigationName.ListImageScreen;
         params: {
@@ -83,7 +101,22 @@ type PostNavigationType = {
     mediaFiles: MediaFileType[];
     onUpdate: (updateImageList: string[], updateMediaFiles: MediaFileType[]) => void;
   };
+  ListImageEditScreen: {
+    oldImage: { id: string; url: string }[];
+    newImage: string[];
+    newMediaFiles: MediaFileType[];
+    listImage: string[];
+    imageDel?: string[];
+    onUpdate: (
+      updateImageList: string[],
+      updateNewMediaFiles: MediaFileType[],
+      updateImageDel?: string[],
+      updateOldImage?: { id: string; url: string }[],
+      updateNewImage?: string[]
+    ) => void;
+  };
   ListImageDetail: { data: PostProps };
+  EditPostScreen: { data?: PostProps; selectedItem?: CardData };
 };
 
 type TabNavigationType = {

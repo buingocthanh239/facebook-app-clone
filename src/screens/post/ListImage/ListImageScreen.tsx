@@ -19,7 +19,6 @@ const ListImageScreen = () => {
 
   const openModal = () => {
     setModalVisible(true);
-    console.log('a');
   };
 
   const closeModal = () => {

@@ -51,6 +51,10 @@ export const addPost = async (data: MyFormData): Promise<IBodyResponse<IAddPostD
   return postMethodWithFormDataApi(PostApi.ADD_POST, data);
 };
 
+export const editPost = async (data: MyFormData): Promise<IBodyResponse<IAddPostData>> => {
+  return postMethodWithFormDataApi(PostApi.EDIT_POST, data);
+};
+
 export const getPost = async (data: { id: number }): Promise<IBodyResponse<IGetPostData>> => {
   return postMethodApi(PostApi.GET_POST, data);
 };

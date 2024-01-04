@@ -28,6 +28,7 @@ import PullDownModal from 'src/components/PullDownModal/PullDownModal';
 import PostImageDetail from 'src/screens/post/PostDetail/PostImageDetail';
 import BaseFlatList from 'src/components/BaseFlatList';
 import { IPost, getListPostAPi } from 'src/services/post.sevices';
+import { useIsFocused } from '@react-navigation/native';
 import Post from 'src/components/Post';
 const COUNT_ITEM = 5;
 
@@ -49,6 +50,7 @@ function ProfileScreen() {
   const auth = useAppSelector(selectAuth);
   const user_id = route.params.user_id;
   const isOwnProfile = auth.user?.id === user_id;
+  const isFocus = useIsFocused();
   useEffect(() => {
     if (isOwnProfile) {
       setProfile(auth.user);
@@ -204,7 +206,7 @@ function ProfileScreen() {
   //get first post
   useEffect(() => {
     getFirPost();
-  }, [getFirPost]);
+  }, [getFirPost, isFocus]);
 
   const onRefresh = async () => {
     setrefreshing(true);

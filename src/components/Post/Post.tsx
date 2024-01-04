@@ -54,6 +54,11 @@ function Post(props: PostProps) {
   const navigationPostDetail: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
     useNavigation();
 
+  const [deleted, setDeleted] = useState(false);
+  const onDeletePost = () => {
+    setDeleted(true);
+  };
+
   const handleNavigationProfile = () =>
     navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
       screen: ProfileNavigationName.Profile,
@@ -69,7 +74,7 @@ function Post(props: PostProps) {
 
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
-  const { described, name, image, video, id, status } = props;
+  const { described, name, image, video, status } = props;
   const urls = image?.map(imageObj => imageObj.url) ?? [];
   const content = described;
   useEffect(() => {
@@ -104,7 +109,9 @@ function Post(props: PostProps) {
 
   const isInteract: boolean =
     props.feel !== '0' || props.comment_mark !== '0' || !!props.numberShares;
-  return (
+  return deleted ? (
+    <></>
+  ) : (
     <View style={styles.postContainer}>
       {name && (
         <View style={styles.userComments}>
@@ -223,7 +230,15 @@ function Post(props: PostProps) {
           </>
         </TouchableHighlight>
       </View>
-      <ReportModal isVisible={modalVisible} onBackdropPress={hideModal} id={id} />
+      <ReportModal
+        isVisible={modalVisible}
+        onBackdropPress={hideModal}
+        authorId={props.author.id}
+        postId={props.id}
+        authorName={props.author.name}
+        post={props}
+        onDeletePost={onDeletePost}
+      />
     </View>
   );
 }
