@@ -23,6 +23,7 @@ import {
 import { useAppDispatch } from 'src/redux';
 import { INotificationItem } from 'src/services/notification.service';
 import { ReadNotification } from 'src/common/enum/commom';
+import globalStyles from 'src/common/styles/globalStyles';
 const COUNT_ITEM = 10;
 
 function NotificationTab() {
@@ -78,6 +79,16 @@ function NotificationTab() {
 
   return (
     <>
+      <View
+        style={[
+          globalStyles.flexRow,
+          globalStyles.spaceBetweenJustify,
+          globalStyles.centerAlignItem
+        ]}
+      >
+        <Text style={{ fontSize: 24, fontWeight: 'bold', marginLeft: 10 }}>Thông báo</Text>
+        <IconButton icon='magnify' size={30} />
+      </View>
       <BaseFlatList
         ref={ref}
         // ListHeaderComponent={

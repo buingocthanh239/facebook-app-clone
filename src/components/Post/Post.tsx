@@ -56,6 +56,11 @@ function Post(props: PostProps) {
   const navigationPostDetail: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
     useNavigation();
 
+  const [deleted, setDeleted] = useState(false);
+  const onDeletePost = () => {
+    setDeleted(true);
+  };
+
   const handleNavigationProfile = () =>
     navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
       screen: ProfileNavigationName.Profile,
@@ -72,6 +77,7 @@ function Post(props: PostProps) {
   const [openCommentModal, setOpenCommentModal] = useState(false);
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
+  const { described, name, image, video, status } = props;
   const { described, name, image, video, id, status } = props;
   const [openModalFeel, setOpenModalFeel] = useState(false);
   const urls = image?.map(imageObj => imageObj.url) ?? [];
@@ -148,7 +154,9 @@ function Post(props: PostProps) {
 
   const isInteract: boolean =
     props.feel !== '0' || props.comment_mark !== '0' || !!props.numberShares;
-  return (
+  return deleted ? (
+    <></>
+  ) : (
     <View style={styles.postContainer}>
       {name && (
         <View style={styles.userComments}>
@@ -165,7 +173,9 @@ function Post(props: PostProps) {
         title={
           <Text style={{ fontSize: 16, alignItems: 'center', fontWeight: '700' }}>
             {props.author?.name}
-            <Text style={{ fontSize: 15, textAlign: 'center' }}>{' ' + status}</Text>
+            {status ? (
+              <Text style={{ fontSize: 15, textAlign: 'center' }}>{' ' + status}</Text>
+            ) : null}
           </Text>
         }
         titleVariant='titleMedium'
@@ -297,6 +307,15 @@ function Post(props: PostProps) {
           </>
         </TouchableHighlight>
       </View>
+      <ReportModal
+        isVisible={modalVisible}
+        onBackdropPress={hideModal}
+        authorId={props.author.id}
+        postId={props.id}
+        authorName={props.author.name}
+        post={props}
+        onDeletePost={onDeletePost}
+      />
       <ReportModal isVisible={modalVisible} onBackdropPress={hideModal} id={id} />
       <CommentTab openModal={openCommentModal} setOpenModal={setOpenCommentModal} id={props.id} />
     </View>

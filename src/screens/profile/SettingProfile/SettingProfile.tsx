@@ -47,7 +47,7 @@ const SettingProfile = () => {
                     text: 'Đóng',
                     onPress: () =>
                       navigationHome.navigate(AppNaviagtionName.TabNavigation, {
-                        screen: TabNavigationName.Home
+                        screen: TabNavigationName.Friend
                       }),
                     style: 'cancel'
                   }
