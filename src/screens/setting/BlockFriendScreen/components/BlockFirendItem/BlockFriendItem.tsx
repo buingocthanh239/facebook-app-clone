@@ -1,13 +1,6 @@
 import { useState } from 'react';
-import { Alert, TouchableOpacity } from 'react-native';
-import {
-  ActivityIndicator,
-  Avatar,
-  Card,
-  CardTitleProps,
-  Text,
-  TouchableRipple
-} from 'react-native-paper';
+import { Alert, TouchableOpacity, Image } from 'react-native';
+import { ActivityIndicator, Card, CardTitleProps, Text, TouchableRipple } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import { setBlockApi, unBlockApi } from 'src/services/block.service';
 import { getAvatarUri } from 'src/utils/helper';
@@ -80,10 +73,11 @@ function BlockFriendItem(props: BlockFirendItemProps) {
         {...remainProps}
         title={title}
         left={() => (
-          <Avatar.Image
+          <Image
             source={getAvatarUri(avatar as string)}
-            size={40}
-            style={{ opacity: 0.8 }}
+            style={{ width: 45, height: 45, borderRadius: 2 }}
+            blurRadius={isNonBlock ? 0 : 6}
+            resizeMode='cover'
           />
         )}
         right={() =>
