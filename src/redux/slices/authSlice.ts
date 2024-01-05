@@ -82,6 +82,21 @@ export const setProfile = createAsyncThunk(
   }
 );
 
+export const setName = createAsyncThunk(
+  'auth/setProfile',
+  async (data: MyFormData, { rejectWithValue }) => {
+    try {
+      const res = await setUserInfoApi(data);
+      if (!res.success) {
+        return rejectWithValue(res.message);
+      }
+      return data;
+    } catch (err) {
+      return rejectWithValue('Vui lòng kiểm tra lại kết nối internet');
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -167,10 +182,21 @@ const authSlice = createSlice({
     },
     setAuthentication: (state, action: PayloadAction<boolean>) => {
       state.isAuthenticated = action.payload;
+    },
+    setUsername: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.username = action.payload;
+      }
     }
   }
 });
 export const selectAuth = (state: RootState) => state.auth;
-export const { deleteErrorMessage, reset, modifyAccountAtivity, changeCoins, setAuthentication } =
-  authSlice.actions;
+export const {
+  deleteErrorMessage,
+  reset,
+  modifyAccountAtivity,
+  changeCoins,
+  setAuthentication,
+  setUsername
+} = authSlice.actions;
 export default authSlice.reducer;
