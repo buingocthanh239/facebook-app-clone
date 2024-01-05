@@ -23,6 +23,8 @@ import { AccountStatus } from 'src/common/enum/commom';
 import BaseModalError from 'src/components/BaseModalError';
 import { deleteMessage, selectApp } from 'src/redux/slices/appSlice';
 import ChangeInfoAfterSignUpScreen from 'src/screens/pending-sigup/ChangeInfoAfterSignUp/ChangeInfoAfterSignUp';
+import { IGetUserFriends } from 'src/interfaces/friends.interface';
+import { getUserFriends } from 'src/redux/slices/friendSlice';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +36,12 @@ function AppNavigation() {
   useEffect(() => {
     if (auth.user?.active === AccountStatus.Active) {
       dispatch(getProfile({ user_id: auth.user.id }));
+      const data: IGetUserFriends = {
+        index: 0,
+        count: 100,
+        user_id: auth.user.id
+      };
+      dispatch(getUserFriends(data));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.user?.active, dispatch]);

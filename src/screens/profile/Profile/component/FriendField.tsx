@@ -4,7 +4,10 @@ import { color } from 'src/common/constants/color';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AppNaviagtionName, TabNavigationName } from 'src/common/constants/nameScreen';
 import { IUserFriends } from 'src/interfaces/friends.interface';
-
+import database from '@react-native-firebase/database';
+import uuid from 'react-native-uuid';
+import { useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
 interface FriendFieldProps {
   friends: IUserFriends[];
   totalFriend: string;
@@ -13,6 +16,28 @@ interface FriendFieldProps {
 const FriendField = ({ friends, totalFriend, isOwnProfile }: FriendFieldProps) => {
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.TabNavigation> =
     useNavigation();
+  const auth = useAppSelector(selectAuth);
+
+  console.log(auth);
+
+  const createChatList = () => {
+    friends.forEach(friend => {
+      const roomId = uuid.v4();
+      const myData = {
+        roomId: roomId,
+        name: friend.username,
+        avatar: friend.avatar,
+        user_id: friend.id,
+        lastMsg: ' '
+      };
+
+      database()
+        .ref('/chatlistt/' + auth.user?.id + '/' + friend.id)
+        .update(myData)
+        .then(() => console.log('Data updated'))
+        .catch(error => console.error('Error updating data:', error));
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -50,7 +75,11 @@ const FriendField = ({ friends, totalFriend, isOwnProfile }: FriendFieldProps) =
           />
         ))}
       </View>
-      <TouchableOpacity style={styles.allFriendBtn} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.allFriendBtn}
+        activeOpacity={0.7}
+        onPress={() => createChatList()}
+      >
         <Text
           style={{ color: color.textColor, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}
         >

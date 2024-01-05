@@ -31,6 +31,13 @@ function LoginScreen() {
   const onSubmit = async (data: ILoginData) => {
     const uuid = await getUniqueId();
     dispatch(login({ ...data, uuid }));
+    // const dataFriend: IGetUserFriends = {
+    //   index: 0,
+    //   count: 100,
+    //   user_id: !user_id ? '' : user_id
+    // };
+    // dispatch(getUserFriends(dataFriend));
+    console.log(data);
   };
 
   const onBackdropPress = () => {

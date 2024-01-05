@@ -75,6 +75,7 @@ function ProfileScreen() {
     }).catch(console.error);
     scrollToTop();
   }, [auth.user, user_id]);
+
   const isFriend = profile?.is_friend;
 
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
@@ -157,6 +158,7 @@ function ProfileScreen() {
             </TouchableOpacity>
           </View>
         )}
+
         <TouchableOpacity
           style={styles.avatarWrapper}
           onPress={showModalAvatar}

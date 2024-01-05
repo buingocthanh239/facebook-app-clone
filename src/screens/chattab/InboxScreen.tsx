@@ -4,11 +4,13 @@ import { IconButton, TextInput, Avatar, Surface, TouchableRipple } from 'react-n
 import database from '@react-native-firebase/database';
 import { NavigationProp, useNavigation } from '@react-navigation/core';
 import { AppNaviagtionName, ChatNavigationName } from 'src/common/constants/nameScreen';
+import { useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
 const avatarsData = ['Tuấn', 'Văn', 'Truyền', 'Trí', 'Thành'];
 interface Contact {
-  Name: string;
+  name: string;
   lastMsg: string;
-  avatar_url: string;
+  avatar: string;
 }
 function AvatarList() {
   return (
@@ -38,10 +40,12 @@ function ContactList() {
   useEffect(() => {
     getChatlist();
   }, []);
+  const auth = useAppSelector(selectAuth);
+  console.log(auth.user);
 
   const getChatlist = async () => {
     database()
-      .ref('/chatlist/')
+      .ref('/chatlistt/' + auth.user?.id)
       .on('value', snapshot => {
         if (snapshot.val()) {
           const chatlistData = snapshot.val();
@@ -63,11 +67,11 @@ function ContactList() {
             <Avatar.Image
               size={60}
               style={{ marginTop: 10, marginLeft: 10 }}
-              source={{ uri: contact.avatar_url }}
+              source={{ uri: contact.avatar }}
             />
             <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 10 }}>
               <Text style={{ fontWeight: '500', fontSize: 15, color: '#000', marginBottom: 5 }}>
-                {contact.Name}``
+                {contact.name}``
               </Text>
               <Text style={{ fontWeight: '500', color: '#000' }}> Bạn: {contact.lastMsg}</Text>
             </View>
