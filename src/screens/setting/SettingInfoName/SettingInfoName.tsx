@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { trim } from 'lodash';
 import { useEffect } from 'react';
 import { FieldValue, useForm } from 'react-hook-form';
 import { View } from 'react-native';
@@ -12,6 +13,7 @@ import BaseInputText from 'src/components/BaseInputText';
 import BaseModalError from 'src/components/BaseModalError';
 import { useAppDispatch } from 'src/redux';
 import { deleteErrorMessage, selectAuth, setProfile } from 'src/redux/slices/authSlice';
+import { setUsername } from 'src/redux/slices/authSlice';
 import * as yup from 'yup';
 
 const nameInfoShema = yup.object({
@@ -35,21 +37,27 @@ function SettingInfoName() {
   const methods = useForm({ resolver: yupResolver(nameInfoShema) });
   const { handleSubmit, setValue } = methods;
   useEffect(() => {
-    const splitname = auth.user?.username.split(' ', 2) as string[];
-    setValue('firtname', splitname[0] as string);
-    setValue('middleName', '');
-    setValue('lastname', splitname[1] as string);
+    const nameParts = auth.user?.username.split(' ') as string[];
+    const lastname = nameParts?.pop();
+    const firstname = nameParts?.shift();
+    const middlename = nameParts?.join(' ');
+    setValue('firtname', firstname as string);
+    setValue('middleName', middlename);
+    setValue('lastname', lastname as string);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.user?.username]);
   const onSubmit = (data: FieldValue<INameInfo>) => {
+    const formData = new FormData();
     const { firtname, lastname, middleName } = data as INameInfo;
     let username: string;
     if (middleName) {
-      username = firtname + ' ' + middleName + ' ' + lastname;
+      username = trim(firtname) + ' ' + trim(middleName) + ' ' + trim(lastname);
     } else {
-      username = firtname + ' ' + lastname;
+      username = trim(firtname) + ' ' + trim(lastname);
     }
-    dispatch(setProfile({ username: username }));
+    formData.append('username', username);
+    dispatch(setProfile(formData));
+    dispatch(setUsername(username));
   };
 
   const onBackdropPress = () => {
