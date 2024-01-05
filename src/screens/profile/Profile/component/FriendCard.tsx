@@ -1,4 +1,4 @@
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation, StackActions } from '@react-navigation/native';
 import { Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { color } from 'src/common/constants/color';
 import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
@@ -9,17 +9,16 @@ export interface FriendProps {
   user_id: string;
 }
 const FriendCard = (props: FriendProps) => {
-  const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
-    useNavigation();
+  const navigation = useNavigation();
+  const pushProfile = StackActions.push(AppNaviagtionName.ProfileNavigation, {
+    screen: ProfileNavigationName.Profile,
+    params: { user_id: props.user_id }
+  });
 
-  const handleNavigateUserProfile = (user_id: string) => {
-    navigation.navigate(AppNaviagtionName.ProfileNavigation, {
-      screen: ProfileNavigationName.Profile,
-      params: { user_id }
-    });
-  };
+  const handleNavigateUserProfile = () => navigation.dispatch(pushProfile);
+
   return (
-    <TouchableOpacity style={styles.card} onPress={() => handleNavigateUserProfile(props.user_id)}>
+    <TouchableOpacity style={styles.card} onPress={handleNavigateUserProfile}>
       <Image style={styles.avatar} source={getAvatarUri(props.avatarUrl)} />
       <Text style={styles.username}>{props.username}</Text>
     </TouchableOpacity>

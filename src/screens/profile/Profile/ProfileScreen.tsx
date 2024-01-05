@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './styles';
@@ -38,11 +38,11 @@ function ProfileScreen() {
   const [profile, setProfile] = useState<IUser | null>(null);
   const [listFriends, setListFriends] = useState<IUserFriends[]>([]);
   const [totalFriend, setTotalFriend] = useState('');
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<FlatList>(null);
 
   const scrollToTop = () => {
     if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({ y: 0, animated: true });
+      scrollViewRef.current.scrollToOffset({ offset: 0, animated: true });
     }
   };
 
@@ -81,8 +81,14 @@ function ProfileScreen() {
       count: 6,
       user_id: !user_id ? '' : user_id
     }).catch(console.error);
-    scrollToTop();
   }, [auth.user, user_id]);
+
+  // scroll to top
+  useEffect(() => {
+    if (isFocus) {
+      scrollToTop();
+    }
+  }, [isFocus]);
   const isFriend = profile?.is_friend;
 
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
@@ -183,7 +189,7 @@ function ProfileScreen() {
   // post api
   const [skip, setSkip] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const [refreshing, setrefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [isNextFetch, setIsNextFetch] = useState(true);
   const [data, setData] = useState<IPost[]>([]);
 
@@ -192,11 +198,11 @@ function ProfileScreen() {
       setLoading(true);
       const res = await getListPostAPi({ user_id: user_id, index: 0, count: COUNT_ITEM });
       if (res.success) {
+        setData(res.data.post);
+        setSkip(COUNT_ITEM);
         if (!res.data.post.length) {
           return setIsNextFetch(false);
         }
-        setData(res.data.post);
-        setSkip(COUNT_ITEM);
       } else {
         setIsNextFetch(false);
       }
@@ -209,11 +215,13 @@ function ProfileScreen() {
 
   //get first post
   useEffect(() => {
-    getFirPost();
+    if (isFocus) {
+      getFirPost();
+    }
   }, [getFirPost, isFocus]);
 
   const onRefresh = async () => {
-    setrefreshing(true);
+    setRefreshing(true);
     try {
       setLoading(true);
       const res = await getListPostAPi({ user_id: user_id, index: 0, count: COUNT_ITEM });
@@ -228,7 +236,7 @@ function ProfileScreen() {
       return;
     } finally {
       setLoading(false);
-      setrefreshing(false);
+      setRefreshing(false);
     }
   };
   async function onEndReadable() {
@@ -252,6 +260,7 @@ function ProfileScreen() {
   }
   return (
     <BaseFlatList
+      ref={scrollViewRef}
       data={data}
       ListHeaderComponent={
         <View style={styles.container}>
