@@ -1,4 +1,4 @@
-import { View, TouchableHighlight, StyleSheet } from 'react-native';
+import { View, TouchableHighlight, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Avatar, Card, IconButton, Text, Divider, TouchableRipple } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
@@ -18,6 +18,8 @@ import {
   PostNavigationName,
   ProfileNavigationName
 } from 'src/common/constants/nameScreen';
+import CommentTab from './components/Comment';
+import { setFeelApi } from 'src/services/comment.service';
 const MAX_LENGTH_CONTENT = 500;
 
 // define props
@@ -72,9 +74,11 @@ function Post(props: PostProps) {
     });
   };
 
+  const [openCommentModal, setOpenCommentModal] = useState(false);
   const [isShowFullContent, setIsShowFullContent] = useState(true);
   const [displayContent, setDisplayContent] = useState('');
-  const { described, name, image, video, status } = props;
+  const { described, name, image, video, id, status } = props;
+  const [openModalFeel, setOpenModalFeel] = useState(false);
   const urls = image?.map(imageObj => imageObj.url) ?? [];
   const content = described;
   useEffect(() => {
@@ -105,6 +109,46 @@ function Post(props: PostProps) {
   };
   const hideModal = () => {
     setModalVisible(false);
+  };
+  const handlePressOut = () => {
+    setOpenModalFeel(false);
+  };
+  const handldeOpenLikeModal = () => {
+    setOpenModalFeel(!openModalFeel);
+  };
+  const handleSetLike = async (id: string) => {
+    try {
+      const res = await setFeelApi({
+        id: id,
+        type: 1
+      });
+      if (res.success) {
+        if (!res.data.length) {
+          // console.log(res.data)
+        }
+      }
+    } catch (e) {
+      return;
+    }
+    setOpenModalFeel(false);
+  };
+
+  const handleSetDislike = async (id: string) => {
+    try {
+      const res = await setFeelApi({
+        id: id,
+        type: 0
+      });
+      if (res.success) {
+        if (!res.data.length) {
+          // console.log(res.data)
+        }
+        // const response = res.data;
+      }
+    } catch (e) {
+      return;
+    }
+    setOpenModalFeel(false);
   };
 
   const isInteract: boolean =
@@ -180,35 +224,67 @@ function Post(props: PostProps) {
       <Divider />
       {isInteract && (
         <>
-          <View style={[globalStyles.flexRow, globalStyles.spaceBetweenJustify, styles.padding]}>
-            {props.feel !== '0' && (
-              <View style={[globalStyles.flexRow, globalStyles.centerAlignItem]}>
-                <AntdIcon name='like1' size={15} color={color.primary} />
-                <Text>{props?.feel}</Text>
-              </View>
-            )}
-            {(props.comment_mark !== '0' || props.numberShares) && (
-              <View style={[globalStyles.flexRow, styles.gap]}>
-                {props?.comment_mark !== '0' && <Text>{props?.comment_mark} bình luận</Text>}
-                {props?.numberShares && <Text>{props?.numberShares} lượt chia sẻ</Text>}
-              </View>
-            )}
-          </View>
+          <TouchableHighlight
+            style={[globalStyles.flexRow, globalStyles.spaceBetweenJustify, styles.padding]}
+            onPress={() => setOpenCommentModal(true)}
+            underlayColor={color.borderColor}
+          >
+            <>
+              {props.feel !== '0' && (
+                <View style={[globalStyles.flexRow, globalStyles.centerAlignItem]}>
+                  <AntdIcon name='like1' size={15} color={color.primary} />
+                  <Text>{props?.feel}</Text>
+                </View>
+              )}
+              {(props.comment_mark !== '0' || props.numberShares) && (
+                <View style={[globalStyles.flexRow, styles.gap]}>
+                  {props?.comment_mark !== '0' && <Text>{props?.comment_mark} bình luận</Text>}
+                  {props?.numberShares && <Text>{props?.numberShares} lượt chia sẻ</Text>}
+                </View>
+              )}
+            </>
+          </TouchableHighlight>
           <Divider />
         </>
       )}
 
       <View style={[globalStyles.flexRow, globalStyles.spaceBetweenJustify]}>
-        <TouchableHighlight
-          style={[globalStyles.flexRow, styles.padding, styles.gap]}
-          underlayColor={color.borderColor}
-          onPress={() => {}}
-        >
-          <>
-            <AntdIcon name='like2' size={20} />
-            <Text>Thích</Text>
-          </>
-        </TouchableHighlight>
+        <TouchableWithoutFeedback onPress={handlePressOut}>
+          <TouchableHighlight
+            style={[globalStyles.flexRow, styles.padding, styles.gap, styles.position]}
+            underlayColor={color.borderColor}
+            onPress={() => {
+              handldeOpenLikeModal();
+            }}
+            // onPressOut={handlePressOut}
+          >
+            <>
+              <AntdIcon name='like2' size={20} />
+              <Text>Thích</Text>
+              {openModalFeel && (
+                <View style={styles.modalLike}>
+                  <AntdIcon
+                    name='like1'
+                    size={22}
+                    style={styles.likeIcon}
+                    onPress={() => {
+                      handleSetLike(id);
+                    }}
+                  />
+                  <AntdIcon
+                    name='dislike1'
+                    size={22}
+                    style={styles.dislikeIcon}
+                    onPress={() => {
+                      handleSetDislike(id);
+                    }}
+                  />
+                </View>
+              )}
+            </>
+          </TouchableHighlight>
+        </TouchableWithoutFeedback>
+
         <TouchableHighlight
           style={[globalStyles.flexRow, styles.padding, styles.gap]}
           underlayColor={color.borderColor}
@@ -216,7 +292,7 @@ function Post(props: PostProps) {
         >
           <>
             <FontAwesomeICon name='comment-o' size={20} />
-            <Text>Bình luận</Text>
+            <Text onPress={() => setOpenCommentModal(true)}>Bình luận</Text>
           </>
         </TouchableHighlight>
         <TouchableHighlight
@@ -239,6 +315,7 @@ function Post(props: PostProps) {
         post={props}
         onDeletePost={onDeletePost}
       />
+      <CommentTab openModal={openCommentModal} setOpenModal={setOpenCommentModal} id={props.id} />
     </View>
   );
 }
@@ -249,7 +326,49 @@ const styles = StyleSheet.create({
   userCommentsContent: { marginBottom: 5, gap: 5 },
   padding: { padding: 10 },
   gap: { gap: 10 },
-  marginVertical: { marginVertical: 10 }
+  marginVertical: { marginVertical: 10 },
+  position: { position: 'relative' },
+
+  modalLike: {
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
+    top: -56,
+    left: 20,
+    backgroundColor: color.white,
+    padding: 5,
+    borderRadius: 20,
+    shadowOffset: {
+      width: 0,
+      height: 0
+    },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    // borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'var(--media-inner-border)',
+    shadowColor: 'var(--shadow-1)',
+    elevation: 2
+  },
+  likeIcon: {
+    padding: 7,
+    paddingLeft: 8,
+    borderWidth: 1, // Border width
+    borderColor: '#ccc', // Border color
+    borderRadius: 50,
+    backgroundColor: '#3578E5',
+    color: color.white
+  },
+  dislikeIcon: {
+    padding: 7,
+    paddingLeft: 8,
+    borderWidth: 1, // Border width
+    borderColor: '#ccc', // Border color
+    borderRadius: 50,
+    backgroundColor: '#ccc',
+    color: color.black
+  }
 });
 
 export default Post;

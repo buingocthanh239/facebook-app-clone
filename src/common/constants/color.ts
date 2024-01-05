@@ -21,7 +21,7 @@ export const color = {
   border: 'rgb(221, 221, 221, 0.5)',
   errorText: '#5D1E07',
   errorBackground: '#FFECE8',
-  likeIcon: '#02ADFC',
+  likeIcon: '#3578E5',
   heartIcon: '#FF74AE',
   textLike: '#65676b',
   laughtIcon: '#FFF298',

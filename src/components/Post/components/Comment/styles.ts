@@ -27,7 +27,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'white'
   },
-
+  containerListComment: {
+    justifyContent: 'flex-start',
+    margin: 0,
+    // marginTop: 40,
+    borderRadius: 10,
+    backgroundColor: 'white'
+  },
   icon: {
     display: 'flex',
     justifyContent: 'flex-start',
@@ -204,6 +210,176 @@ const styles = StyleSheet.create({
   },
   option: {
     paddingVertical: 0
+  },
+
+  touchableHighlight: {
+    borderRadius: 50, // Đảm bảo các góc của TouchableHighlight phù hợp với hình ảnh
+    overflow: 'hidden', // Để các phần không phù hợp với hình ảnh bị ẩn đi
+    // width: 40,
+    height: 40,
+    // marginTop:8,
+    marginLeft: 8
+    // zIndex:10
+  },
+
+  avatarImage: {
+    opacity: 0.8
+  },
+
+  CommentItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: 14,
+    gap: 6
+  },
+  top: {
+    flexDirection: 'row',
+    gap: 10
+  },
+  Content: {
+    flexDirection: 'column',
+    display: 'flex',
+    // alignItems:'center',
+    gap: 2,
+    justifyContent: 'center',
+    backgroundColor: color.Comment,
+    borderRadius: 14,
+    paddingRight: 20,
+    paddingBottom: 2,
+    maxWidth: 290
+  },
+  TextName: {
+    fontSize: 12,
+    marginTop: 2,
+    marginLeft: 10,
+    // height: 21,
+    color: color.black,
+    paddingRight: 2,
+    paddingLeft: 2,
+    fontWeight: 'bold'
+  },
+  TextCommment: {
+    marginLeft: 10,
+    marginBottom: 2,
+    color: color.black
+  },
+  TextTime: {
+    color: color.textLike,
+    fontSize: 12
+  },
+  TextLike: {
+    color: color.textLike,
+    fontWeight: '700',
+    fontSize: 12
+  },
+
+  highlightText: {
+    height: 20,
+    width: 45,
+    borderRadius: 4
+  },
+  highlightConment: {
+    height: 20,
+    width: 65,
+    borderRadius: 4
+  },
+  TextResponse: {
+    color: color.textLike,
+    fontWeight: '700',
+    fontSize: 12
+  },
+  Function: {
+    flexDirection: 'row',
+    marginLeft: 68,
+    gap: 10
+  },
+  viewBeForeComment: {
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 4
+  },
+  topRep: {
+    flexDirection: 'row',
+    gap: 10,
+    paddingLeft: 50,
+    alignItems: 'center'
+  },
+  ContentRep: {
+    flexDirection: 'column',
+    display: 'flex',
+    // alignItems:'center',
+    gap: 2,
+    justifyContent: 'center',
+    backgroundColor: color.Comment,
+    borderRadius: 14,
+    paddingRight: 20,
+    paddingBottom: 2,
+    maxWidth: 290
+  },
+  TextNameRep: {
+    fontSize: 12,
+    paddingTop: 2,
+    marginLeft: 10,
+    // height: 21,
+    color: color.black,
+    paddingRight: 2,
+    paddingLeft: 2,
+    fontWeight: 'bold'
+  },
+  TextCommmentRep: {
+    marginLeft: 10,
+    marginBottom: 2,
+    color: color.black
+    // lineHeight: 20
+    // maxHeight:340
+  },
+  FunctionRep: {
+    flexDirection: 'row',
+    marginLeft: 100,
+    gap: 10
+  },
+  left: {
+    display: 'flex',
+    flexDirection: 'row'
+    // gap:0
+  },
+  listIcon: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5
+  },
+  likeIcon: {
+    padding: 3,
+    paddingLeft: 4,
+    borderWidth: 1, // Border width
+    borderColor: color.white, // Border color
+    borderRadius: 50,
+    backgroundColor: '#3578E5',
+    color: color.white
+  },
+  heartIcon: {
+    position: 'relative',
+    zIndex: 1,
+    right: 5
+  },
+  laughtIcon: {
+    position: 'relative',
+    right: 10
+  },
+  rightIcon: {
+    // color: '#3578E5'
+  },
+  headerListFeel: {
+    paddingLeft: 0,
+    height: 43,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  textHeaderListFeel: {
+    fontSize: 20,
+    color: color.black
   }
 });
 export default styles;
