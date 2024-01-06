@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { ActivityIndicator, IconButton } from 'react-native-paper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './styles';
 import FriendField from './component/FriendField';
@@ -39,18 +39,28 @@ function ProfileScreen() {
   const [listFriends, setListFriends] = useState<IUserFriends[]>([]);
   const [totalFriend, setTotalFriend] = useState('');
   const scrollViewRef = useRef<FlatList>(null);
+  const [isLoadingUserInfo, setIsLoadingUserInfo] = useState<boolean>(true);
+
+  const isFocus = useIsFocused();
 
   const scrollToTop = () => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToOffset({ offset: 0, animated: true });
     }
   };
-
+  useEffect(() => {
+    if (isFocus) {
+      scrollToTop();
+      setTimeout(() => setIsLoadingUserInfo(false), 1000);
+    } else {
+      setIsLoadingUserInfo(true);
+    }
+  }, [isFocus]);
   const route: RouteProp<PropfileNavigationType, ProfileNavigationName.Profile> = useRoute();
   const auth = useAppSelector(selectAuth);
   const user_id = route.params.user_id;
   const isOwnProfile = auth.user?.id === user_id;
-  const isFocus = useIsFocused();
+
   useEffect(() => {
     if (isOwnProfile) {
       setProfile(auth.user);
@@ -81,14 +91,10 @@ function ProfileScreen() {
       count: 6,
       user_id: !user_id ? '' : user_id
     }).catch(console.error);
-  }, [auth.user, user_id]);
+  }, [auth.user, isOwnProfile, user_id]);
 
   // scroll to top
-  useEffect(() => {
-    if (isFocus) {
-      scrollToTop();
-    }
-  }, [isFocus]);
+
   const isFriend = profile?.is_friend;
 
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
@@ -258,7 +264,9 @@ function ProfileScreen() {
       }
     }
   }
-  return (
+  return isLoadingUserInfo ? (
+    <ActivityIndicator color={color.activeOutlineColor} style={{ marginTop: '50%' }} />
+  ) : (
     <BaseFlatList
       ref={scrollViewRef}
       data={data}

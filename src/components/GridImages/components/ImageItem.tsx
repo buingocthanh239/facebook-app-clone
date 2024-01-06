@@ -1,5 +1,6 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { IconButton, TouchableRipple } from 'react-native-paper';
+import BaseImage from 'src/components/BaseImage';
 
 export interface IImageItemProps {
   onPress: () => any;
@@ -13,7 +14,7 @@ function ImageItem({ onPress, style, image, isShowCloseIcon, onPressCloseIcon }:
   return image ? (
     <View style={[styles.image_view, style]}>
       <TouchableRipple onPress={onPress}>
-        <Image
+        <BaseImage
           style={styles.image}
           resizeMode='cover'
           source={{
@@ -21,6 +22,7 @@ function ImageItem({ onPress, style, image, isShowCloseIcon, onPressCloseIcon }:
           }}
         />
       </TouchableRipple>
+
       {isShowCloseIcon ? (
         <IconButton
           icon='close'
