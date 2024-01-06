@@ -1,5 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import IconM from 'react-native-vector-icons/MaterialIcons';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { PostNavigationName } from 'src/common/constants/nameScreen';
@@ -12,6 +12,7 @@ import PostImageDetail from '../PostDetail/PostImageDetail';
 const ListImageEditScreen = () => {
   const route: RouteProp<PostNavigationType, PostNavigationName.ListImageEditScreen> = useRoute();
   const { oldImage, newImage, newMediaFiles, listImage, imageDel, onUpdate } = route.params;
+  // eslint-disable-next-line no-unused-vars
   const [updateImageList, setUpdateImageList] = useState<string[]>(listImage);
   const [updateNewMediaFiles, setUpdateNewMediaFiles] = useState<MediaFileType[]>(newMediaFiles);
   const [updateImageDel, setUpdateImageDel] = useState<string[]>(imageDel as string[]);
@@ -56,9 +57,6 @@ const ListImageEditScreen = () => {
     );
     navigation.goBack();
   };
-  useEffect(() => {
-    console.log(updateImageList, updateImageDel, updateOldImage, updateNewImage);
-  });
   return (
     <View style={{ backgroundColor: color.white, flex: 1 }}>
       <View

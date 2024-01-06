@@ -1,6 +1,7 @@
 import { Avatar } from 'react-native-paper';
 import { NotificationType } from 'src/common/enum/commom';
 import { CommentIcon, FriendSuggestionIcon, PostIcon, VideoIcon } from '../sub-icon';
+import { getAvatarUri } from 'src/utils/helper';
 
 export type AvatarNotificationItemProps = {
   type: NotificationType;
@@ -32,10 +33,7 @@ function AvatarNotificationItem(props: AvatarNotificationItemProps) {
   }
   return (
     <>
-      <Avatar.Image
-        source={ownerUri ? { uri: ownerUri } : require('src/assets/logo.png')}
-        size={size}
-      />
+      <Avatar.Image source={getAvatarUri(ownerUri as string)} size={size} />
       <SubIcon />
     </>
   );

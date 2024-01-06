@@ -50,7 +50,6 @@ const CommentTab = (props: CommentTabProps) => {
           setListMarkComment(result.data);
           setIsNextFetch(true);
           setSkip(COUNT_ITEM);
-          console.log('result', result);
         }
         setTimeout(() => {
           setIsLoadingFirstAPi(false);
@@ -99,7 +98,6 @@ const CommentTab = (props: CommentTabProps) => {
             setIsNextFetch(false);
             return;
           }
-          console.log(skip, res.data);
           const response = res.data;
           if (res.data.length) {
             //console.log('searchResult', searchResult);

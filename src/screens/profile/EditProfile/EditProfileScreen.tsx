@@ -118,7 +118,6 @@ function EditProfile() {
       {
         text: 'Đồng ý',
         onPress: () => {
-          console.log('ok');
           onChangeAvatar(src);
         }
       }
@@ -133,7 +132,6 @@ function EditProfile() {
       {
         text: 'Đồng ý',
         onPress: () => {
-          console.log('ok');
           onChangeCover(src);
         }
       }
@@ -148,7 +146,6 @@ function EditProfile() {
       {
         text: 'Đồng ý',
         onPress: () => {
-          console.log('ok');
           onChangeDescription(description);
         }
       }
@@ -167,7 +164,6 @@ function EditProfile() {
       {
         text: 'Đồng ý',
         onPress: () => {
-          console.log('ok');
           onChangeInfoDetail();
         }
       }

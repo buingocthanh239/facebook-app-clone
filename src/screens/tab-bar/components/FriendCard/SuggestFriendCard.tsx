@@ -17,8 +17,7 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
   id,
   username,
   avatarSource,
-  same_friends,
-  created
+  same_friends
 }) => {
   const [status, setStatus] = useState('');
   const onPressAddFriend = (data: ISetRequestFriend) => {
@@ -53,7 +52,6 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
         text: 'OK',
         onPress: () => {
           setStatus('Delete');
-          console.log(`${created}`);
         }
       }
     ]);
@@ -61,7 +59,6 @@ const SuggestFriendCard: React.FC<SuggestFriendCardProps> = ({
   const onPressCancel = async (data: IDeleteRequestFriend) => {
     try {
       const result = await deleteRequestFriendApi(data);
-      console.log(result);
       setStatus('Cancel');
       return result;
     } catch (error) {

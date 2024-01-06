@@ -85,7 +85,7 @@ const notificationSlice = createSlice({
       state.notification = [...state.notification, ...action.payload.data];
       state.badge = action.payload.badge;
       state.last_update = action.payload.last_update;
-      if (!action.payload.data?.length) {
+      if (action.payload.data?.length === 0) {
         state.isNextFetch = false;
       }
       state.loading = false;

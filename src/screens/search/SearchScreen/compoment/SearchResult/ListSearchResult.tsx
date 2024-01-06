@@ -36,7 +36,7 @@ const ListSearchResult = (props: ListSearchResultProps) => {
         // setTotalRequestFriend(result.data.total);
         setListSavedSearch(result.data);
         // setRefreshing(false);
-        console.log(result);
+
         return result;
       } catch (error) {
         return console.log({ message: 'sever availability' });

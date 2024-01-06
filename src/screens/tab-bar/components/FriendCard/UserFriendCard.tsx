@@ -91,9 +91,8 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
         text: 'OK',
         onPress: async () => {
           try {
-            const result = await setRequestFriendApi(data);
+            await setRequestFriendApi(data);
             setStatus('AddFriend');
-            console.log(result);
           } catch (error) {
             return console.log({ message: 'sever availability' });
           }
@@ -105,7 +104,6 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
   const onPressCancel = async (data: IDeleteRequestFriend) => {
     try {
       const result = await deleteRequestFriendApi(data);
-      console.log(result);
       setStatus('unfriended');
       return result;
     } catch (error) {

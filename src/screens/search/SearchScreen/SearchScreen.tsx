@@ -258,7 +258,6 @@ function SearchScreen() {
             listResult.push(currentItem);
           }
         }
-        console.log('listResult', listResult);
         setListSavedSearch(listResult);
       } catch (error) {
         return console.log({ message: 'sever availability' });
@@ -283,8 +282,7 @@ function SearchScreen() {
 
       try {
         // Gọi API để xóa đối tượng từ server
-        const result = await deleteSavedSearchApi({ search_id: id, all: 0 });
-        console.log(result);
+        await deleteSavedSearchApi({ search_id: id, all: 0 });
       } catch (error) {
         console.log(error);
       }

@@ -161,7 +161,6 @@ const CreatePostScreen = () => {
             video === ''
               ? setVideo(src)
               : Alert.alert('Lỗi!', 'Vui lòng chỉ đăng nhiều nhất 1 video.');
-            console.log('video: ', video);
           } else {
             Alert.alert('Lỗi!', 'Vui lòng chỉ đăng ảnh hoặc video.');
           }
@@ -242,7 +241,6 @@ const CreatePostScreen = () => {
       formData.append('status', status);
       formData.append('auto_accept', 'true');
       const res = await addPost(formData);
-      console.log(res);
       if (res.success) {
         dispatch(setMessage('Đăng bài thành công'));
         dispatch(changeCoins(res.data.coins));

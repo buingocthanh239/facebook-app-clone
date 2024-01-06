@@ -114,8 +114,6 @@ const EditPostScreen = () => {
   ];
   //Xử lý sử kiện button back của android
   useEffect(() => {
-    console.log(data);
-
     const backAction = () => {
       showModal();
       return true;
@@ -166,7 +164,6 @@ const EditPostScreen = () => {
             video === ''
               ? setVideo(src)
               : Alert.alert('Lỗi!', 'Vui lòng chỉ đăng nhiều nhất 1 video.');
-            console.log('video: ', video);
           } else {
             Alert.alert('Lỗi!', 'Vui lòng chỉ đăng ảnh hoặc video.');
           }
@@ -257,9 +254,7 @@ const EditPostScreen = () => {
       formData.append('image_del', imageDel.join(','));
       formData.append('image_sort', '1,2,3,4');
       formData.append('auto_accept', 'true');
-      console.log(formData);
       const res = await editPost(formData);
-      console.log(res);
       if (res.success) {
         dispatch(setMessage('Bạn đã chỉnh sửa bài viết.'));
         dispatch(changeCoins(res.data.coins));
