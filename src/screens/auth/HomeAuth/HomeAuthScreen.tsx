@@ -1,26 +1,38 @@
 import WraperScreen from 'src/components/WraperScreen';
 import BaseButton from 'src/components/BaseButton';
 import BaseMetaLogo from 'src/components/BaseMetaLogo';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
 import Account from './component/Account';
+import { useAppSelector } from 'src/redux';
+import { IAccount, selectAuth } from 'src/redux/slices/authSlice';
+import { AuthNavigationName } from 'src/common/constants/nameScreen';
 
 function HomeAuthScreen() {
   const navigation = useNavigation();
-  const accounts = [
-    { name: 'Bùi Ngọc Thành', imageUrl: '' },
-    { name: 'Bùi Ngọc Thành', imageUrl: '' }
-  ];
+  const accounts = useAppSelector(selectAuth).accounts;
+
+  const navigationAccount: NavigationProp<AuthNavigationType, AuthNavigationName.AccountLogin> =
+    useNavigation();
+  const onPressAccount = (data: IAccount) =>
+    navigationAccount.navigate(AuthNavigationName.AccountLogin, data);
+
   return (
     <WraperScreen spaceBetween linnerGradient>
       <View style={styles.facebookLogo}>
         <Avatar.Image source={require('src/assets/logo.png')} size={50} />
       </View>
       <View style={styles.accountGroup}>
-        {accounts.map((account, index) => (
-          <Account name={account.name} imageUrl={account.imageUrl} key={index} />
+        {Object?.keys(accounts)?.map(key => (
+          <Account
+            name={accounts[key].username}
+            imageUrl={accounts[key].avatar}
+            key={key}
+            id={key}
+            onPress={() => onPressAccount(accounts[key])}
+          />
         ))}
         <TouchableOpacity activeOpacity={0.7}>
           <Text

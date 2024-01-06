@@ -48,3 +48,5 @@ export enum OrderDirection {
 }
 
 export const COUNT_ITEM = 20;
+
+export const KEY_SAVE_LOCAL_ACCOUNT = 'local_count';

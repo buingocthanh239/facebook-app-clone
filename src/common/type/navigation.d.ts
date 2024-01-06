@@ -51,6 +51,11 @@ type AuthNavigationType = {
   VerifyOTPScreen: { verifyCode: string; email: string };
   SaveInfoAccountScreen: undefined;
   ForgetPasswordScreen: undefined;
+  AccountLogin: {
+    username: string;
+    email: string;
+    avatar: string;
+  };
 };
 
 type PropfileNavigationType = {
