@@ -13,18 +13,33 @@ import {
 } from 'src/services/profile.services';
 import { MyFormData } from 'src/common/type/type';
 
+export interface IAccount {
+  avatar: string;
+  username: string;
+  email: string;
+}
+
+export interface IAccount {
+  avatar: string;
+  username: string;
+  email: string;
+}
+
+export type MapAccount = Record<string, IAccount>;
 interface IAuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
   error: IErrorData | IErrorData[] | string | null;
   user: IUser | null;
+  accounts: MapAccount;
 }
 
 const initialState: IAuthState = {
   isLoading: false,
   isAuthenticated: false,
   error: null,
-  user: null
+  user: null,
+  accounts: {}
 };
 
 export const login = createAsyncThunk(
@@ -112,6 +127,16 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload as IUser;
       state.isLoading = false;
+      state.accounts[action.payload.id] = {
+        avatar: action.payload.avatar,
+        email: action.payload.email,
+        username: action.payload.username
+      };
+      state.accounts[action.payload.id] = {
+        avatar: action.payload.avatar,
+        email: action.payload.email,
+        username: action.payload.username
+      };
     });
 
     build.addCase(login.pending, state => {
@@ -187,6 +212,11 @@ const authSlice = createSlice({
       if (state.user) {
         state.user.username = action.payload;
       }
+    },
+    deleteAccount: (state, action: PayloadAction<string>) => {
+      const accounts = state.accounts;
+      delete accounts[action.payload];
+      state.accounts = accounts;
     }
   }
 });
@@ -197,6 +227,7 @@ export const {
   modifyAccountAtivity,
   changeCoins,
   setAuthentication,
+  deleteAccount,
   setUsername
 } = authSlice.actions;
 export default authSlice.reducer;

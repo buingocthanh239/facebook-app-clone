@@ -16,6 +16,7 @@ import { BaseHeader } from 'src/components/BaseHeader';
 import ForgetPassword from 'src/screens/auth/ForgotPassword';
 import { TransitionPresets } from '@react-navigation/stack';
 import { AuthNavigationName } from 'src/common/constants/nameScreen';
+import AccountLogin from 'src/screens/auth/AccountLogin';
 
 const Stack = createNativeStackNavigator();
 function AuthNavigation() {
@@ -36,6 +37,7 @@ function AuthNavigation() {
         component={HomeAuth}
       />
       <Stack.Screen name={AuthNavigationName.Login} component={LoginScreen} />
+      <Stack.Screen name={AuthNavigationName.AccountLogin} component={AccountLogin} />
       <Stack.Group>
         <Stack.Screen name={AuthNavigationName.FirstScreen} component={FirstScreen} />
         <Stack.Screen name={AuthNavigationName.NameScreen} component={NameScreen} />
