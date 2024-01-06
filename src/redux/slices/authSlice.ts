@@ -19,6 +19,12 @@ export interface IAccount {
   email: string;
 }
 
+export interface IAccount {
+  avatar: string;
+  username: string;
+  email: string;
+}
+
 export type MapAccount = Record<string, IAccount>;
 interface IAuthState {
   isLoading: boolean;
@@ -121,6 +127,11 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload as IUser;
       state.isLoading = false;
+      state.accounts[action.payload.id] = {
+        avatar: action.payload.avatar,
+        email: action.payload.email,
+        username: action.payload.username
+      };
       state.accounts[action.payload.id] = {
         avatar: action.payload.avatar,
         email: action.payload.email,
