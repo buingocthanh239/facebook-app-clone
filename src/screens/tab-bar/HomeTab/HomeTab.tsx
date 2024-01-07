@@ -12,6 +12,9 @@ import {
 import { AppNaviagtionName } from 'src/common/constants/nameScreen';
 import { useAppDispatch, useAppSelector } from 'src/redux';
 import { getListPosts, getNextListPosts, selectPost } from 'src/redux/slices/postSlice';
+import { deleteNewPost } from 'src/redux/slices/newPostSlice';
+import { ProgressBar } from 'react-native-paper';
+import { color } from 'src/common/constants/color';
 const COUNT_ITEM = 10;
 
 function HomeTab() {
@@ -19,15 +22,24 @@ function HomeTab() {
   const [skip, setSkip] = useState<number>(0);
 
   const postStore = useAppSelector(selectPost);
+  const newPost = useAppSelector(state => state.newPost.post);
+  const progress = useAppSelector(state => state.newPost.progress);
+  const loadingNewPost = useAppSelector(state => state.newPost.loading);
+
+  const isBlock = useAppSelector(state => state.block.time);
 
   const [refreshing, setrefreshing] = useState(false);
   const onRefresh = async () => {
     setrefreshing(true);
     setSkip(Math.floor(Math.random() * (postStore.post.length ?? 1)));
     dispatch(getListPosts({ index: skip, count: COUNT_ITEM }));
+    dispatch(deleteNewPost());
     setSkip(skip => skip + COUNT_ITEM);
     setrefreshing(false);
   };
+  useEffect(() => {
+    onRefresh();
+  }, [isBlock]);
 
   async function onEndReadable() {
     if (postStore.isNextFetch) {
@@ -78,7 +90,35 @@ function HomeTab() {
     <BaseFlatList
       // {...panResponder.panHandlers}
       ref={ref}
-      ListHeaderComponent={<NewPostCreate />}
+      ListHeaderComponent={
+        <>
+          <NewPostCreate />
+          {newPost && (
+            <>
+              <ProgressBar progress={progress} visible={loadingNewPost} color={color.primary} />
+              {!loadingNewPost && (
+                <Post
+                  id={newPost.id}
+                  author={newPost.author}
+                  created={newPost.created}
+                  comment_mark={newPost.comment_mark}
+                  described={newPost.described}
+                  image={newPost.image}
+                  video={newPost.video}
+                  name={newPost.name}
+                  feel={newPost.feel}
+                  numberShares={newPost.numberShares}
+                  banned={newPost.banned}
+                  can_edit={newPost.can_edit}
+                  is_blocked={newPost.is_blocked}
+                  is_felt={newPost.is_felt}
+                  status={newPost.status}
+                />
+              )}
+            </>
+          )}
+        </>
+      }
       data={postStore.post}
       renderItem={({ item }) => (
         <Post

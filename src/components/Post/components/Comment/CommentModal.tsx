@@ -3,85 +3,43 @@ import Modal from 'react-native-modal';
 import styles from './styles';
 import { color } from 'src/common/constants/color';
 import BaseFlatList from 'src/components/BaseFlatList';
-import { ActivityIndicator, Appbar, Avatar, Divider } from 'react-native-paper';
+import { ActivityIndicator, Avatar, Divider } from 'react-native-paper';
 import { getAvatarUri } from 'src/utils/helper';
 import { useEffect, useState } from 'react';
-import { IGetListFeels, IGetMarkComment, IListFeels } from 'src/interfaces/comments.interface';
-import {
-  getListFeelsApi,
-  getMarkCommentApi,
-  setMarkCommentApi
-} from 'src/services/comment.service';
+import { getMarkCommentApi, setMarkCommentApi } from 'src/services/comment.service';
 import { IListCommentPost } from 'src/interfaces/comments.interface';
 import { coverTimeToNow } from 'src/utils/dayjs';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
 interface CommentTabProps {
   id: string;
   openModal: boolean;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  listMarkComment: IListCommentPost[];
+  setListMarkComment: React.Dispatch<React.SetStateAction<IListCommentPost[]>>;
+  numberFeel: number;
 }
 const CommentTab = (props: CommentTabProps) => {
-  const { id, openModal, setOpenModal } = props;
-  const [listMarkComment, setListMarkComment] = useState<IListCommentPost[]>([]);
+  const { id, openModal, setOpenModal, setListMarkComment, listMarkComment, numberFeel } = props;
+  // const [listMarkComment, setListMarkComment] = useState<IListCommentPost[]>([]);
   const [skip, setSkip] = useState<number>(0);
   const [isNext, setIsNext] = useState<boolean>(false);
   const [isNextFetch, setIsNextFetch] = useState<boolean>(true);
   const [isLoadingFirstApi, setIsLoadingFirstAPi] = useState<boolean>(false);
-  const [listFeels, setListFeels] = useState<IListFeels[]>([]);
-  const [totalFeel, setTotalFeel] = useState(0);
+
   const [commentText, setCommentText] = useState('');
-  const [openModalListFeels, setOpenModalListFeel] = useState(false);
+
   const COUNT_ITEM = 10;
-  useEffect(() => {
-    const data: IGetMarkComment = {
-      id: id,
-      index: 0,
-      count: 10
-    };
-    const fetchData = async (data: IGetMarkComment) => {
-      // setIsLoadingFirstAPi(true);
-      try {
-        const result = await getMarkCommentApi(data);
-        if (result.success) {
-          if (!result.data.length) {
-            setIsNextFetch(false);
-            return;
-          }
-          setListMarkComment(result.data);
-          setIsNextFetch(true);
-          setSkip(COUNT_ITEM);
-        }
-        setTimeout(() => {
-          setIsLoadingFirstAPi(false);
-        }, 500);
-      } catch (error) {
-        return console.log({ message: 'sever availability' });
-      }
-    };
-    fetchData(data).catch(console.error);
-  }, [id]);
 
   useEffect(() => {
-    const data: IGetListFeels = {
-      id: id,
-      index: 0,
-      count: 100
-    };
-    const fetchData = async (data: IGetListFeels) => {
-      try {
-        const result = await getListFeelsApi(data);
-        if (result.success) {
-          if (!result.data.length) {
-            return;
-          } else setTotalFeel(result.data.length);
-          setListFeels(result.data);
-        }
-      } catch (error) {
-        return console.log({ message: 'sever availability' });
-      }
-    };
-    fetchData(data).catch(console.error);
-  }, [id]);
+    setIsLoadingFirstAPi(true);
+    setIsNextFetch(true);
+    setSkip(COUNT_ITEM);
+    setTimeout(() => {
+      setIsLoadingFirstAPi(false);
+    }, 1000);
+  }, []);
 
   async function onEndReadable() {
     if (isNextFetch) {
@@ -98,6 +56,7 @@ const CommentTab = (props: CommentTabProps) => {
             setIsNextFetch(false);
             return;
           }
+          // console.log(skip, res.data);
           const response = res.data;
           if (res.data.length) {
             //console.log('searchResult', searchResult);
@@ -190,6 +149,14 @@ const CommentTab = (props: CommentTabProps) => {
   //   );
   // }
 
+  //handle navigaiton feel screen
+  const navigationFeelScreen: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
+    useNavigation();
+  const handleNavigationFeelScreen = () =>
+    navigationFeelScreen.navigate(AppNaviagtionName.PostNavigation, {
+      screen: PostNavigationName.ListFeelScreen,
+      params: { postId: id }
+    });
   return (
     <Modal
       // visible={openModal}
@@ -210,7 +177,7 @@ const CommentTab = (props: CommentTabProps) => {
         <View style={{ backgroundColor: color.white }}>
           <TouchableHighlight
             style={styles.header}
-            onPress={() => setOpenModalListFeel(true)}
+            onPress={handleNavigationFeelScreen}
             underlayColor={color.Comment}
           >
             {/* <Text>đây là header comment</Text> */}
@@ -229,13 +196,10 @@ const CommentTab = (props: CommentTabProps) => {
                     color={color.iconButtonColor}
                     style={styles.rightIcon}
                   />
-                  {listFeels.length > 1 ? (
+                  {numberFeel >= 1 ? (
                     <Text style={{ color: color.iconButtonColor }}>
-                      {listFeels[0].feel.user.name} và {totalFeel - 1} người khác
-                    </Text>
-                  ) : listFeels.length === 1 ? (
-                    <Text style={{ color: color.iconButtonColor }}>
-                      {listFeels[0].feel.user.name}
+                      Có <Text style={{ fontWeight: 'bold' }}>{numberFeel}</Text> người đã bày tỏ
+                      cảm xúc
                     </Text>
                   ) : null}
                   <AntdIcon
@@ -261,6 +225,11 @@ const CommentTab = (props: CommentTabProps) => {
                 </TouchableHighlight>
               )}
               data={listMarkComment}
+              ListEmptyComponent={
+                <Text style={{ textAlign: 'center', marginTop: 20 }}>
+                  Bài viết chưa có bình luận nào
+                </Text>
+              }
               renderItem={({ item }) => (
                 <>
                   <View>
@@ -366,6 +335,7 @@ const CommentTab = (props: CommentTabProps) => {
               onChangeText={handleTextChange}
               value={commentText}
               style={{
+                // flex:1,
                 marginTop: 5,
                 marginBottom: 5,
                 height: 40,
@@ -379,28 +349,6 @@ const CommentTab = (props: CommentTabProps) => {
           </View>
         </View>
       )}
-      <Modal
-        animationIn='fadeIn'
-        animationInTiming={500}
-        animationOut='slideInDown'
-        isVisible={openModalListFeels}
-        style={styles.containerListComment}
-        onBackdropPress={() => setOpenModalListFeel(false)}
-      >
-        <View style={styles.headerListFeel}>
-          <Appbar.BackAction onPress={() => setOpenModalListFeel(false)} />
-          <Text style={styles.textHeaderListFeel} onPress={() => setOpenModalListFeel(false)}>
-            Người đã bày tỏ cảm xúc
-          </Text>
-        </View>
-        <Divider />
-        <View style={styles.headerListFeel}>
-          <Text> Tất cả {String(totalFeel).length}</Text>
-          <View>
-            <AntdIcon name='like1' size={12} style={styles.likeIcon} />
-          </View>
-        </View>
-      </Modal>
     </Modal>
   );
 };

@@ -61,6 +61,7 @@ export enum PostNavigationName {
   ListImageEditScreen = 'ListImageEditScreen',
   ListImageDetail = 'ListImageDetail',
   EditPostScreen = 'EditPostScreen',
+  ListFeelScreen = 'ListFeelScreen',
   AllPostDetail = 'AllPostDetail'
 }
 

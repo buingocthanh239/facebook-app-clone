@@ -9,6 +9,7 @@ import ListImageScreen from 'src/screens/post/ListImage/ListImageScreen';
 import { ListImageDetail } from 'src/screens/post/PostDetail';
 import EditPostScreen from 'src/screens/post/EditPost/EditPostScreen';
 import ListImageEditScreen from 'src/screens/post/ListImage/ListImageEditScreen';
+import ListFeelScreen from 'src/screens/post/ListFeelScreen';
 import AllPostDetail from 'src/screens/post/AllPostDetail';
 
 const Stack = createNativeStackNavigator();
@@ -67,6 +68,13 @@ function PostNavigation() {
         component={EditPostScreen}
         options={{
           headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name={PostNavigationName.ListFeelScreen}
+        component={ListFeelScreen}
+        options={{
+          title: 'Người đã bày tỏ cảm xúc'
         }}
       />
       <Stack.Screen

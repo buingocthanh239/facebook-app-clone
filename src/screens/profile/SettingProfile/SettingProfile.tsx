@@ -10,10 +10,11 @@ import {
   ProfileNavigationName,
   TabNavigationName
 } from 'src/common/constants/nameScreen';
-import { useAppSelector } from 'src/redux';
+import { useAppDispatch, useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 import { removeDiacritics, removeSpaces } from 'src/utils/helper';
 import { setBlockApi } from 'src/services/block.service';
+import { blockComponent } from 'src/redux/slices/blockSlice';
 
 const SettingProfile = () => {
   const auth = useAppSelector(selectAuth);
@@ -24,6 +25,7 @@ const SettingProfile = () => {
   const isOwnProfile = auth.user?.id === user_id;
   const navigationHome: NavigationProp<AppNavigationType, AppNaviagtionName.TabNavigation> =
     useNavigation();
+  const dispatch = useAppDispatch();
   const handleBlockUser = async () => {
     Alert.alert(
       `Chặn trang cá nhân của ${username}`,
@@ -39,6 +41,7 @@ const SettingProfile = () => {
           onPress: async () => {
             try {
               await setBlockApi({ user_id });
+              dispatch(blockComponent());
               Alert.alert(
                 `Thành công`,
                 `Bạn đã chặn ${username}.\n${username} sẽ không nhận được thông báo về hành động này.`,
@@ -47,7 +50,7 @@ const SettingProfile = () => {
                     text: 'Đóng',
                     onPress: () =>
                       navigationHome.navigate(AppNaviagtionName.TabNavigation, {
-                        screen: TabNavigationName.Friend
+                        screen: TabNavigationName
                       }),
                     style: 'cancel'
                   }

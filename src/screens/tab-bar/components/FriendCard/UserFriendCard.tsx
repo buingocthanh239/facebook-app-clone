@@ -16,6 +16,8 @@ import {
 } from 'src/services/friends.services';
 import { getAvatarUri } from 'src/utils/helper';
 import { setBlockApi } from 'src/services/block.service';
+import { blockComponent } from 'src/redux/slices/blockSlice';
+import { useAppDispatch } from 'src/redux';
 
 interface UserFriendCardProps {
   id: string;
@@ -33,6 +35,7 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
   created
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const dispatch = useAppDispatch();
 
   const showModal = () => {
     setModalVisible(true);
@@ -126,6 +129,7 @@ const UserFriendCard: React.FC<UserFriendCardProps> = ({
           onPress: async () => {
             try {
               await setBlockApi({ user_id: id });
+              dispatch(blockComponent());
               setStatus('Block');
               hideModal();
             } catch (error) {

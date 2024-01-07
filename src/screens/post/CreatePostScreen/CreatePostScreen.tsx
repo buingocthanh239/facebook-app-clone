@@ -28,6 +28,13 @@ import BaseButton from 'src/components/BaseButton';
 import { addPost } from 'src/services/post.services';
 import { setMessage } from 'src/redux/slices/appSlice';
 import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
+import {
+  IUnfinishedPost,
+  getNewPost,
+  resetProgress,
+  resetUnfinishedPost,
+  setUnfinishedPost
+} from 'src/redux/slices/newPostSlice';
 
 export type File = {
   uri?: string;
@@ -50,6 +57,7 @@ const CreatePostScreen = () => {
   const [mediaFiles, setMediaFiles] = useState<MediaFileType[]>([]);
   const [video, setVideo] = useState('');
   const [described, setDescribed] = useState('');
+  const [status, setStatus] = useState('');
   const dispatch = useAppDispatch();
 
   const route: RouteProp<PostNavigationType, PostNavigationName.CreatePostScreen> = useRoute();
@@ -62,6 +70,40 @@ const CreatePostScreen = () => {
   const auth = useAppSelector(selectAuth);
   const avatar = auth.user?.avatar;
   const username = auth.user?.username;
+  const unfinishedPost = useAppSelector(state => state.newPost.unfinishedPost);
+  useEffect(() => {
+    setStatus(
+      selectedItem
+        ? !selectedItem?.label.startsWith('Đang')
+          ? `- Đang ${selectedItem.emoji} cảm thấy ${selectedItem.label.toLowerCase()}`
+          : `- Đang ${selectedItem.emoji} ${selectedItem.label.slice(5)}`
+        : ''
+    );
+  }, [selectedItem]);
+  useEffect(() => {
+    if (unfinishedPost && unfinishedPost.user_id === auth.user?.id) {
+      Alert.alert('Bạn đã tạo bài đăng trước đó', 'Bạn có muốn tiếp tục', [
+        {
+          text: 'Hủy',
+          onPress: () => {
+            dispatch(resetUnfinishedPost());
+          },
+          style: 'cancel'
+        },
+        {
+          text: 'Tiếp tục',
+          onPress: () => {
+            setListImage(unfinishedPost.listImage as string[]);
+            setVideo(unfinishedPost.video as string);
+            setDescribed(unfinishedPost.described as string);
+            setMediaFiles(unfinishedPost.mediaFiles as MediaFileType[]);
+            setStatus(unfinishedPost.status as string);
+            dispatch(resetUnfinishedPost());
+          }
+        }
+      ]);
+    }
+  }, [unfinishedPost]);
   interface IOption {
     icon: string;
     title: string;
@@ -89,6 +131,19 @@ const CreatePostScreen = () => {
 
   const hideModal = () => {
     setModalVisible(false);
+  };
+
+  const handleSavePost = () => {
+    _goBack();
+    const post: IUnfinishedPost = {
+      user_id: auth.user?.id as string,
+      listImage: listImage,
+      video: video,
+      described: described,
+      status: status,
+      mediaFiles: mediaFiles
+    };
+    dispatch(setUnfinishedPost(post));
   };
 
   const optionsModal: IOption[] = [
@@ -202,8 +257,11 @@ const CreatePostScreen = () => {
     navigation.navigate('EnAScreen');
   };
   const navigationGoBack = useNavigation();
-  const handleBackPress = () => {
+  const _goBack = () => {
     navigationGoBack.goBack();
+  };
+  const handleBack = () => {
+    showModal();
   };
   const navigateToListImageScreen = () => {
     navigation2.navigate(AppNaviagtionName.PostNavigation, {
@@ -221,11 +279,6 @@ const CreatePostScreen = () => {
 
   const handleCreatePost = async () => {
     try {
-      const status = selectedItem
-        ? !selectedItem?.label.startsWith('Đang')
-          ? `- Đang ${selectedItem.emoji} cảm thấy ${selectedItem.label.toLowerCase()}`
-          : `- Đang ${selectedItem.emoji} ${selectedItem.label.slice(5)}`
-        : '';
       const formData = new FormData();
       formData.append('described', described);
       if (video) {
@@ -238,13 +291,18 @@ const CreatePostScreen = () => {
       mediaFiles.forEach(file => {
         formData.append(`image`, file.base64 as never);
       });
-      formData.append('status', status);
+      if (status !== '') {
+        formData.append('status', status);
+      }
       formData.append('auto_accept', 'true');
+      navigationGoBack.goBack();
+      dispatch(resetProgress());
       const res = await addPost(formData);
+
       if (res.success) {
-        dispatch(setMessage('Đăng bài thành công'));
+        dispatch(getNewPost({ id: res.data.id }));
+        dispatch(resetUnfinishedPost());
         dispatch(changeCoins(res.data.coins));
-        navigationGoBack.goBack();
         return res;
       } else {
         dispatch(setMessage(handShowErrorMessage(parseInt(res.code as unknown as string))));
@@ -266,7 +324,7 @@ const CreatePostScreen = () => {
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
-          <TouchableOpacity onPress={handleBackPress} activeOpacity={0.8}>
+          <TouchableOpacity onPress={handleBack} activeOpacity={0.8}>
             <IconM name='arrow-back' size={26} color={color.textColor} />
           </TouchableOpacity>
           <Text style={{ fontSize: 19, color: color.textColor }}>Tạo bài viết</Text>
@@ -291,7 +349,9 @@ const CreatePostScreen = () => {
             <View style={{ flexDirection: 'row', marginRight: 80, marginBottom: 5 }}>
               <Text style={styles.username}>
                 {username}{' '}
-                {selectedItem ? (
+                {status !== '' ? (
+                  <Text style={styles.username}>{status}</Text>
+                ) : selectedItem ? (
                   !selectedItem?.label.startsWith('Đang') ? (
                     <Text style={styles.username}>
                       - Đang {selectedItem.emoji} cảm thấy {selectedItem.label.toLowerCase()}
@@ -315,18 +375,19 @@ const CreatePostScreen = () => {
 
         <TextInput
           multiline
-          placeholder={
-            listImage.length === 1 && video === ''
-              ? 'Bạn đang nghĩ gì...'
-              : listImage.length === 1 && video !== ''
-              ? 'Hãy nói gì đó về video này...'
-              : listImage.length === 2 && video === ''
-              ? 'Hãy nói gì đó về bức ảnh này...'
-              : listImage.length > 2 && video === ''
-              ? 'Hãy nói gì đó về các bức ảnh này...'
-              : 'Hãy nói gì đó về nội dung này...'
-          }
+          // placeholder={
+          //   listImage.length === 1 && video === ''
+          //     ? 'Bạn đang nghĩ gì...'
+          //     : listImage.length === 1 && video !== ''
+          //     ? 'Hãy nói gì đó về video này...'
+          //     : listImage.length === 2 && video === ''
+          //     ? 'Hãy nói gì đó về bức ảnh này...'
+          //     : listImage.length > 2 && video === ''
+          //     ? 'Hãy nói gì đó về các bức ảnh này...'
+          //     : 'Hãy nói gì đó về nội dung này...'
+          // }
           style={styles.input}
+          value={described}
           onChange={e => {
             setDescribed(e.nativeEvent.text);
           }}
@@ -385,9 +446,9 @@ const CreatePostScreen = () => {
               key={index}
               onPress={
                 index === 0
-                  ? () => console.log('Save Post & Go to Home Page')
+                  ? () => handleSavePost()
                   : index === 1
-                  ? () => console.log('Go to Home Page')
+                  ? () => _goBack()
                   : index === 2
                   ? hideModal
                   : () => console.log('Lỗi!')

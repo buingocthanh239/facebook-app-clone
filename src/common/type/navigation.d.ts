@@ -41,9 +41,13 @@ type AppNavigationType = {
         };
       }
     | { screen: PostNavigationName.EnAScreen }
+    | { screen: PostNavigationName.ListFeelScreen; params: { postId: string } }
     | { screen: PostNavigationName.AllPostDetail; params: { postId: string } };
   SearchNavigation: { screen: SearchNavigationName };
-  ReportNavigation: { screen: ReportNavigationName; params: { id: string } };
+  ReportNavigation: {
+    screen: ReportNavigationName;
+    params: { id: string; username: string; userId: string };
+  };
   ChatNavigation: { screen: ChatNavigationName };
   VerifyOTPAfterLogin: undefined;
   ChangeProfileAfterSign: undefined;
@@ -123,7 +127,6 @@ type PostNavigationType = {
   };
   ListImageDetail: { data: PostProps };
   EditPostScreen: { data?: PostProps; selectedItem?: CardData };
-  AllPostDetail: { postId: string };
 };
 
 type TabNavigationType = {
@@ -144,4 +147,8 @@ type ChatNavigationType = {
 };
 type AddMoneyNavigationType = {
   AddMoneyScreen: undefined;
+};
+
+type ReportNavigationType = {
+  ReportScreen: { id: string; username: string; userId: string };
 };

@@ -7,6 +7,8 @@ import BaseFlatList from 'src/components/BaseFlatList';
 import { ISearchUserItem, searchUserAPi } from 'src/services/search.service';
 import UserItem from './components/UserItem';
 import { setBlockApi } from 'src/services/block.service';
+import { blockComponent } from 'src/redux/slices/blockSlice';
+import { useAppDispatch } from 'src/redux';
 const COUNT_ITEM = 10;
 
 function SearchUserScreen() {
@@ -19,6 +21,7 @@ function SearchUserScreen() {
   const [isNextFetch, setIsNextFetch] = useState<boolean>(true);
   const navigation = useNavigation();
   const _goBack = () => navigation.goBack();
+  const dispatch = useAppDispatch();
 
   const handleTextChange = (e: string) => {
     setSearchText(e);
@@ -91,6 +94,7 @@ function SearchUserScreen() {
           onPress: async () => {
             try {
               await setBlockApi({ user_id: item.id });
+              dispatch(blockComponent());
             } catch (error) {
               return;
             } finally {
@@ -170,6 +174,7 @@ function SearchUserScreen() {
               <UserItem
                 title={item.username}
                 avatar={item.avatar}
+                id={item.id}
                 onPress={() => onPressUser(item)}
               />
               <Divider />
