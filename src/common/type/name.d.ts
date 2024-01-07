@@ -59,7 +59,8 @@ export enum PostNavigationName {
   ListImageScreen = 'ListImageScreen',
   ListImageEditScreen = 'ListImageEditScreen',
   ListImageDetail = 'ListImageDetail',
-  EditPostScreen = 'EditPostScreen'
+  EditPostScreen = 'EditPostScreen',
+  ListFeelScreen = 'ListFeelScreen'
 }
 
 export enum TabNavigationName {

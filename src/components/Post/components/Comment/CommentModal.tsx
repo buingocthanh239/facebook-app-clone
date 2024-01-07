@@ -3,20 +3,17 @@ import Modal from 'react-native-modal';
 import styles from './styles';
 import { color } from 'src/common/constants/color';
 import BaseFlatList from 'src/components/BaseFlatList';
-import { ActivityIndicator, Appbar, Avatar, Divider } from 'react-native-paper';
+import { ActivityIndicator, Avatar, Divider } from 'react-native-paper';
 import { getAvatarUri } from 'src/utils/helper';
-import { useEffect, useState } from 'react';
-import { IListFeels } from 'src/interfaces/comments.interface';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
-import {
-  getListFeelsApi,
-  getMarkCommentApi,
-  setMarkCommentApi
-} from 'src/services/comment.service';
+import { getMarkCommentApi, setFeelApi, setMarkCommentApi } from 'src/services/comment.service';
+import { useEffect, useState, useRef } from 'react';
 import { IListCommentPost } from 'src/interfaces/comments.interface';
 import { coverTimeToNow } from 'src/utils/dayjs';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
+import { useAppDispatch } from 'src/redux';
+import { changeCoins } from 'src/redux/slices/authSlice';
 interface CommentTabProps {
   id: string;
   openModal: boolean;
@@ -24,62 +21,32 @@ interface CommentTabProps {
   listMarkComment: IListCommentPost[];
   setListMarkComment: React.Dispatch<React.SetStateAction<IListCommentPost[]>>;
   numberFeel: number;
+  typeMark: any;
 }
 const CommentTab = (props: CommentTabProps) => {
-  const navigationProfile: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
-    useNavigation();
-  const { id, openModal, setOpenModal, setListMarkComment, listMarkComment, numberFeel } = props;
+  const { id, openModal, setOpenModal, setListMarkComment, listMarkComment, numberFeel, typeMark } =
+    props;
   // const [listMarkComment, setListMarkComment] = useState<IListCommentPost[]>([]);
+  const dispatch = useAppDispatch();
   const [skip, setSkip] = useState<number>(0);
   const [isNext, setIsNext] = useState<boolean>(false);
   const [isNextFetch, setIsNextFetch] = useState<boolean>(true);
   const [isLoadingFirstApi, setIsLoadingFirstAPi] = useState<boolean>(false);
-  const [listFeels, setListFeels] = useState<IListFeels[]>([]);
-  const [totalFeel, setTotalFeel] = useState(0);
-  const [kudosFeel, setKudosFeel] = useState(0);
+  const [markId, setMarkId] = useState(0);
   const [commentText, setCommentText] = useState('');
-  const [openModalListFeels, setOpenModalListFeel] = useState(false);
+  const [isComment, setIsComment] = useState(false);
+  const [isLike, setIsLike] = useState(false);
   const COUNT_ITEM = 10;
 
-  const handleNavigationProfile = (id: string) =>
-    navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
-      screen: ProfileNavigationName.Profile,
-      params: { user_id: id }
-    });
+  const textInputRef = useRef<TextInput>(null);
   useEffect(() => {
     setIsLoadingFirstAPi(true);
     setIsNextFetch(true);
     setSkip(COUNT_ITEM);
     setTimeout(() => {
       setIsLoadingFirstAPi(false);
-    }, 1000);
+    }, 1500);
   }, []);
-
-  const handleListFeel = async () => {
-    setOpenModalListFeel(true);
-    try {
-      const result = await getListFeelsApi({
-        id: id,
-        index: 0,
-        count: 100
-      });
-      if (result.success) {
-        if (!result.data.length) {
-          return;
-        } else {
-          const listFeel = result.data;
-          setTotalFeel(result.data.length);
-          // console.log('listFeel', listFeel)
-          const kudosFeel = listFeel.filter((feel: any) => feel.feel.type == 1);
-          setKudosFeel(kudosFeel.length);
-          // console.log('kudosFeel', kudosFeel)
-          setListFeels(result.data);
-        }
-      }
-    } catch (error) {
-      return console.log({ message: 'sever availability' });
-    }
-  };
 
   async function onEndReadable() {
     if (isNextFetch) {
@@ -122,14 +89,15 @@ const CommentTab = (props: CommentTabProps) => {
         content: commentText,
         index: 0,
         count: 10,
-        mark_id: null,
-        type: 0
+        mark_id: markId == 0 ? null : markId,
+        type: typeMark
       });
       if (result.success) {
         if (!result.data.length) {
           return;
         }
         setListMarkComment(result.data);
+        dispatch(changeCoins(result.data.coins));
         // const response = res.data;
       }
     } catch (e) {
@@ -137,13 +105,19 @@ const CommentTab = (props: CommentTabProps) => {
     }
     setCommentText('');
     setSkip(0);
+    setMarkId(0);
   };
 
   const handleTextChange = (e: any) => {
     setCommentText(e);
   };
+  const handleResponse = (id_comment: string) => {
+    if (textInputRef.current) {
+      textInputRef.current?.focus();
+      setMarkId(parseInt(id_comment, 10));
+    }
+  };
   // console.log('id', id)
-
   // const ModalComment = ({ visible, onClose, children }: { visible: boolean, onClose: () => void, children: React.ReactNode }) => {
   //   const translateY = useRef(new Animated.Value(0)).current;
   //   const panResponder = useRef(
@@ -188,7 +162,30 @@ const CommentTab = (props: CommentTabProps) => {
   //     </Modal>
   //   );
   // }
+  const handleSetLike = async (id: string) => {
+    try {
+      const res = await setFeelApi({
+        id: id,
+        type: 1
+      });
+      if (res.success) {
+        setIsLike(true);
+        dispatch(changeCoins(res.data.coins));
+      }
+    } catch (e) {
+      return;
+    }
+    // setOpenModalFeel(false);
+  };
 
+  //handle navigaiton feel screen
+  const navigationFeelScreen: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
+    useNavigation();
+  const handleNavigationFeelScreen = () =>
+    navigationFeelScreen.navigate(AppNaviagtionName.PostNavigation, {
+      screen: PostNavigationName.ListFeelScreen,
+      params: { postId: id }
+    });
   return (
     <Modal
       // visible={openModal}
@@ -209,42 +206,74 @@ const CommentTab = (props: CommentTabProps) => {
         <View style={{ backgroundColor: color.white }}>
           <TouchableHighlight
             style={styles.header}
-            onPress={() => handleListFeel()}
+            onPress={handleNavigationFeelScreen}
             underlayColor={color.Comment}
           >
             {/* <Text>đây là header comment</Text> */}
             <View style={styles.icon}>
               <View style={styles.left}>
-                <View style={styles.listIcon}>
-                  <AntdIcon
-                    name='like1'
-                    size={18}
-                    color={color.likeIcon}
-                    style={styles.rightIcon}
-                  />
-                  <AntdIcon
-                    name='dislike1'
-                    size={18}
-                    color={color.iconButtonColor}
-                    style={styles.rightIcon}
-                  />
-                  {numberFeel >= 1 ? (
+                {numberFeel >= 1 && !isLike ? (
+                  <View style={styles.listIcon}>
+                    <AntdIcon
+                      name='like1'
+                      size={18}
+                      color={color.likeIcon}
+                      style={styles.rightIcon}
+                    />
+                    <AntdIcon
+                      name='dislike1'
+                      size={18}
+                      color={color.iconButtonColor}
+                      style={styles.rightIcon}
+                    />
+
                     <Text style={{ color: color.iconButtonColor }}>
                       Có <Text style={{ fontWeight: 'bold' }}>{numberFeel}</Text> người đã bày tỏ
                       cảm xúc
                     </Text>
-                  ) : null}
-                  <AntdIcon
-                    name='right'
-                    size={18}
-                    color={color.iconButtonColor}
-                    style={styles.rightIcon}
-                  />
-                </View>
+
+                    <AntdIcon
+                      name='right'
+                      size={18}
+                      color={color.iconButtonColor}
+                      style={styles.rightIcon}
+                    />
+                  </View>
+                ) : numberFeel < 1 && isLike ? (
+                  <View style={styles.listIcon1}>
+                    <Text style={{ fontWeight: 'bold', color: color.black }}>
+                      Bạn đã thích bài viết này
+                    </Text>
+
+                    <AntdIcon
+                      name='like1'
+                      size={22}
+                      style={{ color: color.likeIcon }}
+                      onPress={() => {
+                        handleSetLike(id);
+                      }}
+                    />
+                  </View>
+                ) : (
+                  <View style={styles.listIcon0}>
+                    <Text style={{ fontWeight: 'bold', color: color.black }}>
+                      Hãy là người đầu tiên thích tin này
+                    </Text>
+
+                    <AntdIcon
+                      name='like2'
+                      size={22}
+                      // style={}
+                      onPress={() => {
+                        handleSetLike(id);
+                      }}
+                    />
+                  </View>
+                )}
               </View>
             </View>
           </TouchableHighlight>
-          <View style={{ height: '86%' }}>
+          <View style={isComment ? { height: '75%' } : { height: '86%' }}>
             <BaseFlatList
               ListHeaderComponent={() => (
                 <TouchableHighlight style={{ padding: 10 }} underlayColor={color.Comment}>
@@ -301,13 +330,21 @@ const CommentTab = (props: CommentTabProps) => {
                           style={styles.highlightConment}
                           underlayColor={color.Comment}
                         >
-                          <Text style={styles.TextResponse}> Phản hồi</Text>
+                          <Text
+                            style={styles.TextResponse}
+                            onPress={() => {
+                              handleResponse(item.id);
+                            }}
+                          >
+                            {' '}
+                            Phản hồi
+                          </Text>
                         </TouchableHighlight>
                       </View>
                       {item.comments.length > 0
                         ? item.comments.map((repItem: any, index: number) => (
                             <>
-                              <View key={index} style={styles.topRep}>
+                              <View key={index.toString() + repItem.content} style={styles.topRep}>
                                 <TouchableHighlight
                                   onPress={() => {}}
                                   style={styles.touchableHighlight}
@@ -361,6 +398,9 @@ const CommentTab = (props: CommentTabProps) => {
           <Divider />
           <View>
             <TextInput
+              ref={textInputRef}
+              onFocus={() => setIsComment(true)}
+              onBlur={() => setIsComment(false)}
               placeholder='Viết bình luận'
               clearButtonMode='always'
               onSubmitEditing={handlePressEnter}
@@ -381,85 +421,6 @@ const CommentTab = (props: CommentTabProps) => {
           </View>
         </View>
       )}
-      <Modal
-        animationIn='fadeIn'
-        animationInTiming={500}
-        animationOut='fadeOut'
-        isVisible={openModalListFeels}
-        style={styles.containerListComment}
-      >
-        <View style={styles.headerListFeel}>
-          <Appbar.BackAction onPress={() => setOpenModalListFeel(false)} />
-          <Text style={styles.textHeaderListFeel}>Người đã bày tỏ cảm xúc</Text>
-        </View>
-        <Divider />
-        <View style={styles.ListFeel}>
-          <Text> Tất cả {String(totalFeel)}</Text>
-          <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-            <AntdIcon name='like1' size={13} style={styles.likeIcon} />
-            <Text>{String(kudosFeel)}</Text>
-          </View>
-          <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-            <AntdIcon name='dislike1' size={13} style={styles.dislikeIcon} />
-            <Text> {String(totalFeel - kudosFeel)}</Text>
-          </View>
-        </View>
-
-        <Divider />
-        <View style={{ paddingTop: 20, paddingLeft: 10 }}>
-          <BaseFlatList
-            data={listFeels}
-            renderItem={({ item }) => (
-              <>
-                <TouchableHighlight
-                  style={styles.CommentItem}
-                  underlayColor={color.Comment}
-                  onPress={() => {
-                    handleNavigationProfile(item.feel.user.id);
-                  }}
-                >
-                  <View style={styles.top}>
-                    <TouchableHighlight
-                      // activeOpacity={0.8}
-                      // underlayColor={color.borderColor}
-                      onPress={() => {}}
-                      style={styles.touchableHighlight}
-                      underlayColor={color.Comment}
-                    >
-                      <>
-                        <View>
-                          <Avatar.Image
-                            source={getAvatarUri(item.feel.user.avatar)}
-                            size={40}
-                            style={styles.avatarImage}
-                          />
-                        </View>
-                      </>
-                    </TouchableHighlight>
-                    <View style={{ position: 'absolute', top: 20, left: 30 }}>
-                      {item.feel.type == '1' ? (
-                        <View>
-                          <AntdIcon name='like1' size={13} style={styles.likeIconFeel} />
-                        </View>
-                      ) : (
-                        <View>
-                          <AntdIcon name='dislike1' size={13} style={styles.dislikeIconFeel} />
-                        </View>
-                      )}
-                    </View>
-                    <View style={styles.ContentNameFeel}>
-                      <Text style={styles.TextNameFeel}>{item.feel.user.name}</Text>
-
-                      {/* <Text style={styles.TextCommment}>{item.mark_content}</Text> */}
-                    </View>
-                  </View>
-                </TouchableHighlight>
-              </>
-            )}
-            keyExtractor={item => item.id}
-          />
-        </View>
-      </Modal>
     </Modal>
   );
 };

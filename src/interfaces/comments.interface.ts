@@ -37,7 +37,7 @@ export interface IListCommentPost {
     name: string;
     avatar: string;
   };
-  comments?: IListCommentPost[];
+  comments?: [];
 }
 export interface IListFeels {
   id: string;
