@@ -240,7 +240,9 @@ const CreatePostScreen = () => {
       mediaFiles.forEach(file => {
         formData.append(`image`, file.base64 as never);
       });
-      formData.append('status', status);
+      if (status !== '') {
+        formData.append('status', status);
+      }
       formData.append('auto_accept', 'true');
       navigationGoBack.goBack();
       dispatch(resetProgress());
