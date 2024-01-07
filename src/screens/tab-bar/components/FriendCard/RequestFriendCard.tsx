@@ -8,6 +8,8 @@ import { ISetAcceptFriend } from 'src/interfaces/friends.interface';
 import { setAcceptFriendApi } from 'src/services/friends.services';
 import { getAvatarUri } from 'src/utils/helper';
 import { setBlockApi } from 'src/services/block.service';
+import { blockComponent } from 'src/redux/slices/blockSlice';
+import { useAppDispatch } from 'src/redux';
 
 interface RequestFriendCardProps {
   id: string;
@@ -24,6 +26,7 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
   same_friends,
   created
 }) => {
+  const dispatch = useAppDispatch();
   const options = [
     {
       icon: 'report',
@@ -137,6 +140,7 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
           onPress: async () => {
             try {
               await setBlockApi({ user_id: id });
+              dispatch(blockComponent());
               setStatus('Block');
               hideModal();
             } catch (error) {

@@ -51,7 +51,7 @@ function ProfileScreen() {
   useEffect(() => {
     if (isFocus) {
       scrollToTop();
-      setTimeout(() => setIsLoadingUserInfo(false), 1000);
+      setTimeout(() => setIsLoadingUserInfo(false), 500);
     } else {
       setIsLoadingUserInfo(true);
     }

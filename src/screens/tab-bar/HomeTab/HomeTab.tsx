@@ -19,6 +19,7 @@ function HomeTab() {
   const [skip, setSkip] = useState<number>(0);
 
   const postStore = useAppSelector(selectPost);
+  const isBlock = useAppSelector(state => state.block.time);
 
   const [refreshing, setrefreshing] = useState(false);
   const onRefresh = async () => {
@@ -28,6 +29,9 @@ function HomeTab() {
     setSkip(skip => skip + COUNT_ITEM);
     setrefreshing(false);
   };
+  useEffect(() => {
+    onRefresh();
+  }, [isBlock]);
 
   async function onEndReadable() {
     if (postStore.isNextFetch) {
