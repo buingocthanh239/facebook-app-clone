@@ -20,8 +20,9 @@ import {
   ProfileNavigationName
 } from 'src/common/constants/nameScreen';
 import CommentTab from './components/Comment';
-import { deleteFeelsApi, setFeelApi } from 'src/services/comment.service';
+import { deleteFeelsApi, getMarkCommentApi, setFeelApi } from 'src/services/comment.service';
 import { useAppDispatch } from 'src/redux';
+import { IListCommentPost } from 'src/interfaces/comments.interface';
 
 const MAX_LENGTH_CONTENT = 500;
 
@@ -59,6 +60,7 @@ function Post(props: PostProps) {
   const navigationPostDetail: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
     useNavigation();
   const [deleted, setDeleted] = useState(false);
+  const [listMarkComment, setListMarkComment] = useState<IListCommentPost[]>([]);
   const onDeletePost = () => {
     setDeleted(true);
   };
@@ -120,6 +122,24 @@ function Post(props: PostProps) {
   const handldeOpenLikeModal = () => {
     setOpenModalFeel(true);
   };
+  const handleComment = async () => {
+    setOpenCommentModal(true);
+    // setIsLoadingFirstAPi(true);
+    try {
+      const result = await getMarkCommentApi({
+        id: id,
+        index: 0,
+        count: 10
+      });
+      if (result.success) {
+        setListMarkComment(result.data);
+        // console.log('result', result.data)
+      }
+    } catch (error) {
+      return console.log({ message: 'sever availability' });
+    }
+  };
+
   const handleLike = async () => {
     if (feel == '-1') {
       try {
@@ -261,7 +281,7 @@ function Post(props: PostProps) {
         <>
           <TouchableHighlight
             style={[globalStyles.flexRow, globalStyles.spaceBetweenJustify, styles.padding]}
-            onPress={() => setOpenCommentModal(true)}
+            onPress={() => handleComment()}
             underlayColor={color.borderColor}
           >
             <>
@@ -345,7 +365,7 @@ function Post(props: PostProps) {
         >
           <>
             <FontAwesomeICon name='comment-o' size={20} />
-            <Text onPress={() => setOpenCommentModal(true)}>Bình luận</Text>
+            <Text onPress={() => handleComment()}>Bình luận</Text>
           </>
         </TouchableHighlight>
         <TouchableHighlight
@@ -368,7 +388,14 @@ function Post(props: PostProps) {
         post={props}
         onDeletePost={onDeletePost}
       />
-      <CommentTab openModal={openCommentModal} setOpenModal={setOpenCommentModal} id={props.id} />
+      <CommentTab
+        openModal={openCommentModal}
+        setOpenModal={setOpenCommentModal}
+        listMarkComment={listMarkComment}
+        setListMarkComment={setListMarkComment}
+        numberFeel={numberFeel}
+        id={props.id}
+      />
     </View>
   );
 }

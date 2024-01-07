@@ -15,9 +15,10 @@ import {
 import BaseFlatList from 'src/components/BaseFlatList';
 import Post from 'src/components/Post';
 import NetInfo from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import BaseFlatListSearch from 'src/components/BaseFlatListSearch';
 import UserItem from 'src/screens/setting/SearchUserScreen/components/UserItem';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 export interface ISearchResult {
   id: string;
   name: string;
@@ -46,6 +47,8 @@ function SearchScreen() {
   const [listSearch, setListSearch] = useState<ISearchResult[]>([]);
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
   const [isLoadingFirstApi, setIsLoadingFirstAPi] = useState<boolean>(false);
+  const [isLoadingFirstApiListSaveSearch, setIsLoadingFirstAPiListSaveSearch] =
+    useState<boolean>(true);
   const [tab, setTab] = useState(ListTab.POST);
   const [data, setData] = useState<ISearchUserItem[]>([]);
   const [skip, setSkip] = useState<number>(0);
@@ -55,10 +58,17 @@ function SearchScreen() {
   const [isNextSearch, setIsNextSearch] = useState<boolean>(false);
   const [isNextSearchPost, setIsNextSearchPost] = useState<boolean>(false);
   const navigation = useNavigation();
+  const navigationProfile: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
   // const [onSearch, setOnSearch] = useState(false)
   // const handleOpenCommentTab = () => {
   //   setOpenModal(true);
   // };
+  const handleNavigationProfile = (id: string) =>
+    navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id: id }
+    });
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
       // `state.isConnected` sẽ là `true` nếu có kết nối mạng và `false` nếu không có
@@ -80,15 +90,21 @@ function SearchScreen() {
 
   const handleSearch = async (index: any, keyword: any) => {
     Keyboard.dismiss();
+    // console.log('keywword', keyword)
     setIsRefreshSaveSearch(!isRefreshSaveSearch);
     setIsLoadingFirstAPi(true);
     setIsSearching(true);
+    setTimeout(() => {
+      setIsLoadingFirstAPi(false);
+    }, 500);
+    // setListSavedSearch([keyword, ...listSavedSearch])
     const data: ISearch = {
       keyword: keyword,
       user_id: null,
       index: index,
       count: COUNT_ITEM
     };
+
     try {
       const result = await searchApi(data);
       if (result.success) {
@@ -96,6 +112,7 @@ function SearchScreen() {
         const searchResult: any = [];
         if (!response.length) {
           setIsNextFetchPost(false);
+          setListSearch([]);
           return;
         }
         response.forEach(item => {
@@ -110,20 +127,17 @@ function SearchScreen() {
         setIsNextFetchPost(true);
         setSkipPost(COUNT_ITEM);
       }
-
       const res = await searchUserAPi({ keyword: searchText, index: 0, count: COUNT_ITEM });
       if (res.success) {
         if (!res.data.length) {
           setIsNextFetch(false);
+
           return;
         }
         setData(res.data);
         setIsNextFetch(true);
         setSkip(COUNT_ITEM);
       }
-      setTimeout(() => {
-        setIsLoadingFirstAPi(false);
-      }, 300);
 
       // setCurrentIndex(0)
     } catch (error) {
@@ -246,7 +260,11 @@ function SearchScreen() {
       index: 0,
       count: 10
     };
+
     const fetchData = async (data: IGetSavedSearch) => {
+      setTimeout(() => {
+        setIsLoadingFirstAPiListSaveSearch(false);
+      }, 300);
       try {
         const listResult: any[] = [];
         const result = await getSaveSearchApi(data);
@@ -266,7 +284,7 @@ function SearchScreen() {
     };
 
     fetchData(data).catch(console.error);
-  }, [isRefreshSaveSearch]);
+  }, [isRefreshSaveSearch, isSearching]);
 
   const handleDeleteSearch = async (IdSearch: number, keyword: any) => {
     const duplicateKeywords = listAllSavedSearch.filter(item => item.keyword === keyword);
@@ -275,9 +293,7 @@ function SearchScreen() {
     setIsRefresh(!isRefresh);
     const updatedList = listSavedSearch.filter(item => item.id !== IdSearch);
     setListSavedSearch(updatedList);
-
     let currentIndex = 0;
-
     const deleteSearchWithInterval = async () => {
       const id = idArray[currentIndex];
 
@@ -288,10 +304,8 @@ function SearchScreen() {
       } catch (error) {
         console.log(error);
       }
-
       // Chuyển sang phần tử tiếp theo trong mảng
       currentIndex++;
-
       // Nếu đã xử lý hết mọi phần tử trong mảng, dừng vòng lặp
       if (currentIndex === idArray.length) {
         clearInterval(intervalId);
@@ -445,6 +459,9 @@ function SearchScreen() {
                         <UserItem
                           title={item.username}
                           avatar={item.avatar}
+                          onPress={() => {
+                            handleNavigationProfile(item.id);
+                          }}
                           // onPress={() => onPressUser(item)}
                         />
                         <Divider />
@@ -464,7 +481,12 @@ function SearchScreen() {
             ) : (
               // Hiển thị HistorySearch khi searchText có giá trị
               <>
-                {listSavedSearch.length === 0 ? (
+                {isLoadingFirstApiListSaveSearch ? (
+                  <ActivityIndicator
+                    color={color.activeOutlineColor}
+                    style={{ marginTop: '50%' }}
+                  />
+                ) : listSavedSearch.length === 0 ? (
                   // Hiển thị dòng text không có tìm kiếm nào gần đây
                   <Text style={styles.noSearchText}>Không có tìm kiếm nào gần đây</Text>
                 ) : (
@@ -478,7 +500,7 @@ function SearchScreen() {
                         setSearchText(item.keyword);
                         setTimeout(() => {
                           handleSearch(currentIndex, item.keyword);
-                        }, 200);
+                        }, 300);
                       }}
                     >
                       <View key={item.id} style={styles.ListSearchResult}>
