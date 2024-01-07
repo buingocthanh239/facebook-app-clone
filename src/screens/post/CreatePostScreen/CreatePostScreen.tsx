@@ -27,7 +27,11 @@ import { changeCoins, selectAuth } from 'src/redux/slices/authSlice';
 import BaseButton from 'src/components/BaseButton';
 import { addPost } from 'src/services/post.services';
 import { setMessage } from 'src/redux/slices/appSlice';
-import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
+import {
+  AddMoneyNavigationName,
+  AppNaviagtionName,
+  PostNavigationName
+} from 'src/common/constants/nameScreen';
 import {
   IUnfinishedPost,
   getNewPost,
@@ -67,6 +71,7 @@ const CreatePostScreen = () => {
     useNavigation();
   const navigation2: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
     useNavigation();
+  const navigationAddMoney: NavigationProp<AppNavigationType> = useNavigation();
   const auth = useAppSelector(selectAuth);
   const avatar = auth.user?.avatar;
   const username = auth.user?.username;
@@ -276,6 +281,10 @@ const CreatePostScreen = () => {
       }
     });
   };
+  const onPressAddMoney = () =>
+    navigationAddMoney.navigate(AppNaviagtionName.AddMoneyNavigation, {
+      screen: AddMoneyNavigationName.AddMoneyScreen
+    });
 
   const handleCreatePost = async () => {
     try {
@@ -295,15 +304,33 @@ const CreatePostScreen = () => {
         formData.append('status', status);
       }
       formData.append('auto_accept', 'true');
-      navigationGoBack.goBack();
       dispatch(resetProgress());
       const res = await addPost(formData);
 
       if (res.success) {
+        navigationGoBack.goBack();
         dispatch(getNewPost({ id: res.data.id }));
         dispatch(resetUnfinishedPost());
         dispatch(changeCoins(res.data.coins));
         return res;
+      } else if (res.message == 'Not enough coins') {
+        Alert.alert(
+          'Lỗi!',
+          'Tài khoản của bạn không đủ số dư.\nVui lòng nạp thêm coins để tiếp tục thực hiện thao tác này! ',
+          [
+            {
+              text: 'Hủy',
+              onPress: () => {},
+              style: 'cancel'
+            },
+            {
+              text: 'Tiếp tục',
+              onPress: () => {
+                onPressAddMoney();
+              }
+            }
+          ]
+        );
       } else {
         dispatch(setMessage(handShowErrorMessage(parseInt(res.code as unknown as string))));
       }

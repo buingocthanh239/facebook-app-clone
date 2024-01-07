@@ -60,6 +60,7 @@ function SearchScreen() {
   const navigation = useNavigation();
   const navigationProfile: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
     useNavigation();
+
   // const [onSearch, setOnSearch] = useState(false)
   // const handleOpenCommentTab = () => {
   //   setOpenModal(true);
@@ -258,13 +259,13 @@ function SearchScreen() {
   useEffect(() => {
     const data: IGetSavedSearch = {
       index: 0,
-      count: 10
+      count: 30
     };
 
     const fetchData = async (data: IGetSavedSearch) => {
       setTimeout(() => {
         setIsLoadingFirstAPiListSaveSearch(false);
-      }, 300);
+      }, 1000);
       try {
         const listResult: any[] = [];
         const result = await getSaveSearchApi(data);
@@ -272,7 +273,7 @@ function SearchScreen() {
         for (let i = 0; i < result.data.length; i++) {
           const currentItem = result.data[i];
           const exist = listResult.some(item => item.keyword === currentItem.keyword);
-          if (!exist) {
+          if (!exist && listResult.length < 20) {
             listResult.push(currentItem);
           }
         }

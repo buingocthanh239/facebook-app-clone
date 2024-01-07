@@ -13,7 +13,15 @@ import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
+import { useSelector } from 'react-redux';
+import { selectFriend } from 'src/redux/slices/friendSlice';
+import database from '@react-native-firebase/database';
+
 function Header() {
+  const listfriends = useSelector(selectFriend);
+  const friends = listfriends.friends?.friends;
+  console.log(friends);
+
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.SearchNavigation> =
     useNavigation();
   const navigationChatScreen: NavigationProp<AppNavigationType, AppNaviagtionName.ChatNavigation> =
@@ -25,15 +33,43 @@ function Header() {
     navigation.navigate(AppNaviagtionName.SearchNavigation, {
       screen: SearchNavigationName.SearchScreen
     });
-  const handleNaviagtionChatScreen = () =>
-    navigationChatScreen.navigate(AppNaviagtionName.ChatNavigation, {
-      screen: ChatNavigationName.InboxListScreen
+  const auth = useAppSelector(selectAuth);
+
+  const createChatList = () => {
+    friends?.forEach(friend => {
+      const roomId = Number(auth.user?.id) + Number(friend.id);
+      console.log(roomId);
+      const myData = {
+        roomId: roomId,
+        name: friend.username,
+        avatar: friend.avatar,
+        user_id: friend.id,
+        lastMsg: ' '
+      };
+
+      database()
+        .ref('/chatlistt/' + auth.user?.id + '/' + friend.id)
+        .update(myData)
+        .then(() => console.log('Data updated'));
+
+      database()
+        .ref('/chatlistt/' + friend.id + '/' + auth.user?.id)
+        .update(friend)
+        .then(() => console.log('Data updated'));
     });
+  };
+
+  const handleNaviagtionChatScreen = () => {
+    navigationChatScreen.navigate(AppNaviagtionName.ChatNavigation, {
+      screen: ChatNavigationName.InboxScreen
+    });
+    createChatList();
+  };
   const onPressAddMoney = () =>
     navigationAddMoney.navigate(AppNaviagtionName.AddMoneyNavigation, {
       screen: AddMoneyNavigationName.AddMoneyScreen
     });
-  const auth = useAppSelector(selectAuth);
+
   const coins = auth.user?.coins;
 
   return (
@@ -76,7 +112,7 @@ function Header() {
           activeOpacity={0.8}
         >
           <Text style={{ color: color.iconButtonColor, fontWeight: 'bold', fontSize: 16 }}>
-            {parseFloat(coins).toLocaleString('en-US')}
+            {parseFloat(coins as string).toLocaleString('en-US')}
           </Text>
           <IconFont name='coins' color={color.iconButtonColor} size={16} />
         </TouchableOpacity>

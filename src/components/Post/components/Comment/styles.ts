@@ -371,7 +371,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5
   },
-
+  listIcon0: {
+    display: 'flex',
+    flexDirection: 'row',
+    // justifyContent: 'space-between',
+    gap: 90
+  },
+  listIcon1: {
+    display: 'flex',
+    flexDirection: 'row',
+    // justifyContent: 'space-between',
+    gap: 150
+  },
   likeIcon: {
     padding: 3,
     paddingLeft: 4,

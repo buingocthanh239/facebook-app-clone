@@ -11,14 +11,9 @@ const defaultProps: Partial<BaseVideoProps> = {
   resizeMode: 'contain'
 };
 function BaseVideo(props: VideoPlayerProps) {
-  const { video, thumbnail, ...propsRemain } = props;
-
+  const { video, ...propsRemain } = props;
   return video ? (
-    <VideoPlayer
-      {...propsRemain}
-      video={video}
-      thumbnail={thumbnail === null ? thumbnail : require('src/assets/cover-default.jpg')}
-    />
+    <VideoPlayer {...propsRemain} thumbnail={require('src/assets/cover-default.jpg')} />
   ) : null;
 }
 BaseVideo.defaultProps = defaultProps;

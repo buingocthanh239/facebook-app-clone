@@ -37,10 +37,10 @@ export interface PostProps {
   };
   described: string;
   created: string;
-  feel?: string;
-  comment_mark?: string;
-  is_felt?: string;
-  is_blocked?: string;
+  feel: string;
+  comment_mark: string;
+  is_felt: string;
+  is_blocked: string;
   can_edit: string;
   banned: string;
   status: string;
@@ -48,8 +48,6 @@ export interface PostProps {
     id: string;
     name: string;
     avatar: string;
-    coins?: string;
-    listing?: any[];
   };
   numberShares?: number;
   isShowCloseIcon?: boolean;
@@ -63,6 +61,7 @@ function Post(props: PostProps) {
     useNavigation();
   const [deleted, setDeleted] = useState(false);
   const [listMarkComment, setListMarkComment] = useState<IListCommentPost[]>([]);
+  const [typeMark, setTypeMark] = useState<number | null>(null);
   const onDeletePost = () => {
     setDeleted(true);
   };
@@ -86,7 +85,7 @@ function Post(props: PostProps) {
   const { described, name, image, video, id, status } = props;
   const [openModalFeel, setOpenModalFeel] = useState(false);
   const [feel, setfeel] = useState(props.is_felt);
-  const [numberFeel, setNumberFeel] = useState<number>(parseInt(props.feel, 10));
+  const [numberFeel, setNumberFeel] = useState<number>(parseInt(props.feel ?? '0', 10));
   const urls = image?.map(imageObj => imageObj.url) ?? [];
   const content = described;
   useEffect(() => {
@@ -166,6 +165,7 @@ function Post(props: PostProps) {
         if (res.success) {
           setfeel('-1');
           setNumberFeel(numberFeel - 1);
+          setTypeMark(1);
         }
       } catch (e) {
         return;
@@ -181,8 +181,11 @@ function Post(props: PostProps) {
       });
       if (res.success) {
         dispatch(changeCoins(res.data.coins));
-        setNumberFeel(numberFeel + 1);
+        if (feel == '-1') {
+          setNumberFeel(numberFeel + 1);
+        }
         setfeel('1');
+        setTypeMark(1);
       }
     } catch (e) {
       return;
@@ -199,7 +202,10 @@ function Post(props: PostProps) {
       if (res.success) {
         dispatch(changeCoins(res.data.coins));
         setfeel('0');
-        setNumberFeel(numberFeel + 1);
+        if (feel == '-1') {
+          setNumberFeel(numberFeel + 1);
+        }
+        setTypeMark(0);
         // const response = res.data;
       }
     } catch (e) {
@@ -287,7 +293,7 @@ function Post(props: PostProps) {
             underlayColor={color.borderColor}
           >
             <>
-              {props.feel !== '0' && (
+              {numberFeel !== 0 && (
                 <View style={[globalStyles.flexRow, globalStyles.centerAlignItem]}>
                   <AntdIcon name='like1' size={15} color={color.primary} />
                   <Text>{numberFeel}</Text>
@@ -391,6 +397,7 @@ function Post(props: PostProps) {
         onDeletePost={onDeletePost}
       />
       <CommentTab
+        typeMark={typeMark}
         openModal={openCommentModal}
         setOpenModal={setOpenCommentModal}
         listMarkComment={listMarkComment}

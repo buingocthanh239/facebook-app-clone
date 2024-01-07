@@ -50,7 +50,7 @@ const FriendField = ({ friends, totalFriend, isOwnProfile }: FriendFieldProps) =
           />
         ))}
       </View>
-      <TouchableOpacity style={styles.allFriendBtn} activeOpacity={0.7}>
+      <TouchableOpacity style={styles.allFriendBtn} activeOpacity={0.7} onPress={() => {}}>
         <Text
           style={{ color: color.textColor, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}
         >

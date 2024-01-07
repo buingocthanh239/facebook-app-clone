@@ -1,129 +1,177 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { TextInput, IconButton, Avatar, useTheme } from 'react-native-paper';
+import { TextInput, IconButton, Avatar } from 'react-native-paper';
+import database from '@react-native-firebase/database';
+import { useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
+import { getAvatarUri } from 'src/utils/helper';
 
-interface MyMessageProps {
-  message: string;
-}
+const InboxListScreen = ({ route }: { route: any }) => {
+  //   const alltestchat = [
+  //     {
+  //       sender: 'you',
+  //       text: 'Hello from you',
+  //       messageType: 'sent'
+  //     },
+  //     {
+  //       sender: 'other',
+  //       text: 'Hi from other',
+  //       messageType: 'received'
+  //     },
+  //     {
+  //       sender: 'other',
+  //       text: 'Hi from other',
+  //       messageType: 'received'
+  //     },
+  //     {
+  //       sender: 'you',
+  //       text: 'Hello from you',
+  //       messageType: 'sent'
+  //     },
+  //     {
+  //       sender: 'you',
+  //       text: 'Hello from you',
+  //       messageType: 'sent'
+  //     },
+  //     {
+  //       sender: 'other',
+  //       text: 'Hi from other',
+  //       messageType: 'received'
+  //     }
+  //     // Thêm tin nhắn khác nếu cần
+  //   ];
+  const { contact } = route.params;
 
-const MyMessage: React.FC<MyMessageProps> = ({ message }: MyMessageProps) => (
-  <View style={styles.myMessageContainer}>
-    <Text style={styles.myMessageText}>{message}</Text>
-  </View>
-);
+  //   const [text, setText] = useState('');
+  const [, setIsTyping] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [allChat, setAllChat] = useState<Message[]>([]);
 
-interface TheirMessageProps {
-  message: string;
-}
+  interface Message {
+    // Định nghĩa kiểu dữ liệu của một tin nhắn
+    // Ví dụ:
+    from: string;
+    messages: string;
+    mstType: string;
+    roomId: string;
+    to: string;
+    // Các trường khác nếu cần
+  }
 
-const TheirMessage: React.FC<TheirMessageProps> = ({ message }: TheirMessageProps) => (
-  <View style={styles.theirMessageContainer}>
-    <Avatar.Image source={require('../../assets/avatar-default.png')} size={40} />
-    <View style={styles.theirMessageContent}>
-      <Text style={styles.theirMessageText}>{message}</Text>
-    </View>
-  </View>
-);
+  useEffect(() => {
+    const onChildAdd = database()
+      .ref('/messages/' + contact.roomId)
+      .on('child_added', snapshot => {
+        const newMessage = snapshot.val();
+        setAllChat(state => [...state, newMessage]);
+      });
 
-const InboxListScreen: React.FC = () => {
-  const [text, setText] = useState('');
-  const theme = useTheme();
-  const { colors } = theme;
+    // Stop listening for updates when no longer required
+    return () =>
+      database()
+        .ref('/messages' + contact.roomId)
+        .off('child_added', onChildAdd);
+  }, [contact.roomId]);
+  const auth = useAppSelector(selectAuth);
 
-  const [isTyping, setIsTyping] = useState(false);
-  const [messages, setMessages] = useState([
-    { type: 'their', content: '1' },
-    { type: 'mine', content: 'ádasasdadasdads' },
-    { type: 'their', content: 'adasdasad' }
-    // ... (các tin nhắn khác)
-  ]);
+  const msgvalid = (txt: string) => txt && txt.replace(/\s/g, '').length;
 
-  const handleSendMessage = () => {
-    if (text.trim() !== '') {
-      const newMessage = { type: 'mine', content: text };
-      setMessages(prevMessages => [...prevMessages, newMessage]);
-      setText('');
+  const sendMsg = () => {
+    if (msg == '' || msgvalid(msg) == 0) {
+      alert('Enter something...');
     }
-    setIsTyping(false);
+    const msgData = {
+      roomId: contact.roomId,
+      messages: msg,
+      from: auth.user?.id,
+      to: contact.user_id,
+      mstType: 'text'
+    };
+
+    // Tạo một reference đến đường dẫn cụ thể trong Firebase
+    const newReference = database()
+      .ref('/messages/' + contact.roomId)
+      .push();
+
+    // console.log('Auto generated key: ', newReference.key);
+
+    // Set dữ liệu tại key mới tạo
+    newReference.set(msgData).then(() => {
+      const chatlistupdate = {
+        lastMsg: msg
+      };
+
+      database()
+        .ref('/chatlistt/' + contact.user_id + '/' + auth.user?.id)
+        .update(chatlistupdate)
+        .then(() => console.log('Data updated'));
+      database()
+        .ref('/chatlistt/' + auth.user?.id + '/' + contact.user_id)
+        .update(chatlistupdate)
+        .then(() => console.log('Data updated'));
+
+      setMsg('');
+    });
   };
 
   return (
     <>
       <View style={{ flexDirection: 'row', backgroundColor: '#fff' }}>
         <IconButton icon={'keyboard-backspace'} iconColor={'#6A5ACD'} onPress={() => {}} />
-        <Avatar.Image
-          size={35}
-          style={{ marginTop: 10 }}
-          source={require('../../assets/avatar-default.png')}
-        />
+        <Avatar.Image size={35} style={{ marginTop: 10 }} source={getAvatarUri(contact.avatar)} />
         <View style={{ flexDirection: 'column', marginTop: 8, marginLeft: 10 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#003' }}> Trần Tuấn </Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#003' }}>{contact.name}</Text>
           <Text style={{ fontSize: 10, fontWeight: '300' }}> Hoạt động 20 phút trước </Text>
         </View>
-        <IconButton icon={'phone'} iconColor={'#6A5ACD'} style={{ marginLeft: 'auto' }} />
-        <IconButton icon={'video'} iconColor={'#6A5ACD'} />
-        <IconButton icon={'information'} iconColor={'#6A5ACD'} />
       </View>
       <ScrollView style={styles.container}>
-        {messages.map((message, index) =>
-          message.type === 'mine' ? (
-            <MyMessage key={index} message={message.content} />
-          ) : (
-            <TheirMessage key={index} message={message.content} />
-          )
-        )}
+        {allChat.map((message, index) => {
+          return (
+            <View
+              key={index}
+              style={[
+                styles.messageContainer,
+                message.from === auth.user?.id ? styles.sentMessage : styles.receivedMessage
+              ]}
+            >
+              <Text style={message.from === auth.user?.id ? styles.sentText : styles.receivedText}>
+                {message.messages}
+              </Text>
+            </View>
+          );
+        })}
       </ScrollView>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          maxHeight: 250
-        }}
-      >
-        <IconButton icon={'dots-grid'} size={30} iconColor='#0066FF' onPress={() => {}} />
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
         <IconButton
-          icon={'camera'}
+          icon={'dots-grid'}
           size={30}
           iconColor='#0066FF'
           onPress={() => {}}
-          style={isTyping && { display: 'none' }}
+          style={{ marginRight: -5 }}
         />
-        <IconButton
-          icon={'file-image'}
-          size={30}
-          iconColor='#0066FF'
-          onPress={() => {}}
-          style={isTyping && { display: 'none' }}
-        />
-        <IconButton
-          icon={'microphone'}
-          size={30}
-          iconColor='#0066FF'
-          onPress={() => {}}
-          style={isTyping && { display: 'none' }}
-        />
-        <View style={{ flex: 1, borderRadius: 10, maxHeight: 250 }}>
-          <TextInput
-            placeholder='Nhắn tin'
-            multiline
-            value={text}
-            onFocus={() => setIsTyping(true)}
-            onBlur={!text ? () => setIsTyping(false) : () => {}}
-            onChangeText={text => setText(text)}
-            right={<TextInput.Icon icon='sticker-emoji' color={'#0066FF'} />}
-            onSubmitEditing={handleSendMessage}
-            theme={{ ...theme, colors: { ...colors, primary: 'transparent' }, roundness: 20 }}
-            style={{
-              backgroundColor: '#DCDCDC',
-              flex: 1,
-              borderRadius: 20,
-              textAlign: 'left'
-            }}
-            underlineColor='transparent'
-          />
-        </View>
 
-        <IconButton size={30} icon={'thumb-up'} iconColor='#0066FF' />
+        <TextInput
+          label='Nhắn tin'
+          value={msg}
+          onFocus={() => setIsTyping(true)}
+          onChangeText={msg => setMsg(msg)}
+          //   right={<TextInput.Icon icon='sticker-emoji' color={'#0066FF'} />}
+          onSubmitEditing={() => {
+            sendMsg();
+          }}
+          style={{
+            paddingBottom: -20,
+            paddingTop: -20,
+            borderColor: '#fff',
+            backgroundColor: '#DCDCDC',
+            margin: 15,
+            marginTop: 20,
+            borderBottomLeftRadius: 30,
+            borderBottomRightRadius: 30,
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30
+          }}
+        />
       </View>
     </>
   );
@@ -131,36 +179,30 @@ const InboxListScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'column-reverse',
     flex: 1,
     padding: 16,
     backgroundColor: '#F4F4F4'
   },
-  myMessageContainer: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#0066FF',
+
+  messageContainer: {
     padding: 10,
-    marginBottom: 10,
-    borderRadius: 20
+    borderRadius: 10,
+    marginVertical: 5
   },
-  myMessageText: {
+  sentMessage: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#0066FF'
+  },
+  receivedMessage: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#FFFFFF'
+  },
+  sentText: {
     color: '#FFFFFF'
   },
-  theirMessageContainer: {
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingRight: 20,
-    borderRadius: 10
-  },
-  theirMessageContent: {
-    marginLeft: 10,
-    backgroundColor: '#E0E0E0',
-    padding: 10,
-    borderRadius: 20
-  },
-  theirMessageText: {
+  receivedText: {
     color: '#000000'
   }
 });
-
 export default InboxListScreen;
