@@ -47,7 +47,9 @@ type AppNavigationType = {
     screen: ReportNavigationName;
     params: { id: string; username: string; userId: string };
   };
-  ChatNavigation: { screen: ChatNavigationName };
+  ChatNavigation:
+    | { screen: ChatNavigationName.InboxScreen; params: { contact: Contact } }
+    | { screen: ChatNavigationName.InboxListScreen };
   VerifyOTPAfterLogin: undefined;
   ChangeProfileAfterSign: undefined;
   NotFoundScreen: undefined;
