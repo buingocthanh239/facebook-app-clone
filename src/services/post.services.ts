@@ -23,28 +23,29 @@ export interface Category {
 }
 
 export interface IGetPostData {
-  id: string;
-  name: string;
-  created: string;
-  described: string;
-  modified: string;
-  fake: string;
-  trust: string;
-  kudos: string;
-  disappointed: string;
-  is_felt: string;
-  is_marked: string;
-  image: string[];
   author: Author;
-  category: Category;
-  state: string;
-  is_blocked: string;
-  can_edit: string;
   banned: string;
+  can_edit: string;
   can_mark: string;
   can_rate: string;
-  url: string;
+  category: Category;
+  created: string;
+  described: string;
+  disappointed: string;
+  fake: string;
+  id: string;
+  image: [{ id: string; url: string }];
+  video: { url: string; thumb: string };
+  is_blocked: string;
+  is_felt: string;
+  is_marked: string;
+  kudos: string;
   messages: string;
+  modified: string;
+  name: string;
+  state: string;
+  trust: string;
+  url: string;
 }
 
 export const addPost = async (data: MyFormData): Promise<IBodyResponse<IAddPostData>> => {
@@ -55,6 +56,6 @@ export const editPost = async (data: MyFormData): Promise<IBodyResponse<IAddPost
   return postMethodWithFormDataApi(PostApi.EDIT_POST, data);
 };
 
-export const getPost = async (data: { id: number }): Promise<IBodyResponse<IGetPostData>> => {
+export const getPost = async (data: { id: string }): Promise<IBodyResponse<IGetPostData>> => {
   return postMethodApi(PostApi.GET_POST, data);
 };
