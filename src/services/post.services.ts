@@ -6,6 +6,7 @@ import { PostApi } from './clientConstant';
 export interface IAddPostData {
   id: string;
   coins: string;
+  code: string;
 }
 
 export interface Author {

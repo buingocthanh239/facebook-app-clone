@@ -76,7 +76,7 @@ function Header() {
           activeOpacity={0.8}
         >
           <Text style={{ color: color.iconButtonColor, fontWeight: 'bold', fontSize: 16 }}>
-            {parseFloat(coins).toLocaleString('en-US')}
+            {parseFloat(coins as string).toLocaleString('en-US')}
           </Text>
           <IconFont name='coins' color={color.iconButtonColor} size={16} />
         </TouchableOpacity>
