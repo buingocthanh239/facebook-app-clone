@@ -28,6 +28,7 @@ import BaseButton from 'src/components/BaseButton';
 import { addPost } from 'src/services/post.services';
 import { setMessage } from 'src/redux/slices/appSlice';
 import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
+import { getNewPost, resetProgress } from 'src/redux/slices/newPostSlice';
 
 export type File = {
   uri?: string;
@@ -241,12 +242,13 @@ const CreatePostScreen = () => {
       });
       formData.append('status', status);
       formData.append('auto_accept', 'true');
+      navigationGoBack.goBack();
+      dispatch(resetProgress());
       const res = await addPost(formData);
-      console.log(res);
+      console.log('res: ', res);
       if (res.success) {
-        dispatch(setMessage('Đăng bài thành công'));
+        dispatch(getNewPost({ id: res.data.id }));
         dispatch(changeCoins(res.data.coins));
-        navigationGoBack.goBack();
         return res;
       } else {
         dispatch(setMessage(handShowErrorMessage(parseInt(res.code as unknown as string))));
