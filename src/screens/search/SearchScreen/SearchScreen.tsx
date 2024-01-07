@@ -49,7 +49,7 @@ function SearchScreen() {
   const [tab, setTab] = useState(ListTab.POST);
   const [data, setData] = useState<ISearchUserItem[]>([]);
   const [skip, setSkip] = useState<number>(0);
-  const [skipPost, setSkipPost] = useState<number>(90);
+  const [skipPost, setSkipPost] = useState<number>(0);
   const [isNextFetch, setIsNextFetch] = useState<boolean>(true);
   const [isNextFetchPost, setIsNextFetchPost] = useState<boolean>(true);
   const [isNextSearch, setIsNextSearch] = useState<boolean>(false);
@@ -258,7 +258,7 @@ function SearchScreen() {
             listResult.push(currentItem);
           }
         }
-        console.log('listResult', listResult);
+        // console.log('listResult', listResult);
         setListSavedSearch(listResult);
       } catch (error) {
         return console.log({ message: 'sever availability' });
