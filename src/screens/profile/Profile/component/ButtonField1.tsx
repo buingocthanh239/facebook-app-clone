@@ -20,12 +20,15 @@ import {
   TabNavigationName
 } from 'src/common/constants/nameScreen';
 import { setBlockApi } from 'src/services/block.service';
+import { useAppDispatch } from 'src/redux';
+import { blockComponent } from 'src/redux/slices/blockSlice';
 
 const ButtonField1 = ({ user_id, username }: { user_id: string; username: string }) => {
   const [status, setStatus] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const navigationHome: NavigationProp<AppNavigationType, AppNaviagtionName.TabNavigation> =
     useNavigation();
+  const dispatch = useAppDispatch();
   const showModal = () => {
     setModalVisible(true);
   };
@@ -80,6 +83,7 @@ const ButtonField1 = ({ user_id, username }: { user_id: string; username: string
           onPress: async () => {
             try {
               await setBlockApi({ user_id });
+              dispatch(blockComponent());
               hideModal();
               Alert.alert(
                 `Thành công`,

@@ -7,6 +7,7 @@ import videoReducer from './videoSlice';
 import appSlice from './appSlice';
 import notificationReducer from './notificationSlice';
 import settingReducer from './settingSlice';
+import blockSlice from './blockSlice';
 
 const rootReducer = combineReducers({
   app: appSlice,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   post: postReducer,
   video: videoReducer,
   notification: notificationReducer,
-  setting: settingReducer
+  setting: settingReducer,
+  block: blockSlice
 });
 
 export default rootReducer;
