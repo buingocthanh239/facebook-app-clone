@@ -3,20 +3,15 @@ import Modal from 'react-native-modal';
 import styles from './styles';
 import { color } from 'src/common/constants/color';
 import BaseFlatList from 'src/components/BaseFlatList';
-import { ActivityIndicator, Appbar, Avatar, Divider } from 'react-native-paper';
+import { ActivityIndicator, Avatar, Divider } from 'react-native-paper';
 import { getAvatarUri } from 'src/utils/helper';
 import { useEffect, useState } from 'react';
-import { IListFeels } from 'src/interfaces/comments.interface';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
-import {
-  getListFeelsApi,
-  getMarkCommentApi,
-  setMarkCommentApi
-} from 'src/services/comment.service';
+import { getMarkCommentApi, setMarkCommentApi } from 'src/services/comment.service';
 import { IListCommentPost } from 'src/interfaces/comments.interface';
 import { coverTimeToNow } from 'src/utils/dayjs';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
 interface CommentTabProps {
   id: string;
   openModal: boolean;
@@ -26,26 +21,17 @@ interface CommentTabProps {
   numberFeel: number;
 }
 const CommentTab = (props: CommentTabProps) => {
-  const navigationProfile: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
-    useNavigation();
   const { id, openModal, setOpenModal, setListMarkComment, listMarkComment, numberFeel } = props;
   // const [listMarkComment, setListMarkComment] = useState<IListCommentPost[]>([]);
   const [skip, setSkip] = useState<number>(0);
   const [isNext, setIsNext] = useState<boolean>(false);
   const [isNextFetch, setIsNextFetch] = useState<boolean>(true);
   const [isLoadingFirstApi, setIsLoadingFirstAPi] = useState<boolean>(false);
-  const [listFeels, setListFeels] = useState<IListFeels[]>([]);
-  const [totalFeel, setTotalFeel] = useState(0);
-  const [kudosFeel, setKudosFeel] = useState(0);
+
   const [commentText, setCommentText] = useState('');
-  const [openModalListFeels, setOpenModalListFeel] = useState(false);
+
   const COUNT_ITEM = 10;
 
-  const handleNavigationProfile = (id: string) =>
-    navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
-      screen: ProfileNavigationName.Profile,
-      params: { user_id: id }
-    });
   useEffect(() => {
     setIsLoadingFirstAPi(true);
     setIsNextFetch(true);
@@ -54,32 +40,6 @@ const CommentTab = (props: CommentTabProps) => {
       setIsLoadingFirstAPi(false);
     }, 1000);
   }, []);
-
-  const handleListFeel = async () => {
-    setOpenModalListFeel(true);
-    try {
-      const result = await getListFeelsApi({
-        id: id,
-        index: 0,
-        count: 100
-      });
-      if (result.success) {
-        if (!result.data.length) {
-          return;
-        } else {
-          const listFeel = result.data;
-          setTotalFeel(result.data.length);
-          // console.log('listFeel', listFeel)
-          const kudosFeel = listFeel.filter((feel: any) => feel.feel.type == 1);
-          setKudosFeel(kudosFeel.length);
-          // console.log('kudosFeel', kudosFeel)
-          setListFeels(result.data);
-        }
-      }
-    } catch (error) {
-      return console.log({ message: 'sever availability' });
-    }
-  };
 
   async function onEndReadable() {
     if (isNextFetch) {
@@ -189,6 +149,14 @@ const CommentTab = (props: CommentTabProps) => {
   //   );
   // }
 
+  //handle navigaiton feel screen
+  const navigationFeelScreen: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
+    useNavigation();
+  const handleNavigationFeelScreen = () =>
+    navigationFeelScreen.navigate(AppNaviagtionName.PostNavigation, {
+      screen: PostNavigationName.ListFeelScreen,
+      params: { postId: id }
+    });
   return (
     <Modal
       // visible={openModal}
@@ -209,7 +177,7 @@ const CommentTab = (props: CommentTabProps) => {
         <View style={{ backgroundColor: color.white }}>
           <TouchableHighlight
             style={styles.header}
-            onPress={() => handleListFeel()}
+            onPress={handleNavigationFeelScreen}
             underlayColor={color.Comment}
           >
             {/* <Text>đây là header comment</Text> */}
@@ -381,85 +349,6 @@ const CommentTab = (props: CommentTabProps) => {
           </View>
         </View>
       )}
-      <Modal
-        animationIn='fadeIn'
-        animationInTiming={500}
-        animationOut='fadeOut'
-        isVisible={openModalListFeels}
-        style={styles.containerListComment}
-      >
-        <View style={styles.headerListFeel}>
-          <Appbar.BackAction onPress={() => setOpenModalListFeel(false)} />
-          <Text style={styles.textHeaderListFeel}>Người đã bày tỏ cảm xúc</Text>
-        </View>
-        <Divider />
-        <View style={styles.ListFeel}>
-          <Text> Tất cả {String(totalFeel)}</Text>
-          <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-            <AntdIcon name='like1' size={13} style={styles.likeIcon} />
-            <Text>{String(kudosFeel)}</Text>
-          </View>
-          <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-            <AntdIcon name='dislike1' size={13} style={styles.dislikeIcon} />
-            <Text> {String(totalFeel - kudosFeel)}</Text>
-          </View>
-        </View>
-
-        <Divider />
-        <View style={{ paddingTop: 20, paddingLeft: 10 }}>
-          <BaseFlatList
-            data={listFeels}
-            renderItem={({ item }) => (
-              <>
-                <TouchableHighlight
-                  style={styles.CommentItem}
-                  underlayColor={color.Comment}
-                  onPress={() => {
-                    handleNavigationProfile(item.feel.user.id);
-                  }}
-                >
-                  <View style={styles.top}>
-                    <TouchableHighlight
-                      // activeOpacity={0.8}
-                      // underlayColor={color.borderColor}
-                      onPress={() => {}}
-                      style={styles.touchableHighlight}
-                      underlayColor={color.Comment}
-                    >
-                      <>
-                        <View>
-                          <Avatar.Image
-                            source={getAvatarUri(item.feel.user.avatar)}
-                            size={40}
-                            style={styles.avatarImage}
-                          />
-                        </View>
-                      </>
-                    </TouchableHighlight>
-                    <View style={{ position: 'absolute', top: 20, left: 30 }}>
-                      {item.feel.type == '1' ? (
-                        <View>
-                          <AntdIcon name='like1' size={13} style={styles.likeIconFeel} />
-                        </View>
-                      ) : (
-                        <View>
-                          <AntdIcon name='dislike1' size={13} style={styles.dislikeIconFeel} />
-                        </View>
-                      )}
-                    </View>
-                    <View style={styles.ContentNameFeel}>
-                      <Text style={styles.TextNameFeel}>{item.feel.user.name}</Text>
-
-                      {/* <Text style={styles.TextCommment}>{item.mark_content}</Text> */}
-                    </View>
-                  </View>
-                </TouchableHighlight>
-              </>
-            )}
-            keyExtractor={item => item.id}
-          />
-        </View>
-      </Modal>
     </Modal>
   );
 };
