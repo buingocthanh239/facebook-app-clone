@@ -40,7 +40,8 @@ type AppNavigationType = {
           onUpdate: (updateImageList: string[], updateMediaFiles: MediaFileType[]) => void;
         };
       }
-    | { screen: PostNavigationName.EnAScreen };
+    | { screen: PostNavigationName.EnAScreen }
+    | { screen: PostNavigationName.ListFeelScreen; params: { postId: string } };
   SearchNavigation: { screen: SearchNavigationName };
   ReportNavigation: {
     screen: ReportNavigationName;
@@ -125,6 +126,7 @@ type PostNavigationType = {
   };
   ListImageDetail: { data: PostProps };
   EditPostScreen: { data?: PostProps; selectedItem?: CardData };
+  ListFeelScreen: { postId: string };
 };
 
 type TabNavigationType = {

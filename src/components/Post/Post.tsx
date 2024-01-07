@@ -85,7 +85,7 @@ function Post(props: PostProps) {
   const { described, name, image, video, id, status } = props;
   const [openModalFeel, setOpenModalFeel] = useState(false);
   const [feel, setfeel] = useState(props.is_felt);
-  const [numberFeel, setNumberFeel] = useState<number>(parseInt(props.feel, 10));
+  const [numberFeel, setNumberFeel] = useState<number>(parseInt(props.feel ?? '0', 10));
   const urls = image?.map(imageObj => imageObj.url) ?? [];
   const content = described;
   useEffect(() => {
@@ -181,7 +181,9 @@ function Post(props: PostProps) {
       });
       if (res.success) {
         dispatch(changeCoins(res.data.coins));
-        setNumberFeel(numberFeel + 1);
+        if (feel == '-1') {
+          setNumberFeel(numberFeel + 1);
+        }
         setfeel('1');
         setTypeMark(1);
       }
@@ -200,7 +202,9 @@ function Post(props: PostProps) {
       if (res.success) {
         dispatch(changeCoins(res.data.coins));
         setfeel('0');
-        setNumberFeel(numberFeel + 1);
+        if (feel == '-1') {
+          setNumberFeel(numberFeel + 1);
+        }
         setTypeMark(0);
         // const response = res.data;
       }
