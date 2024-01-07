@@ -128,9 +128,6 @@ function Post(props: PostProps) {
           type: 1
         });
         if (res.success) {
-          if (!res.data.length) {
-            return;
-          }
           dispatch(changeCoins(res.data.coins));
           setfeel('1');
           setNumberFeel(numberFeel + 1);
@@ -145,9 +142,6 @@ function Post(props: PostProps) {
           id: id
         });
         if (res.success) {
-          if (!res.data.length) {
-            return;
-          }
           setfeel('-1');
           setNumberFeel(numberFeel - 1);
         }
@@ -164,9 +158,6 @@ function Post(props: PostProps) {
         type: 1
       });
       if (res.success) {
-        if (!res.data.length) {
-          return;
-        }
         dispatch(changeCoins(res.data.coins));
         setNumberFeel(numberFeel + 1);
         setfeel('1');
@@ -184,9 +175,6 @@ function Post(props: PostProps) {
         type: 0
       });
       if (res.success) {
-        if (!res.data.length) {
-          return;
-        }
         dispatch(changeCoins(res.data.coins));
         setfeel('0');
         setNumberFeel(numberFeel + 1);
