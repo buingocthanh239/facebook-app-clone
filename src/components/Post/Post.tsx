@@ -86,7 +86,7 @@ function Post(props: PostProps) {
   const { described, name, image, video, id, status } = props;
   const [openModalFeel, setOpenModalFeel] = useState(false);
   const [feel, setfeel] = useState(props.is_felt);
-  const [numberFeel, setNumberFeel] = useState<number>(parseInt(props.feel, 10));
+  const [numberFeel, setNumberFeel] = useState<number>(parseInt(props.feel as string, 10));
   const urls = image?.map(imageObj => imageObj.url) ?? [];
   const content = described;
   useEffect(() => {
