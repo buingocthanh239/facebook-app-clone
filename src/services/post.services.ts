@@ -34,7 +34,7 @@ export interface IGetPostData {
   disappointed: string;
   is_felt: string;
   is_marked: string;
-  image: string[];
+  image?: [{ id: string; url: string }];
   author: Author;
   category: Category;
   state: string;
@@ -45,6 +45,10 @@ export interface IGetPostData {
   can_rate: string;
   url: string;
   messages: string;
+  video?: {
+    url: string;
+    thumb: string;
+  };
 }
 
 export const addPost = async (data: MyFormData): Promise<IBodyResponse<IAddPostData>> => {
@@ -55,6 +59,6 @@ export const editPost = async (data: MyFormData): Promise<IBodyResponse<IAddPost
   return postMethodWithFormDataApi(PostApi.EDIT_POST, data);
 };
 
-export const getPost = async (data: { id: number }): Promise<IBodyResponse<IGetPostData>> => {
+export const getPost = async (data: { id: string }): Promise<IBodyResponse<IGetPostData>> => {
   return postMethodApi(PostApi.GET_POST, data);
 };

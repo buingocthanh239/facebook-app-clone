@@ -40,7 +40,8 @@ type AppNavigationType = {
           onUpdate: (updateImageList: string[], updateMediaFiles: MediaFileType[]) => void;
         };
       }
-    | { screen: PostNavigationName.EnAScreen };
+    | { screen: PostNavigationName.EnAScreen }
+    | { screen: PostNavigationName.AllPostDetail; params: { postId: string } };
   SearchNavigation: { screen: SearchNavigationName };
   ReportNavigation: { screen: ReportNavigationName; params: { id: string } };
   ChatNavigation: { screen: ChatNavigationName };
@@ -122,6 +123,7 @@ type PostNavigationType = {
   };
   ListImageDetail: { data: PostProps };
   EditPostScreen: { data?: PostProps; selectedItem?: CardData };
+  AllPostDetail: { postId: string };
 };
 
 type TabNavigationType = {

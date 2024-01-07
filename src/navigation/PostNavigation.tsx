@@ -9,6 +9,7 @@ import ListImageScreen from 'src/screens/post/ListImage/ListImageScreen';
 import { ListImageDetail } from 'src/screens/post/PostDetail';
 import EditPostScreen from 'src/screens/post/EditPost/EditPostScreen';
 import ListImageEditScreen from 'src/screens/post/ListImage/ListImageEditScreen';
+import AllPostDetail from 'src/screens/post/AllPostDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -66,6 +67,13 @@ function PostNavigation() {
         component={EditPostScreen}
         options={{
           headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name={PostNavigationName.AllPostDetail}
+        component={AllPostDetail}
+        options={{
+          title: 'Bài Viết'
         }}
       />
     </Stack.Navigator>

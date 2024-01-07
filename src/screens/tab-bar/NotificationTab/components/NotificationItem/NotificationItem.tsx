@@ -6,6 +6,8 @@ import { coverTimeToNowAgo } from 'src/utils/dayjs';
 import { ReactNode } from 'react';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
 
 export interface NotificationItemProps {
   time: string;
@@ -37,8 +39,15 @@ export interface NotificationItemProps {
 }
 
 function NotificationItem(props: NotificationItemProps) {
-  const { onPress, isLook, ownerUri, type, onPressRightIcon, onLongPress, user } = props;
+  const { isLook, ownerUri, type, onPressRightIcon, onLongPress, user } = props;
   const authStore = useAppSelector(selectAuth);
+  const navigationPost: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
+    useNavigation();
+  const handlePostNavigation = () =>
+    navigationPost.navigate(AppNaviagtionName.PostNavigation, {
+      screen: PostNavigationName.AllPostDetail,
+      params: { postId: props.post?.id as string }
+    });
   let Description: ReactNode;
   switch (type) {
     case NotificationType.FriendAccepted:
@@ -120,7 +129,7 @@ function NotificationItem(props: NotificationItemProps) {
   const time = coverTimeToNowAgo(props.time);
   return (
     <TouchableRipple
-      onPress={onPress ?? (() => {})}
+      onPress={handlePostNavigation}
       onLongPress={onLongPress}
       rippleColor={color.outlineColor}
       underlayColor={color.activeOutlineColor}
