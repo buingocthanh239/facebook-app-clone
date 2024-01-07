@@ -7,7 +7,11 @@ import { ReactNode } from 'react';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
+import {
+  AppNaviagtionName,
+  PostNavigationName,
+  ProfileNavigationName
+} from 'src/common/constants/nameScreen';
 
 export interface NotificationItemProps {
   time: string;
@@ -43,12 +47,20 @@ function NotificationItem(props: NotificationItemProps) {
   const authStore = useAppSelector(selectAuth);
   const navigationPost: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
     useNavigation();
+  const navigationProfile: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
   const handlePostNavigation = () =>
     navigationPost.navigate(AppNaviagtionName.PostNavigation, {
       screen: PostNavigationName.AllPostDetail,
       params: { postId: props.post?.id as string }
     });
+  const handleProfileNavigation = () =>
+    navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id: user?.id as string, username: user?.username as string }
+    });
   let Description: ReactNode;
+  let onPress: () => any = () => {};
   switch (type) {
     case NotificationType.FriendAccepted:
       Description = (
@@ -56,6 +68,7 @@ function NotificationItem(props: NotificationItemProps) {
           <Text variant='titleSmall'>{user?.username}</Text> đồng ý yêu cầu kết bạn của bạn
         </Text>
       );
+      onPress = handleProfileNavigation;
       break;
     case NotificationType.FriendRequest:
       Description = (
@@ -63,6 +76,7 @@ function NotificationItem(props: NotificationItemProps) {
           <Text variant='titleSmall'>{user?.username}</Text> đã gửi lời yêu cầu kết bạn với bạn
         </Text>
       );
+      onPress = handleProfileNavigation;
       break;
     case NotificationType.PostAdded:
       Description =
@@ -73,6 +87,7 @@ function NotificationItem(props: NotificationItemProps) {
             <Text variant='titleSmall'>{user?.username}</Text> vừa đăng một bài viết mới.
           </Text>
         );
+      onPress = handlePostNavigation;
       break;
     case NotificationType.PostUpdated:
       Description =
@@ -83,6 +98,7 @@ function NotificationItem(props: NotificationItemProps) {
             <Text variant='titleSmall'>{user?.username}</Text> vừa chỉnh sửa một bài viết.
           </Text>
         );
+      onPress = handlePostNavigation;
       break;
     case NotificationType.PostMarked:
       Description = (
@@ -90,6 +106,7 @@ function NotificationItem(props: NotificationItemProps) {
           <Text variant='titleSmall'>{user?.username}</Text> đã đánh giá về bài viết của bạn.
         </Text>
       );
+      onPress = handlePostNavigation;
       break;
     case NotificationType.PostFelt:
       Description = (
@@ -97,6 +114,7 @@ function NotificationItem(props: NotificationItemProps) {
           <Text variant='titleSmall'>{user?.username}</Text> đã bày tỏ cảm xúc về bài viết của bạn.
         </Text>
       );
+      onPress = handlePostNavigation;
       break;
     case NotificationType.MarkCommented:
       Description = (
@@ -104,6 +122,7 @@ function NotificationItem(props: NotificationItemProps) {
           <Text variant='titleSmall'>{user?.username}</Text> đã đánh giá bình luận của bạn.
         </Text>
       );
+      onPress = handlePostNavigation;
       break;
     case NotificationType.VideoAdded:
       Description =
@@ -114,6 +133,7 @@ function NotificationItem(props: NotificationItemProps) {
             <Text variant='titleSmall'>{user?.username}</Text> vừa đăng một video mới.
           </Text>
         );
+      onPress = handlePostNavigation;
       break;
     case NotificationType.PostCommented:
       Description = (
@@ -121,7 +141,7 @@ function NotificationItem(props: NotificationItemProps) {
           <Text variant='titleSmall'>{user?.username}</Text> vừa bình luận bài viết.
         </Text>
       );
-
+      onPress = handlePostNavigation;
       break;
     default:
       Description = <Text>Bạn vừa có một thông báo từ hệ thống.</Text>;
@@ -129,7 +149,7 @@ function NotificationItem(props: NotificationItemProps) {
   const time = coverTimeToNowAgo(props.time);
   return (
     <TouchableRipple
-      onPress={handlePostNavigation}
+      onPress={onPress}
       onLongPress={onLongPress}
       rippleColor={color.outlineColor}
       underlayColor={color.activeOutlineColor}
