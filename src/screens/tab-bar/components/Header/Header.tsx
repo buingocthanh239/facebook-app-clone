@@ -20,7 +20,6 @@ import database from '@react-native-firebase/database';
 function Header() {
   const listfriends = useSelector(selectFriend);
   const friends = listfriends.friends?.friends;
-  console.log(friends);
 
   const navigation: NavigationProp<AppNavigationType, AppNaviagtionName.SearchNavigation> =
     useNavigation();

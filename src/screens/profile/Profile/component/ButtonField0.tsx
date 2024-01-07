@@ -41,7 +41,6 @@ const ButtonField0 = ({ user_id, username }: { user_id: string; username: string
     try {
       const result = await deleteRequestFriendApi(data);
       setStatus('');
-      console.log(result);
       return result;
     } catch (error) {
       return console.log({ message: 'sever availability' });
