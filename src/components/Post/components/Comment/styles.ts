@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     gap: 6
   },
   top: {
+    position: 'relative',
     flexDirection: 'row',
     gap: 10
   },
@@ -248,8 +249,30 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
     maxWidth: 290
   },
+  ContentNameFeel: {
+    flexDirection: 'column',
+    display: 'flex',
+    // alignItems:'center',
+    gap: 2,
+    justifyContent: 'center',
+    // backgroundColor: color.white,
+    borderRadius: 14,
+    paddingRight: 20,
+    paddingBottom: 2,
+    maxWidth: 290
+  },
   TextName: {
     fontSize: 12,
+    marginTop: 2,
+    marginLeft: 10,
+    // height: 21,
+    color: color.black,
+    paddingRight: 2,
+    paddingLeft: 2,
+    fontWeight: 'bold'
+  },
+  TextNameFeel: {
+    fontSize: 15,
     marginTop: 2,
     marginLeft: 10,
     // height: 21,
@@ -348,6 +371,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5
   },
+
   likeIcon: {
     padding: 3,
     paddingLeft: 4,
@@ -356,6 +380,35 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: '#3578E5',
     color: color.white
+  },
+  likeIconFeel: {
+    padding: 3,
+    paddingLeft: 4,
+    borderWidth: 1, // Border width
+    borderColor: color.white, // Border color
+    borderRadius: 50,
+    backgroundColor: '#3578E5',
+    color: color.white,
+    zIndex: 1
+  },
+  dislikeIconFeel: {
+    padding: 3,
+    paddingLeft: 4,
+    borderWidth: 1, // Border width
+    borderColor: color.white, // Border color
+    borderRadius: 50,
+    backgroundColor: color.Comment,
+    color: color.black,
+    zIndex: 1
+  },
+  dislikeIcon: {
+    padding: 3,
+    paddingLeft: 4,
+    borderWidth: 1, // Border width
+    borderColor: color.white, // Border color
+    borderRadius: 50,
+    backgroundColor: color.Comment,
+    color: color.black
   },
   heartIcon: {
     position: 'relative',
@@ -372,6 +425,15 @@ const styles = StyleSheet.create({
   headerListFeel: {
     paddingLeft: 0,
     height: 43,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  ListFeel: {
+    paddingLeft: 20,
+    height: 43,
+    gap: 30,
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',

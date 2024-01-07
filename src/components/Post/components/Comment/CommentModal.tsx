@@ -7,6 +7,8 @@ import { ActivityIndicator, Appbar, Avatar, Divider } from 'react-native-paper';
 import { getAvatarUri } from 'src/utils/helper';
 import { useEffect, useState } from 'react';
 import { IGetListFeels, IGetMarkComment, IListFeels } from 'src/interfaces/comments.interface';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppNaviagtionName, ProfileNavigationName } from 'src/common/constants/nameScreen';
 import {
   getListFeelsApi,
   getMarkCommentApi,
@@ -21,6 +23,8 @@ interface CommentTabProps {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const CommentTab = (props: CommentTabProps) => {
+  const navigationProfile: NavigationProp<AppNavigationType, AppNaviagtionName.ProfileNavigation> =
+    useNavigation();
   const { id, openModal, setOpenModal } = props;
   const [listMarkComment, setListMarkComment] = useState<IListCommentPost[]>([]);
   const [skip, setSkip] = useState<number>(0);
@@ -29,9 +33,16 @@ const CommentTab = (props: CommentTabProps) => {
   const [isLoadingFirstApi, setIsLoadingFirstAPi] = useState<boolean>(false);
   const [listFeels, setListFeels] = useState<IListFeels[]>([]);
   const [totalFeel, setTotalFeel] = useState(0);
+  const [kudosFeel, setKudosFeel] = useState(0);
   const [commentText, setCommentText] = useState('');
   const [openModalListFeels, setOpenModalListFeel] = useState(false);
   const COUNT_ITEM = 10;
+
+  const handleNavigationProfile = (id: string) =>
+    navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
+      screen: ProfileNavigationName.Profile,
+      params: { user_id: id }
+    });
   useEffect(() => {
     const data: IGetMarkComment = {
       id: id,
@@ -40,27 +51,29 @@ const CommentTab = (props: CommentTabProps) => {
     };
     const fetchData = async (data: IGetMarkComment) => {
       // setIsLoadingFirstAPi(true);
-      try {
-        const result = await getMarkCommentApi(data);
-        if (result.success) {
-          if (!result.data.length) {
-            setIsNextFetch(false);
-            return;
+      if (openModal) {
+        try {
+          const result = await getMarkCommentApi(data);
+          if (result.success) {
+            if (!result.data.length) {
+              setIsNextFetch(false);
+              return;
+            }
+            setListMarkComment(result.data);
+            // console.log('result', result.data)
+            setIsNextFetch(true);
+            setSkip(COUNT_ITEM);
           }
-          setListMarkComment(result.data);
-          setIsNextFetch(true);
-          setSkip(COUNT_ITEM);
-          console.log('result', result);
+          setTimeout(() => {
+            setIsLoadingFirstAPi(false);
+          }, 500);
+        } catch (error) {
+          return console.log({ message: 'sever availability' });
         }
-        setTimeout(() => {
-          setIsLoadingFirstAPi(false);
-        }, 500);
-      } catch (error) {
-        return console.log({ message: 'sever availability' });
       }
     };
     fetchData(data).catch(console.error);
-  }, [id]);
+  }, [openModal]);
 
   useEffect(() => {
     const data: IGetListFeels = {
@@ -69,20 +82,29 @@ const CommentTab = (props: CommentTabProps) => {
       count: 100
     };
     const fetchData = async (data: IGetListFeels) => {
-      try {
-        const result = await getListFeelsApi(data);
-        if (result.success) {
-          if (!result.data.length) {
-            return;
-          } else setTotalFeel(result.data.length);
-          setListFeels(result.data);
+      if (openModal) {
+        try {
+          const result = await getListFeelsApi(data);
+          if (result.success) {
+            if (!result.data.length) {
+              return;
+            } else {
+              const listFeel = result.data;
+              setTotalFeel(result.data.length);
+              // console.log('listFeel', listFeel)
+              const kudosFeel = listFeel.filter((feel: any) => feel.feel.type == 1);
+              setKudosFeel(kudosFeel.length);
+              // console.log('kudosFeel', kudosFeel)
+              setListFeels(result.data);
+            }
+          }
+        } catch (error) {
+          return console.log({ message: 'sever availability' });
         }
-      } catch (error) {
-        return console.log({ message: 'sever availability' });
       }
     };
     fetchData(data).catch(console.error);
-  }, [id]);
+  }, [openModal]);
 
   async function onEndReadable() {
     if (isNextFetch) {
@@ -99,7 +121,7 @@ const CommentTab = (props: CommentTabProps) => {
             setIsNextFetch(false);
             return;
           }
-          console.log(skip, res.data);
+          // console.log(skip, res.data);
           const response = res.data;
           if (res.data.length) {
             //console.log('searchResult', searchResult);
@@ -263,6 +285,11 @@ const CommentTab = (props: CommentTabProps) => {
                 </TouchableHighlight>
               )}
               data={listMarkComment}
+              ListEmptyComponent={
+                <Text style={{ textAlign: 'center', marginTop: 20 }}>
+                  Bài viết chưa có bình luận nào
+                </Text>
+              }
               renderItem={({ item }) => (
                 <>
                   <View>
@@ -384,10 +411,9 @@ const CommentTab = (props: CommentTabProps) => {
       <Modal
         animationIn='fadeIn'
         animationInTiming={500}
-        animationOut='slideInDown'
+        animationOut='fadeOut'
         isVisible={openModalListFeels}
         style={styles.containerListComment}
-        onBackdropPress={() => setOpenModalListFeel(false)}
       >
         <View style={styles.headerListFeel}>
           <Appbar.BackAction onPress={() => setOpenModalListFeel(false)} />
@@ -396,11 +422,71 @@ const CommentTab = (props: CommentTabProps) => {
           </Text>
         </View>
         <Divider />
-        <View style={styles.headerListFeel}>
-          <Text> Tất cả {String(totalFeel).length}</Text>
-          <View>
-            <AntdIcon name='like1' size={12} style={styles.likeIcon} />
+        <View style={styles.ListFeel}>
+          <Text> Tất cả {String(totalFeel)}</Text>
+          <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+            <AntdIcon name='like1' size={13} style={styles.likeIcon} />
+            <Text>{String(kudosFeel)}</Text>
           </View>
+          <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+            <AntdIcon name='dislike1' size={13} style={styles.dislikeIcon} />
+            <Text> {String(totalFeel - kudosFeel)}</Text>
+          </View>
+        </View>
+
+        <Divider />
+        <View style={{ paddingTop: 20, paddingLeft: 10 }}>
+          <BaseFlatList
+            data={listFeels}
+            renderItem={({ item }) => (
+              <>
+                <TouchableHighlight
+                  style={styles.CommentItem}
+                  underlayColor={color.Comment}
+                  onPress={() => {
+                    handleNavigationProfile(item.feel.user.id);
+                  }}
+                >
+                  <View style={styles.top}>
+                    <TouchableHighlight
+                      // activeOpacity={0.8}
+                      // underlayColor={color.borderColor}
+                      onPress={() => {}}
+                      style={styles.touchableHighlight}
+                      underlayColor={color.Comment}
+                    >
+                      <>
+                        <View>
+                          <Avatar.Image
+                            source={getAvatarUri(item.feel.user.avatar)}
+                            size={40}
+                            style={styles.avatarImage}
+                          />
+                        </View>
+                      </>
+                    </TouchableHighlight>
+                    <View style={{ position: 'absolute', top: 20, left: 30 }}>
+                      {item.feel.type == '1' ? (
+                        <View>
+                          <AntdIcon name='like1' size={13} style={styles.likeIconFeel} />
+                        </View>
+                      ) : (
+                        <View>
+                          <AntdIcon name='dislike1' size={13} style={styles.dislikeIconFeel} />
+                        </View>
+                      )}
+                    </View>
+                    <View style={styles.ContentNameFeel}>
+                      <Text style={styles.TextNameFeel}>{item.feel.user.name}</Text>
+
+                      {/* <Text style={styles.TextCommment}>{item.mark_content}</Text> */}
+                    </View>
+                  </View>
+                </TouchableHighlight>
+              </>
+            )}
+            keyExtractor={item => item.id}
+          />
         </View>
       </Modal>
     </Modal>
