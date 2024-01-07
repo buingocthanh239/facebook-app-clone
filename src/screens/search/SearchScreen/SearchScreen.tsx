@@ -90,7 +90,7 @@ function SearchScreen() {
 
   const handleSearch = async (index: any, keyword: any) => {
     Keyboard.dismiss();
-    // console.log('keywword', keyword)
+
     setIsRefreshSaveSearch(!isRefreshSaveSearch);
     setIsLoadingFirstAPi(true);
     setIsSearching(true);
@@ -122,7 +122,7 @@ function SearchScreen() {
           };
           searchResult.push(newData);
         });
-        //console.log('searchResult', searchResult);
+
         setListSearch(searchResult);
         setIsNextFetchPost(true);
         setSkipPost(COUNT_ITEM);
@@ -192,7 +192,7 @@ function SearchScreen() {
             };
             searchResult.push(newData);
           });
-          //console.log('searchResult', searchResult);
+
           setListSearch(listSearch => [...listSearch, ...searchResult]);
         }
       } catch (e) {
