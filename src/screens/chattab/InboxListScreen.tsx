@@ -4,6 +4,7 @@ import { TextInput, IconButton, Avatar } from 'react-native-paper';
 import database from '@react-native-firebase/database';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
+import { getAvatarUri } from 'src/utils/helper';
 
 const InboxListScreen = ({ route }: { route: any }) => {
   //   const alltestchat = [
@@ -61,8 +62,8 @@ const InboxListScreen = ({ route }: { route: any }) => {
     const onChildAdd = database()
       .ref('/messages/' + contact.roomId)
       .on('child_added', snapshot => {
-        console.log('A new node has been added', snapshot.val());
-        setAllChat(state => [snapshot.val(), ...state]);
+        const newMessage = snapshot.val();
+        setAllChat(state => [...state, newMessage]);
       });
 
     // Stop listening for updates when no longer required
@@ -117,7 +118,7 @@ const InboxListScreen = ({ route }: { route: any }) => {
     <>
       <View style={{ flexDirection: 'row', backgroundColor: '#fff' }}>
         <IconButton icon={'keyboard-backspace'} iconColor={'#6A5ACD'} onPress={() => {}} />
-        <Avatar.Image size={35} style={{ marginTop: 10 }} source={{ uri: contact.avatar }} />
+        <Avatar.Image size={35} style={{ marginTop: 10 }} source={getAvatarUri(contact.avatar)} />
         <View style={{ flexDirection: 'column', marginTop: 8, marginLeft: 10 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#003' }}>{contact.name}</Text>
           <Text style={{ fontSize: 10, fontWeight: '300' }}> Hoạt động 20 phút trước </Text>
@@ -125,8 +126,6 @@ const InboxListScreen = ({ route }: { route: any }) => {
       </View>
       <ScrollView style={styles.container}>
         {allChat.map((message, index) => {
-          console.log(allChat);
-
           return (
             <View
               key={index}
@@ -180,6 +179,7 @@ const InboxListScreen = ({ route }: { route: any }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'column-reverse',
     flex: 1,
     padding: 16,
     backgroundColor: '#F4F4F4'

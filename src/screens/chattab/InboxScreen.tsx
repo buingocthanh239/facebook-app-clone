@@ -6,6 +6,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/core';
 import { AppNaviagtionName, ChatNavigationName } from 'src/common/constants/nameScreen';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
+import { getAvatarUri } from 'src/utils/helper';
 interface Contact {
   name: string;
   lastMsg: string;
@@ -21,11 +22,10 @@ function ContactList() {
       screen: ChatNavigationName.InboxListScreen,
       params: { contact }
     });
+  const auth = useAppSelector(selectAuth);
   useEffect(() => {
     getChatlist();
-  });
-  const auth = useAppSelector(selectAuth);
-  console.log(auth.user);
+  }, [auth.user?.id]);
 
   const getChatlist = async () => {
     database()
@@ -51,7 +51,7 @@ function ContactList() {
             <Avatar.Image
               size={60}
               style={{ marginTop: 10, marginLeft: 10 }}
-              source={{ uri: contact.avatar }}
+              source={getAvatarUri(contact.avatar)}
             />
             <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 10 }}>
               <Text style={{ fontWeight: '500', fontSize: 15, color: '#000', marginBottom: 5 }}>
