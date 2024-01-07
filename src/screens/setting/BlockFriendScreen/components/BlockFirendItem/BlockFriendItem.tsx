@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Alert, TouchableOpacity, Image } from 'react-native';
 import { ActivityIndicator, Card, CardTitleProps, Text, TouchableRipple } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
+import { useAppDispatch } from 'src/redux';
+import { blockComponent } from 'src/redux/slices/blockSlice';
 import { setBlockApi, unBlockApi } from 'src/services/block.service';
 import { getAvatarUri } from 'src/utils/helper';
 export type BlockFirendItemProps = CardTitleProps & {
@@ -10,6 +12,7 @@ export type BlockFirendItemProps = CardTitleProps & {
   onPress?: () => void;
 };
 function BlockFriendItem(props: BlockFirendItemProps) {
+  const dispatch = useAppDispatch();
   const { title, avatar, onPress, id, ...remainProps } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isNonBlock, setIsNonBlock] = useState<boolean>(false);
@@ -54,6 +57,7 @@ function BlockFriendItem(props: BlockFirendItemProps) {
             try {
               setIsLoading(true);
               const res = await setBlockApi({ user_id: id });
+              dispatch(blockComponent());
               if (res.success) {
                 setIsNonBlock(false);
               }

@@ -459,6 +459,7 @@ function SearchScreen() {
                         <UserItem
                           title={item.username}
                           avatar={item.avatar}
+                          id={item.id}
                           onPress={() => {
                             handleNavigationProfile(item.id);
                           }}

@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { Button, Text, Divider, TouchableRipple } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -13,11 +13,14 @@ import { IReportPost, reportPostApi } from 'src/services/post.sevices';
 import { useAppDispatch } from 'src/redux';
 import { setMessage } from 'src/redux/slices/appSlice';
 import { handShowErrorMessage } from 'src/utils/helper';
+import { setBlockApi } from 'src/services/block.service';
+import { blockComponent } from 'src/redux/slices/blockSlice';
 
 const ReportScreen = () => {
   const route: RouteProp<ReportNavigationType, ReportNavigationName.ReportScreen> = useRoute();
   const id = route.params?.id;
-  console.log(id);
+  const username = route.params?.username;
+  const userId = route.params?.userId;
 
   const options = [
     'Ảnh khỏa thân',
@@ -55,6 +58,34 @@ const ReportScreen = () => {
     } catch (error) {
       dispatch(setMessage('Vui lòng kiểm tra lại kết nối internet!'));
     }
+  };
+  const handleBlockUser = async () => {
+    Alert.alert(
+      `Chặn trang cá nhân của ${username}`,
+      `Những người bạn chặn sẽ không thể bắt đầu trò chuyện, thêm bạn vào danh sách bạn bè hoặc xem nội dung của bạn đăng trên dòng thời gian của mình nữa. Nếu bạn chặn ai đó khi hai người đang là bạn bè thì hành động này cũng sẽ hủy kết bạn với họ.`,
+      [
+        {
+          text: 'Hủy',
+          onPress: () => {},
+          style: 'cancel'
+        },
+        {
+          text: 'Chặn',
+          onPress: async () => {
+            try {
+              await setBlockApi({ user_id: userId });
+              dispatch(blockComponent());
+              Alert.alert(
+                `Thành công`,
+                `Bạn đã chặn ${username}.\n${username} sẽ không nhận được thông báo về hành động này.`
+              );
+            } catch (error) {
+              return;
+            }
+          }
+        }
+      ]
+    );
   };
 
   return (
@@ -106,7 +137,7 @@ const ReportScreen = () => {
       >
         Các bước khác mà bạn có thể thực hiện
       </Text>
-      <TouchableRipple>
+      <TouchableRipple onPress={handleBlockUser}>
         <View
           style={{
             flexDirection: 'row',
@@ -118,7 +149,7 @@ const ReportScreen = () => {
         >
           <MaterialCommunityIcon name='block-helper' size={25} color={color.textColor} />
           <View>
-            <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Chặn Phạm</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Chặn {username}</Text>
             <Text style={{ fontSize: 12 }}>
               Các bạn sẽ không thể nhìn thấy hoặc liên hệ với nhau
             </Text>
@@ -137,7 +168,7 @@ const ReportScreen = () => {
         >
           <SimpleLineIcon name='user-unfollow' size={25} color={color.textColor} />
           <View>
-            <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Bỏ theo dõi Phạm</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Bỏ theo dõi {username}</Text>
             <Text style={{ fontSize: 12 }}>Dừng xem bài viết nhưng vẫn là bạn bè</Text>
           </View>
         </View>

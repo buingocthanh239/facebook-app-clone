@@ -37,10 +37,10 @@ export interface PostProps {
   };
   described: string;
   created: string;
-  feel: string;
-  comment_mark: string;
-  is_felt: string;
-  is_blocked: string;
+  feel?: string;
+  comment_mark?: string;
+  is_felt?: string;
+  is_blocked?: string;
   can_edit: string;
   banned: string;
   status: string;
@@ -48,6 +48,8 @@ export interface PostProps {
     id: string;
     name: string;
     avatar: string;
+    coins?: string;
+    listing?: any[];
   };
   numberShares?: number;
   isShowCloseIcon?: boolean;
