@@ -27,6 +27,8 @@ import AddMoneyNavigationWrapper from './AddMoneyNavigation';
 import axiosInstance from 'src/services/axiosInstance';
 import { Snackbar } from 'react-native-paper';
 import { useNetInfoInstance } from '@react-native-community/netinfo';
+import { getUserFriends } from 'src/redux/slices/friendSlice';
+import { IGetUserFriends } from 'src/interfaces/friends.interface';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +53,12 @@ function AppNavigation() {
   useEffect(() => {
     if (auth.user?.active === AccountStatus.Active) {
       dispatch(getProfile({ user_id: auth.user.id }));
+      const data: IGetUserFriends = {
+        index: 0,
+        count: 100,
+        user_id: auth.user.id
+      };
+      dispatch(getUserFriends(data));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.user?.active, dispatch]);
