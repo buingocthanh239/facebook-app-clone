@@ -30,7 +30,6 @@ const HistorySearch = (props: HistorySearchProps) => {
         // setTotalRequestFriend(result.data.total);
         setListAllSavedSearch(result.data);
         // setRefreshing(false);
-        console.log(result);
         return result;
       } catch (error) {
         return console.log({ message: 'sever availability' });
@@ -54,8 +53,7 @@ const HistorySearch = (props: HistorySearchProps) => {
 
       try {
         // Gọi API để xóa đối tượng từ server
-        const result = await deleteSavedSearchApi({ search_id: id, all: 0 });
-        console.log(result);
+        await deleteSavedSearchApi({ search_id: id, all: 0 });
       } catch (error) {
         console.log(error);
       }

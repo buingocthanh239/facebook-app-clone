@@ -27,9 +27,8 @@ const ButtonField0 = ({ user_id, username }: { user_id: string; username: string
         text: 'OK',
         onPress: async () => {
           try {
-            const result = await setRequestFriendApi(data);
+            await setRequestFriendApi(data);
             setStatus('RequestFriend');
-            console.log(result);
           } catch (error) {
             return console.log({ message: 'sever availability' });
           }
@@ -42,7 +41,6 @@ const ButtonField0 = ({ user_id, username }: { user_id: string; username: string
     try {
       const result = await deleteRequestFriendApi(data);
       setStatus('');
-      console.log(result);
       return result;
     } catch (error) {
       return console.log({ message: 'sever availability' });

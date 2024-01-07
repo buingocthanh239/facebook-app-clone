@@ -22,7 +22,6 @@ export const changeInfoAfterSignup = createAsyncThunk(
   async (data: MyFormData, { rejectWithValue }) => {
     try {
       const result = await changeInfoAfterSignupApi(data);
-      console.log(result);
       return result;
     } catch (error) {
       return rejectWithValue({ message: 'sever availability' });

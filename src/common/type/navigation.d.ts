@@ -41,7 +41,8 @@ type AppNavigationType = {
         };
       }
     | { screen: PostNavigationName.EnAScreen }
-    | { screen: PostNavigationName.ListFeelScreen; params: { postId: string } };
+    | { screen: PostNavigationName.ListFeelScreen; params: { postId: string } }
+    | { screen: PostNavigationName.AllPostDetail; params: { postId: string } };
   SearchNavigation: { screen: SearchNavigationName };
   ReportNavigation: {
     screen: ReportNavigationName;
@@ -61,9 +62,9 @@ type AuthNavigationType = {
   Login: undefined;
   NameScreen: undefined;
   BirthdayScreen: { firstname: string; lastname: string };
-  GenderScreen: { firstname: string; lastname: string; dob: Date };
-  EmailScreen: { firstname: string; lastname: string; dob: Date; gender: Gender };
-  PasswordScreen: { firstname: string; lastname: string; dob: Date; gender: Gender; email: string };
+  GenderScreen: { firstname: string; lastname: string };
+  EmailScreen: { firstname: string; lastname: string; gender: Gender };
+  PasswordScreen: { firstname: string; lastname: string; gender: Gender; email: string };
   ConfirmPolicyScreen: {
     firstname: string;
     lastname: string;
@@ -128,7 +129,6 @@ type PostNavigationType = {
   };
   ListImageDetail: { data: PostProps };
   EditPostScreen: { data?: PostProps; selectedItem?: CardData };
-  ListFeelScreen: { postId: string };
 };
 
 type TabNavigationType = {

@@ -221,7 +221,6 @@ const CreatePostScreen = () => {
             video === ''
               ? setVideo(src)
               : Alert.alert('Lỗi!', 'Vui lòng chỉ đăng nhiều nhất 1 video.');
-            console.log('video: ', video);
           } else {
             Alert.alert('Lỗi!', 'Vui lòng chỉ đăng ảnh hoặc video.');
           }
@@ -307,7 +306,7 @@ const CreatePostScreen = () => {
       formData.append('auto_accept', 'true');
       dispatch(resetProgress());
       const res = await addPost(formData);
-      console.log('res: ', res);
+
       if (res.success) {
         navigationGoBack.goBack();
         dispatch(getNewPost({ id: res.data.id }));

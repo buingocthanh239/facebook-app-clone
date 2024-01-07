@@ -7,12 +7,7 @@ function HeaderItemComment(props: HeaderItemCommentProps) {
     <>
       <View style={{ padding: 10 }}>
         <Text
-          onPress={
-            onPress ??
-            (() => {
-              console.log('xem các bình luận trước');
-            })
-          }
+          onPress={onPress ?? (() => {})}
           variant='titleMedium'
           style={{ fontSize: 14, fontWeight: '700', marginBottom: 4 }}
         >

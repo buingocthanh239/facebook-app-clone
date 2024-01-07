@@ -7,7 +7,7 @@ import {
   getNotificationApi
 } from 'src/services/notification.service';
 
-interface IPostState {
+interface INotificationState {
   loading: boolean;
   notification: INotificationItem[];
   error: IErrorData | IErrorData[] | string | null;
@@ -16,7 +16,7 @@ interface IPostState {
   isNextFetch: boolean;
 }
 
-const initialState: IPostState = {
+const initialState: INotificationState = {
   loading: false,
   error: null,
   notification: [],
@@ -68,6 +68,7 @@ const notificationSlice = createSlice({
     builder.addCase(getNotifications.rejected, (state, action) => {
       state.error = action.payload as string;
       state.loading = false;
+      state.isNextFetch = false;
     });
     builder.addCase(getNotifications.fulfilled, (state, action) => {
       state.notification = action.payload.data;
@@ -75,18 +76,23 @@ const notificationSlice = createSlice({
       state.last_update = action.payload.last_update;
       if (!action.payload.data?.length) {
         state.isNextFetch = false;
+      } else {
+        state.isNextFetch = true;
       }
       state.loading = false;
     });
     builder.addCase(getNextNotifications.rejected, state => {
       state.loading = false;
+      state.isNextFetch = false;
     });
     builder.addCase(getNextNotifications.fulfilled, (state, action) => {
       state.notification = [...state.notification, ...action.payload.data];
       state.badge = action.payload.badge;
       state.last_update = action.payload.last_update;
-      if (!action.payload.data?.length) {
+      if (action.payload.data?.length === 0) {
         state.isNextFetch = false;
+      } else {
+        state.isNextFetch = true;
       }
       state.loading = false;
     });

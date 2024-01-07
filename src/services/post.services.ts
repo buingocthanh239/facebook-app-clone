@@ -24,29 +24,32 @@ export interface Category {
 }
 
 export interface IGetPostData {
-  author: Author;
-  banned: string;
-  can_edit: string;
-  can_mark: string;
-  can_rate: string;
-  category: Category;
+  id: string;
+  name: string;
   created: string;
   described: string;
-  disappointed: string;
+  modified: string;
   fake: string;
-  id: string;
-  image: [{ id: string; url: string }];
-  video: { url: string; thumb: string };
-  is_blocked: string;
+  trust: string;
+  kudos: string;
+  disappointed: string;
   is_felt: string;
   is_marked: string;
-  kudos: string;
-  messages: string;
-  modified: string;
-  name: string;
+  image?: [{ id: string; url: string }];
+  author: Author;
+  category: Category;
   state: string;
-  trust: string;
+  is_blocked: string;
+  can_edit: string;
+  banned: string;
+  can_mark: string;
+  can_rate: string;
   url: string;
+  messages: string;
+  video?: {
+    url: string;
+    thumb: string;
+  };
 }
 
 export const addPost = async (data: MyFormData): Promise<IBodyResponse<IAddPostData>> => {

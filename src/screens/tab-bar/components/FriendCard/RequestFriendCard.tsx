@@ -215,7 +215,6 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = ({
                 icon={require('../../../../assets/three-dot.png')}
                 onPress={() => {
                   showModal();
-                  console.log('detail');
                 }}
               ></IconButton>
             </View>

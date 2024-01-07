@@ -13,7 +13,8 @@ export enum NotificationType {
   PostFelt = '5',
   PostMarked = '6',
   MarkCommented = '7',
-  VideoAdded = '8'
+  VideoAdded = '8',
+  PostCommented = '9'
 }
 
 export enum AccountStatus {
