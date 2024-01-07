@@ -1,8 +1,18 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { PostProps } from 'src/components/Post/Post';
+import { MediaFileType } from 'src/screens/post/CreatePostScreen/CreatePostScreen';
 import { getPost } from 'src/services/post.services';
 
+export interface IUnfinishedPost {
+  user_id: string;
+  status?: string;
+  listImage?: string[];
+  video?: string;
+  described?: string;
+  mediaFiles?: MediaFileType[];
+}
 interface NewPostState {
+  unfinishedPost: IUnfinishedPost | undefined;
   post: PostProps | undefined;
   loading: boolean;
   error: string | null;
@@ -10,6 +20,7 @@ interface NewPostState {
 }
 
 const initialState: NewPostState = {
+  unfinishedPost: undefined,
   post: undefined,
   loading: false,
   error: null,
@@ -72,11 +83,18 @@ export const newPostSlice = createSlice({
     },
     resetProgress: state => {
       state.progress = 0;
+    },
+    setUnfinishedPost: (state, action: PayloadAction<IUnfinishedPost>) => {
+      state.unfinishedPost = action.payload;
+    },
+    resetUnfinishedPost: state => {
+      state.unfinishedPost = undefined;
     }
   }
 });
 
 // Action creators are generated for each case reducer function
-export const { deleteNewPost, resetProgress } = newPostSlice.actions;
+export const { deleteNewPost, resetProgress, setUnfinishedPost, resetUnfinishedPost } =
+  newPostSlice.actions;
 
 export default newPostSlice.reducer;
