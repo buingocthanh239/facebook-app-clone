@@ -1,4 +1,4 @@
-import { View, TouchableHighlight, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { View, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar, Card, IconButton, Text, Divider, TouchableRipple } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
@@ -13,13 +13,16 @@ import ReportModal from './ReportModal';
 import { getAvatarUri } from 'src/utils/helper';
 import { coverTimeToNow } from 'src/utils/dayjs';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { changeCoins } from 'src/redux/slices/authSlice';
 import {
   AppNaviagtionName,
   PostNavigationName,
   ProfileNavigationName
 } from 'src/common/constants/nameScreen';
 import CommentTab from './components/Comment';
-import { setFeelApi } from 'src/services/comment.service';
+import { deleteFeelsApi, setFeelApi } from 'src/services/comment.service';
+import { useAppDispatch } from 'src/redux';
+
 const MAX_LENGTH_CONTENT = 500;
 
 // define props
@@ -55,12 +58,11 @@ function Post(props: PostProps) {
     useNavigation();
   const navigationPostDetail: NavigationProp<AppNavigationType, AppNaviagtionName.PostNavigation> =
     useNavigation();
-
   const [deleted, setDeleted] = useState(false);
   const onDeletePost = () => {
     setDeleted(true);
   };
-
+  const dispatch = useAppDispatch();
   const handleNavigationProfile = () =>
     navigationProfile.navigate(AppNaviagtionName.ProfileNavigation, {
       screen: ProfileNavigationName.Profile,
@@ -79,6 +81,8 @@ function Post(props: PostProps) {
   const [displayContent, setDisplayContent] = useState('');
   const { described, name, image, video, id, status } = props;
   const [openModalFeel, setOpenModalFeel] = useState(false);
+  const [feel, setfeel] = useState(props.is_felt);
+  const [numberFeel, setNumberFeel] = useState<number>(parseInt(props.feel, 10));
   const urls = image?.map(imageObj => imageObj.url) ?? [];
   const content = described;
   useEffect(() => {
@@ -114,7 +118,44 @@ function Post(props: PostProps) {
     setOpenModalFeel(false);
   };
   const handldeOpenLikeModal = () => {
-    setOpenModalFeel(!openModalFeel);
+    setOpenModalFeel(true);
+  };
+  const handleLike = async () => {
+    if (feel == '-1') {
+      try {
+        const res = await setFeelApi({
+          id: id,
+          type: 1
+        });
+        if (res.success) {
+          if (!res.data.length) {
+            return;
+          }
+          dispatch(changeCoins(res.data.coins));
+          setfeel('1');
+          setNumberFeel(numberFeel + 1);
+        }
+      } catch (e) {
+        return;
+      }
+      setOpenModalFeel(false);
+    } else {
+      try {
+        const res = await deleteFeelsApi({
+          id: id
+        });
+        if (res.success) {
+          if (!res.data.length) {
+            return;
+          }
+          setfeel('-1');
+          setNumberFeel(numberFeel - 1);
+        }
+      } catch (e) {
+        return;
+      }
+      setOpenModalFeel(false);
+    }
   };
   const handleSetLike = async (id: string) => {
     try {
@@ -124,8 +165,11 @@ function Post(props: PostProps) {
       });
       if (res.success) {
         if (!res.data.length) {
-          // console.log(res.data)
+          return;
         }
+        dispatch(changeCoins(res.data.coins));
+        setNumberFeel(numberFeel + 1);
+        setfeel('1');
       }
     } catch (e) {
       return;
@@ -141,8 +185,11 @@ function Post(props: PostProps) {
       });
       if (res.success) {
         if (!res.data.length) {
-          // console.log(res.data)
+          return;
         }
+        dispatch(changeCoins(res.data.coins));
+        setfeel('0');
+        setNumberFeel(numberFeel + 1);
         // const response = res.data;
       }
     } catch (e) {
@@ -233,7 +280,7 @@ function Post(props: PostProps) {
               {props.feel !== '0' && (
                 <View style={[globalStyles.flexRow, globalStyles.centerAlignItem]}>
                   <AntdIcon name='like1' size={15} color={color.primary} />
-                  <Text>{props?.feel}</Text>
+                  <Text>{numberFeel}</Text>
                 </View>
               )}
               {(props.comment_mark !== '0' || props.numberShares) && (
@@ -249,19 +296,37 @@ function Post(props: PostProps) {
       )}
 
       <View style={[globalStyles.flexRow, globalStyles.spaceBetweenJustify]}>
-        <TouchableWithoutFeedback onPress={handlePressOut}>
-          <TouchableHighlight
-            style={[globalStyles.flexRow, styles.padding, styles.gap, styles.position]}
-            underlayColor={color.borderColor}
-            onPress={() => {
-              handldeOpenLikeModal();
-            }}
-            // onPressOut={handlePressOut}
-          >
-            <>
-              <AntdIcon name='like2' size={20} />
+        <TouchableHighlight
+          style={[globalStyles.flexRow, styles.padding, styles.gap, styles.position]}
+          underlayColor={color.borderColor}
+          onPress={() => {
+            handleLike();
+          }}
+          onLongPress={() => {
+            handldeOpenLikeModal();
+          }}
+          // onPressOut={handlePressOut}
+        >
+          <>
+            {feel === '1' ? (
+              <AntdIcon style={styles.kudos} name='like1' size={17} />
+            ) : feel === '0' ? (
+              <AntdIcon style={styles.disappoint} name='dislike1' size={17} />
+            ) : (
+              <AntdIcon name='like2' size={17} />
+            )}
+
+            {feel === '1' ? (
+              <Text style={styles.kudos}>Thích</Text>
+            ) : feel === '0' ? (
+              <Text style={styles.disappoint}>Không thích</Text>
+            ) : (
               <Text>Thích</Text>
-              {openModalFeel && (
+            )}
+
+            {/* <Text style={styles.kudos}>Thích</Text> */}
+            {openModalFeel && (
+              <TouchableOpacity style={styles.modalContainer} onPress={handlePressOut}>
                 <View style={styles.modalLike}>
                   <AntdIcon
                     name='like1'
@@ -280,10 +345,10 @@ function Post(props: PostProps) {
                     }}
                   />
                 </View>
-              )}
-            </>
-          </TouchableHighlight>
-        </TouchableWithoutFeedback>
+              </TouchableOpacity>
+            )}
+          </>
+        </TouchableHighlight>
 
         <TouchableHighlight
           style={[globalStyles.flexRow, styles.padding, styles.gap]}
@@ -367,6 +432,28 @@ const styles = StyleSheet.create({
     borderColor: '#ccc', // Border color
     borderRadius: 50,
     backgroundColor: '#ccc',
+    color: color.black
+  },
+  modalContainer: {
+    height: '100%',
+    width: '100%',
+    zIndex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  kudos: {
+    color: '#3578E5'
+  },
+  disappoint: {
     color: color.black
   }
 });
