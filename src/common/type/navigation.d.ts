@@ -143,3 +143,7 @@ type ChatNavigationType = {
 type AddMoneyNavigationType = {
   AddMoneyScreen: undefined;
 };
+
+type ReportNavigationType = {
+  ReportScreen: { id: string };
+};

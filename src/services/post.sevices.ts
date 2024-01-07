@@ -33,6 +33,12 @@ export interface IListPost {
   last_id: string;
 }
 
+export interface IReportPost {
+  id: string;
+  subject: string;
+  details: string;
+}
+
 export const getListPostAPi = async (data: IGetListPost): Promise<IBodyResponse<IListPost>> => {
   return postMethodApi(PostApi.GET_LIST_POSTS, data);
 };
@@ -51,4 +57,8 @@ export const deletePostApi = async (data: { id: string }): Promise<IBodyResponse
 
 export const getNewPostApi = async (data: IGetNewPosts): Promise<IListBodyResponse<IPost>> => {
   return postMethodApi(PostApi.GET_NEW_POSTS, data);
+};
+
+export const reportPostApi = async (data: IReportPost): Promise<IListBodyResponse<any>> => {
+  return postMethodApi(PostApi.REPORT_POST, data);
 };
