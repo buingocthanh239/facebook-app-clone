@@ -12,7 +12,7 @@ import { AuthNavigationName } from 'src/common/constants/nameScreen';
 
 function HomeAuthScreen() {
   const navigation = useNavigation();
-  const accounts = useAppSelector(selectAuth).accounts;
+  const accounts = useAppSelector(selectAuth).accounts ?? [];
 
   const navigationAccount: NavigationProp<AuthNavigationType, AuthNavigationName.AccountLogin> =
     useNavigation();
