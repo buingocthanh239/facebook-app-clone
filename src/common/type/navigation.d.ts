@@ -42,7 +42,10 @@ type AppNavigationType = {
       }
     | { screen: PostNavigationName.EnAScreen };
   SearchNavigation: { screen: SearchNavigationName };
-  ReportNavigation: { screen: ReportNavigationName; params: { id: string } };
+  ReportNavigation: {
+    screen: ReportNavigationName;
+    params: { id: string; username: string; userId: string };
+  };
   ChatNavigation: { screen: ChatNavigationName };
   VerifyOTPAfterLogin: undefined;
   ChangeProfileAfterSign: undefined;
@@ -145,5 +148,5 @@ type AddMoneyNavigationType = {
 };
 
 type ReportNavigationType = {
-  ReportScreen: { id: string };
+  ReportScreen: { id: string; username: string; userId: string };
 };

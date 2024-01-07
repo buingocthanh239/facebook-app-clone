@@ -41,7 +41,7 @@ function ReportModal(props: ReportModalType) {
     onBackdropPress();
     navigation.navigate(AppNaviagtionName.ReportNavigation, {
       screen: ReportNavigationName.ReportScreen,
-      params: { id: postId }
+      params: { id: postId, username: authorName, userId: authorId }
     });
   };
   const handleNavigationEditPost = () => {
