@@ -3,6 +3,9 @@ import { color } from 'src/common/constants/color';
 import { FeelType, MarkType, NotificationType } from 'src/common/enum/commom';
 import AvatarNotificationItem from '../AvatarNotificationItem';
 import { coverTimeToNowAgo } from 'src/utils/dayjs';
+import { ReactNode } from 'react';
+import { useAppSelector } from 'src/redux';
+import { selectAuth } from 'src/redux/slices/authSlice';
 
 export interface NotificationItemProps {
   time: string;
@@ -35,34 +38,84 @@ export interface NotificationItemProps {
 
 function NotificationItem(props: NotificationItemProps) {
   const { onPress, isLook, ownerUri, type, onPressRightIcon, onLongPress, user } = props;
-  let description: string;
+  const authStore = useAppSelector(selectAuth);
+  let Description: ReactNode;
   switch (type) {
     case NotificationType.FriendAccepted:
-      description = `${user?.username} đồng ý yêu cầu kết bạn của bạn`;
+      Description = (
+        <Text>
+          <Text variant='titleSmall'>{user?.username}</Text> đồng ý yêu cầu kết bạn của bạn
+        </Text>
+      );
       break;
     case NotificationType.FriendRequest:
-      description = `${user?.username} đã gửi lời yêu cầu kết bạn với bạn`;
+      Description = (
+        <Text>
+          <Text variant='titleSmall'>{user?.username}</Text> đã gửi lời yêu cầu kết bạn với bạn
+        </Text>
+      );
       break;
     case NotificationType.PostAdded:
-      description = `Bài viết đã được đăng thành công`;
+      Description =
+        authStore.user?.id === user?.id ? (
+          <Text>Bài viết đã được đăng thành công.</Text>
+        ) : (
+          <Text>
+            <Text variant='titleSmall'>{user?.username}</Text> vừa đăng một bài viết mới.
+          </Text>
+        );
       break;
     case NotificationType.PostUpdated:
-      description = `Bài viết đã được chỉnh sửa thành công`;
+      Description =
+        authStore.user?.id === user?.id ? (
+          <Text>Bài viết đã được chỉnh sửa thành công.</Text>
+        ) : (
+          <Text>
+            <Text variant='titleSmall'>{user?.username}</Text> vừa chỉnh sửa một bài viết.
+          </Text>
+        );
       break;
     case NotificationType.PostMarked:
-      description = `${user?.username} đã đánh giá về bài viết của bạn`;
+      Description = (
+        <Text>
+          <Text variant='titleSmall'>{user?.username}</Text> đã đánh giá về bài viết của bạn.
+        </Text>
+      );
       break;
     case NotificationType.PostFelt:
-      description = `${user?.username} đã bày tỏ cảm xúc về bài viết của bạn`;
+      Description = (
+        <Text>
+          <Text variant='titleSmall'>{user?.username}</Text> đã bày tỏ cảm xúc về bài viết của bạn.
+        </Text>
+      );
       break;
     case NotificationType.MarkCommented:
-      description = `${user?.username} đã đánh giá bình luận của bạn`;
+      Description = (
+        <Text>
+          <Text variant='titleSmall'>{user?.username}</Text> đã đánh giá bình luận của bạn.
+        </Text>
+      );
       break;
     case NotificationType.VideoAdded:
-      description = `Bạn đã đăng video thành công`;
+      Description =
+        authStore.user?.id === user?.id ? (
+          <Text>Bạn đã đăng video thành công.</Text>
+        ) : (
+          <Text>
+            <Text variant='titleSmall'>{user?.username}</Text> vừa đăng một video mới.
+          </Text>
+        );
+      break;
+    case NotificationType.PostCommented:
+      Description = (
+        <Text>
+          <Text variant='titleSmall'>{user?.username}</Text> vừa bình luận bài viết.
+        </Text>
+      );
+
       break;
     default:
-      description = `Bạn vừa có một thông báo từ hệ thống`;
+      Description = <Text>Bạn vừa có một thông báo từ hệ thống.</Text>;
   }
   const time = coverTimeToNowAgo(props.time);
   return (
@@ -73,7 +126,7 @@ function NotificationItem(props: NotificationItemProps) {
       underlayColor={color.activeOutlineColor}
     >
       <Card.Title
-        title={<Text>{description}</Text>}
+        title={Description}
         subtitle={
           <Text variant='bodySmall' style={{ color: color.activeOutlineColor }}>
             {time}

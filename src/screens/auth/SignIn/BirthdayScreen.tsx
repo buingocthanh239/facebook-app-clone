@@ -17,8 +17,8 @@ function DatePickerScreen() {
   const route: RouteProp<AuthNavigationType, 'BirthdayScreen'> = useRoute();
   const handleSubmit = () => {
     naviagtion.navigate('GenderScreen', {
-      ...route.params,
-      dob: date
+      ...route.params
+      // dob: new Date(Date.now())
     });
   };
   const getAge = (DOB: Date) => {

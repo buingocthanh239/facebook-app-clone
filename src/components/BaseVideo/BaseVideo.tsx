@@ -3,7 +3,7 @@ export type BaseVideoProps = VideoPlayerProps;
 const defaultProps: Partial<BaseVideoProps> = {
   videoHeight: 900,
   videoWidth: 1600,
-  autoplay: true,
+  autoplay: false,
   showDuration: true,
   defaultMuted: true,
   disableFullscreen: false,
@@ -12,7 +12,14 @@ const defaultProps: Partial<BaseVideoProps> = {
 };
 function BaseVideo(props: VideoPlayerProps) {
   const { video, thumbnail, ...propsRemain } = props;
-  return video ? <VideoPlayer {...propsRemain} video={video} thumbnail={thumbnail} /> : null;
+
+  return video ? (
+    <VideoPlayer
+      {...propsRemain}
+      video={video}
+      thumbnail={thumbnail === null ? thumbnail : require('src/assets/cover-default.jpg')}
+    />
+  ) : null;
 }
 BaseVideo.defaultProps = defaultProps;
 export default BaseVideo;

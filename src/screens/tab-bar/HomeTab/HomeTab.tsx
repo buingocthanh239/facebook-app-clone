@@ -2,7 +2,7 @@ import Post from 'src/components/Post';
 import NewPostCreate from './components/NewPostCreate/NewPostCreate';
 import { useEffect, useRef, useState } from 'react';
 import BaseFlatList from 'src/components/BaseFlatList';
-import { PanResponder } from 'react-native';
+// import { PanResponder } from 'react-native';
 import {
   NavigationProp,
   useIsFocused,
@@ -43,30 +43,30 @@ function HomeTab() {
     useNavigation();
 
   // header handle
-  const [isShowHeader, setIsShowHeader] = useState(true);
+  // const [isShowHeader, setIsShowHeader] = useState(true);
   const isFocus = useIsFocused();
   useEffect(() => {
-    if (isShowHeader && isFocus) {
+    if (isFocus) {
       navigation?.getParent()?.setOptions({ headerShown: true });
     } else {
       navigation?.getParent()?.setOptions({ headerShown: false });
     }
-  }, [isShowHeader, isFocus, navigation]);
+  }, [isFocus, navigation]);
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (event, gestureState) => {
-        const { dy } = gestureState;
-        if (dy < 0) {
-          setIsShowHeader(false);
-        } else {
-          setIsShowHeader(true);
-        }
-      }
-    })
-  ).current;
+  // const panResponder = useRef(
+  //   PanResponder.create({
+  //     onStartShouldSetPanResponder: () => true,
+  //     onMoveShouldSetPanResponder: () => true,
+  //     onPanResponderMove: (event, gestureState) => {
+  //       const { dy } = gestureState;
+  //       if (dy < 0) {
+  //         setIsShowHeader(false);
+  //       } else {
+  //         setIsShowHeader(true);
+  //       }
+  //     }
+  //   })
+  // ).current;
 
   // get post handle
   useEffect(() => {
@@ -76,7 +76,7 @@ function HomeTab() {
 
   return (
     <BaseFlatList
-      {...panResponder.panHandlers}
+      // {...panResponder.panHandlers}
       ref={ref}
       ListHeaderComponent={<NewPostCreate />}
       data={postStore.post}

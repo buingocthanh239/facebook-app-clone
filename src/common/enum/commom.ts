@@ -14,7 +14,7 @@ export enum NotificationType {
   PostMarked = '6',
   MarkCommented = '7',
   VideoAdded = '8',
-  PostCommented = 9
+  PostCommented = '9'
 }
 
 export enum AccountStatus {
