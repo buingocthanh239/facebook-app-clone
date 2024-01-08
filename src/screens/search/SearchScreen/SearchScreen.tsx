@@ -43,7 +43,7 @@ function SearchScreen() {
   const [isRefresh, setIsRefresh] = useState(false);
   const [isRefreshSaveSearch, setIsRefreshSaveSearch] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(90);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [listSearch, setListSearch] = useState<ISearchResult[]>([]);
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
   const [isLoadingFirstApi, setIsLoadingFirstAPi] = useState<boolean>(false);

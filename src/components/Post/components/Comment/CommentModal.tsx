@@ -343,8 +343,8 @@ const CommentTab = (props: CommentTabProps) => {
                       </View>
                       {item.comments.length > 0
                         ? item.comments.map((repItem: any, index: number) => (
-                            <>
-                              <View key={index.toString() + repItem.content} style={styles.topRep}>
+                            <View key={index}>
+                              <View style={styles.topRep}>
                                 <TouchableHighlight
                                   onPress={() => {}}
                                   style={styles.touchableHighlight}
@@ -382,7 +382,7 @@ const CommentTab = (props: CommentTabProps) => {
                                   <Text style={styles.TextResponse}> Phản hồi</Text>
                                 </TouchableHighlight>
                               </View>
-                            </>
+                            </View>
                           ))
                         : null}
                     </View>
