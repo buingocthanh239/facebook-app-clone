@@ -289,7 +289,9 @@ const CreatePostScreen = () => {
   const handleCreatePost = async () => {
     try {
       const formData = new FormData();
-      formData.append('described', described);
+      if (described !== '') {
+        formData.append('described', described);
+      }
       if (video) {
         formData.append('video', {
           uri: video,
