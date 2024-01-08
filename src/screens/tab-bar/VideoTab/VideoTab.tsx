@@ -22,9 +22,9 @@ function VideoTab() {
   const [refreshing, setrefreshing] = useState(false);
   const onRefresh = async () => {
     setrefreshing(true);
-    setSkip(Math.floor(Math.random() * (videoStore.videos.length ?? 1)));
-    dispatch(getListVideos({ index: skip, count: COUNT_ITEM }));
-    setSkip(skip => skip + COUNT_ITEM);
+    const skips = Math.floor(Math.random() * (videoStore.videos.length ?? 1));
+    dispatch(getListVideos({ index: skips, count: COUNT_ITEM }));
+    setSkip(skips + COUNT_ITEM);
     setrefreshing(false);
   };
 

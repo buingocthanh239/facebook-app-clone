@@ -31,10 +31,10 @@ function HomeTab() {
   const [refreshing, setrefreshing] = useState(false);
   const onRefresh = async () => {
     setrefreshing(true);
-    setSkip(Math.floor(Math.random() * (postStore.post.length ?? 1)));
-    dispatch(getListPosts({ index: skip, count: COUNT_ITEM }));
+    const skips = Math.floor(Math.random() * (postStore.post.length ?? 1));
+    dispatch(getListPosts({ index: skips, count: COUNT_ITEM }));
     dispatch(deleteNewPost());
-    setSkip(skip => skip + COUNT_ITEM);
+    setSkip(skips + COUNT_ITEM);
     setrefreshing(false);
   };
   useEffect(() => {

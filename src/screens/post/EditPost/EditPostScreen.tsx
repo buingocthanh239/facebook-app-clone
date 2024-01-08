@@ -28,6 +28,7 @@ import { editPost } from 'src/services/post.services';
 import { setMessage } from 'src/redux/slices/appSlice';
 import { PostNavigationName } from 'src/common/constants/nameScreen';
 import OptionCard from '../CreatePostScreen/component/OptionCard';
+import { getNewPost } from 'src/redux/slices/newPostSlice';
 
 export type File = {
   uri?: string;
@@ -263,6 +264,7 @@ const EditPostScreen = () => {
       } else {
         dispatch(setMessage(handShowErrorMessage(parseInt(res.code as unknown as string))));
       }
+      dispatch(getNewPost({ id: res.data.id }));
     } catch (error) {
       dispatch(setMessage('Vui lòng kiểm tra lại kết nối'));
     }
