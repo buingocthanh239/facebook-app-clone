@@ -5,6 +5,7 @@ import database from '@react-native-firebase/database';
 import { useAppSelector } from 'src/redux';
 import { selectAuth } from 'src/redux/slices/authSlice';
 import { getAvatarUri } from 'src/utils/helper';
+import { useNavigation } from '@react-navigation/native';
 
 const InboxListScreen = ({ route }: { route: any }) => {
   //   const alltestchat = [
@@ -113,63 +114,75 @@ const InboxListScreen = ({ route }: { route: any }) => {
       setMsg('');
     });
   };
+  const navigation = useNavigation();
 
   return (
     <>
       <View style={{ flexDirection: 'row', backgroundColor: '#fff' }}>
-        <IconButton icon={'keyboard-backspace'} iconColor={'#6A5ACD'} onPress={() => {}} />
+        <IconButton
+          icon={'keyboard-backspace'}
+          iconColor={'#6A5ACD'}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
         <Avatar.Image size={35} style={{ marginTop: 10 }} source={getAvatarUri(contact.avatar)} />
         <View style={{ flexDirection: 'column', marginTop: 8, marginLeft: 10 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#003' }}>{contact.name}</Text>
           <Text style={{ fontSize: 10, fontWeight: '300' }}> Hoạt động 20 phút trước </Text>
         </View>
       </View>
-      <ScrollView style={styles.container}>
-        {allChat.map((message, index) => {
-          return (
-            <View
-              key={index}
-              style={[
-                styles.messageContainer,
-                message.from === auth.user?.id ? styles.sentMessage : styles.receivedMessage
-              ]}
-            >
-              <Text style={message.from === auth.user?.id ? styles.sentText : styles.receivedText}>
-                {message.messages}
-              </Text>
-            </View>
-          );
-        })}
+      <ScrollView invertStickyHeaders style={styles.container}>
+        <View style={{ flex: 1, width: '100%', flexDirection: 'column' }}>
+          {allChat.map((message, index) => {
+            return (
+              <View
+                key={index}
+                style={[
+                  styles.messageContainer,
+                  message.from === auth.user?.id ? styles.sentMessage : styles.receivedMessage
+                ]}
+              >
+                <Text
+                  style={message.from === auth.user?.id ? styles.sentText : styles.receivedText}
+                >
+                  {message.messages}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
       </ScrollView>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-        <IconButton
-          icon={'dots-grid'}
-          size={30}
-          iconColor='#0066FF'
-          onPress={() => {}}
-          style={{ marginRight: -5 }}
-        />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          width: '100%',
+          paddingBottom: 10,
+          paddingRight: 10,
+          paddingTop: 10
+        }}
+      >
+        <IconButton icon={'dots-grid'} size={30} iconColor='#0066FF' onPress={() => {}} />
 
         <TextInput
-          label='Nhắn tin'
+          label='Nhập tin nhắn'
           value={msg}
           onFocus={() => setIsTyping(true)}
           onChangeText={msg => setMsg(msg)}
-          //   right={<TextInput.Icon icon='sticker-emoji' color={'#0066FF'} />}
           onSubmitEditing={() => {
             sendMsg();
           }}
+          underlineColor='transparent'
           style={{
-            paddingBottom: -20,
-            paddingTop: -20,
             borderColor: '#fff',
             backgroundColor: '#DCDCDC',
-            margin: 15,
-            marginTop: 20,
             borderBottomLeftRadius: 30,
             borderBottomRightRadius: 30,
             borderTopLeftRadius: 30,
-            borderTopRightRadius: 30
+            borderTopRightRadius: 30,
+            flex: 1
           }}
         />
       </View>
@@ -179,9 +192,8 @@ const InboxListScreen = ({ route }: { route: any }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column-reverse',
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 10,
     backgroundColor: '#F4F4F4'
   },
 
