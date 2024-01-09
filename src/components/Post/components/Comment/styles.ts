@@ -295,7 +295,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 12
   },
+  TextTrust: {
+    color: color.likeIcon,
+    fontWeight: '700',
+    fontSize: 12
+  },
 
+  TextFake: {
+    color: color.error,
+    fontWeight: '700',
+    fontSize: 12
+  },
   highlightText: {
     height: 20,
     width: 45,
@@ -453,6 +463,29 @@ const styles = StyleSheet.create({
   textHeaderListFeel: {
     fontSize: 20,
     color: color.black
+  },
+  modalLike: {
+    width: 40,
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+    top: -50,
+    left: 0,
+    backgroundColor: color.white,
+    padding: 5,
+    borderRadius: 20,
+    shadowOffset: {
+      width: 0,
+      height: 0
+    },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    borderWidth: 1,
+    borderStyle: 'dotted',
+    borderColor: 'var(--media-inner-border)',
+    shadowColor: 'var(--shadow-1)',
+    elevation: 2
   }
 });
 export default styles;
