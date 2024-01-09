@@ -1,4 +1,4 @@
-import { View, Text, TouchableHighlight, TextInput } from 'react-native';
+import { View, Text, TouchableHighlight, TextInput, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import styles from './styles';
 import { color } from 'src/common/constants/color';
@@ -10,6 +10,8 @@ import { useEffect, useState, useRef } from 'react';
 import { IListCommentPost } from 'src/interfaces/comments.interface';
 import { coverTimeToNow } from 'src/utils/dayjs';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AppNaviagtionName, PostNavigationName } from 'src/common/constants/nameScreen';
 import { useAppDispatch } from 'src/redux';
@@ -21,11 +23,9 @@ interface CommentTabProps {
   listMarkComment: IListCommentPost[];
   setListMarkComment: React.Dispatch<React.SetStateAction<IListCommentPost[]>>;
   numberFeel: number;
-  typeMark: any;
 }
 const CommentTab = (props: CommentTabProps) => {
-  const { id, openModal, setOpenModal, setListMarkComment, listMarkComment, numberFeel, typeMark } =
-    props;
+  const { id, openModal, setOpenModal, setListMarkComment, listMarkComment, numberFeel } = props;
   // const [listMarkComment, setListMarkComment] = useState<IListCommentPost[]>([]);
   const dispatch = useAppDispatch();
   const [skip, setSkip] = useState<number>(0);
@@ -35,18 +35,22 @@ const CommentTab = (props: CommentTabProps) => {
   const [markId, setMarkId] = useState(0);
   const [commentText, setCommentText] = useState('');
   const [isComment, setIsComment] = useState(false);
+  const [typeMark, setTypeMark] = useState<number>(1);
+  // const [isMark, setIsMark] = useState<number>(1);
   const [isLike, setIsLike] = useState(false);
   const COUNT_ITEM = 10;
 
   const textInputRef = useRef<TextInput>(null);
   useEffect(() => {
-    setIsLoadingFirstAPi(true);
-    setIsNextFetch(true);
-    setSkip(COUNT_ITEM);
-    setTimeout(() => {
-      setIsLoadingFirstAPi(false);
-    }, 1500);
-  }, []);
+    if (openModal) {
+      setIsLoadingFirstAPi(true);
+      setIsNextFetch(true);
+      setSkip(COUNT_ITEM);
+      setTimeout(() => {
+        setIsLoadingFirstAPi(false);
+      }, 1500);
+    }
+  }, [openModal]);
 
   async function onEndReadable() {
     if (isNextFetch) {
@@ -82,26 +86,52 @@ const CommentTab = (props: CommentTabProps) => {
   const handleCancel = () => {
     setOpenModal(false);
   };
-  const handlePressEnter = async () => {
-    try {
-      const result = await setMarkCommentApi({
-        id: id,
-        content: commentText,
-        index: 0,
-        count: 10,
-        mark_id: markId == 0 ? null : markId,
-        type: typeMark
-      });
-      if (result.success) {
-        if (!result.data.length) {
-          return;
+  const handlerypeMark = () => {
+    Alert.alert(
+      'Đánh giá bài viết',
+      'Hãy đánh giá về độ tin cậy của bài viết Trust là tin cậy và Fake là không tin cậy!!!',
+      [
+        {
+          text: 'HỦY',
+          style: 'cancel'
+        },
+        {
+          text: 'TRUST',
+          onPress: () => {
+            setTypeMark(1);
+          }
+        },
+        {
+          text: 'FAKE',
+          onPress: () => {
+            setTypeMark(0);
+          }
         }
-        setListMarkComment(result.data);
-        dispatch(changeCoins(result.data.coins));
-        // const response = res.data;
+      ]
+    );
+  };
+  const handlePressEnter = async () => {
+    if (commentText && commentText !== '') {
+      try {
+        const result = await setMarkCommentApi({
+          id: id,
+          content: commentText,
+          index: 0,
+          count: 10,
+          mark_id: markId == 0 ? null : markId,
+          type: typeMark
+        });
+        if (result.success) {
+          if (!result.data.length) {
+            return;
+          }
+          setListMarkComment(result.data);
+          dispatch(changeCoins(result.data.coins));
+          // const response = res.data;
+        }
+      } catch (e) {
+        return;
       }
-    } catch (e) {
-      return;
     }
     setCommentText('');
     setSkip(0);
@@ -323,7 +353,11 @@ const CommentTab = (props: CommentTabProps) => {
                           style={styles.highlightText}
                           underlayColor={color.Comment}
                         >
-                          <Text style={styles.TextLike}> Thích</Text>
+                          {item.type_of_mark == '1' ? (
+                            <Text style={styles.TextTrust}> Trust</Text>
+                          ) : (
+                            <Text style={styles.TextFake}> Fake</Text>
+                          )}
                         </TouchableHighlight>
                         <TouchableHighlight
                           onPress={() => {}}
@@ -396,14 +430,22 @@ const CommentTab = (props: CommentTabProps) => {
             />
           </View>
           <Divider />
-          <View>
+          <View
+            style={{
+              // flex:1,
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 10,
+              alignItems: 'center'
+            }}
+          >
             <TextInput
               ref={textInputRef}
               onFocus={() => setIsComment(true)}
               onBlur={() => setIsComment(false)}
               placeholder='Viết bình luận'
               clearButtonMode='always'
-              onSubmitEditing={handlePressEnter}
+              // onSubmitEditing={handlePressEnter}
               onChangeText={handleTextChange}
               value={commentText}
               style={{
@@ -411,13 +453,33 @@ const CommentTab = (props: CommentTabProps) => {
                 marginTop: 5,
                 marginBottom: 5,
                 height: 40,
-                width: '90%',
+                width: '70%',
                 marginLeft: 15,
                 borderRadius: 50,
                 backgroundColor: color.backgroundColor,
                 paddingLeft: 20
               }}
             />
+            <TouchableHighlight>
+              <FontAwesome6
+                name='face-smile'
+                size={25}
+                // color={color.laughtIcon}
+                style={styles.rightIcon}
+                onPress={() => {
+                  handlerypeMark();
+                }}
+              />
+            </TouchableHighlight>
+            <TouchableHighlight>
+              <Ionicons
+                name='send'
+                size={25}
+                color={color.likeIcon}
+                style={styles.rightIcon}
+                onPress={handlePressEnter}
+              />
+            </TouchableHighlight>
           </View>
         </View>
       )}

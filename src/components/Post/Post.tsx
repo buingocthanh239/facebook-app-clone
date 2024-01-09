@@ -61,7 +61,6 @@ function Post(props: PostProps) {
     useNavigation();
   const [deleted, setDeleted] = useState(false);
   const [listMarkComment, setListMarkComment] = useState<IListCommentPost[]>([]);
-  const [typeMark, setTypeMark] = useState<number | null>(null);
   const onDeletePost = () => {
     setDeleted(true);
   };
@@ -165,7 +164,6 @@ function Post(props: PostProps) {
         if (res.success) {
           setfeel('-1');
           setNumberFeel(numberFeel - 1);
-          setTypeMark(1);
         }
       } catch (e) {
         return;
@@ -185,7 +183,6 @@ function Post(props: PostProps) {
           setNumberFeel(numberFeel + 1);
         }
         setfeel('1');
-        setTypeMark(1);
       }
     } catch (e) {
       return;
@@ -205,7 +202,7 @@ function Post(props: PostProps) {
         if (feel == '-1') {
           setNumberFeel(numberFeel + 1);
         }
-        setTypeMark(0);
+
         // const response = res.data;
       }
     } catch (e) {
@@ -287,26 +284,27 @@ function Post(props: PostProps) {
       <Divider />
       {isInteract && (
         <>
-          <TouchableHighlight
-            style={[globalStyles.flexRow, globalStyles.spaceBetweenJustify, styles.padding]}
-            onPress={() => handleComment()}
-            underlayColor={color.borderColor}
-          >
-            <>
-              {numberFeel !== 0 && (
+          {numberFeel !== 0 && (
+            <TouchableHighlight
+              style={[globalStyles.flexRow, globalStyles.spaceBetweenJustify, styles.padding]}
+              onPress={() => handleComment()}
+              underlayColor={color.borderColor}
+            >
+              <>
                 <View style={[globalStyles.flexRow, globalStyles.centerAlignItem]}>
                   <AntdIcon name='like1' size={15} color={color.primary} />
                   <Text>{numberFeel}</Text>
                 </View>
-              )}
-              {(props.comment_mark !== '0' || props.numberShares) && (
-                <View style={[globalStyles.flexRow, styles.gap]}>
-                  {props?.comment_mark !== '0' && <Text>{props?.comment_mark} bình luận</Text>}
-                  {props?.numberShares && <Text>{props?.numberShares} lượt chia sẻ</Text>}
-                </View>
-              )}
-            </>
-          </TouchableHighlight>
+
+                {(props.comment_mark !== '0' || props.numberShares) && (
+                  <View style={[globalStyles.flexRow, styles.gap]}>
+                    {props?.comment_mark !== '0' && <Text>{props?.comment_mark} bình luận</Text>}
+                    {props?.numberShares && <Text>{props?.numberShares} lượt chia sẻ</Text>}
+                  </View>
+                )}
+              </>
+            </TouchableHighlight>
+          )}
           <Divider />
         </>
       )}
@@ -369,11 +367,11 @@ function Post(props: PostProps) {
         <TouchableHighlight
           style={[globalStyles.flexRow, styles.padding, styles.gap]}
           underlayColor={color.borderColor}
-          onPress={() => {}}
+          onPress={() => handleComment()}
         >
           <>
             <FontAwesomeICon name='comment-o' size={20} />
-            <Text onPress={() => handleComment()}>Bình luận</Text>
+            <Text>Bình luận</Text>
           </>
         </TouchableHighlight>
         <TouchableHighlight
@@ -397,7 +395,6 @@ function Post(props: PostProps) {
         onDeletePost={onDeletePost}
       />
       <CommentTab
-        typeMark={typeMark}
         openModal={openCommentModal}
         setOpenModal={setOpenCommentModal}
         listMarkComment={listMarkComment}
