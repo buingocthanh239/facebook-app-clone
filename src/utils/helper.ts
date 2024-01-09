@@ -150,5 +150,5 @@ export const formatDate = (date: string) => {
 };
 
 export function formatNumber(number: string): string {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

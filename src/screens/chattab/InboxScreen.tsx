@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import {
-  IconButton,
-  Avatar,
-  Surface,
-  TouchableRipple,
-  ActivityIndicator
-} from 'react-native-paper';
+import { IconButton, Avatar, TouchableRipple, ActivityIndicator, Appbar } from 'react-native-paper';
 import database from '@react-native-firebase/database';
 import { NavigationProp, useNavigation } from '@react-navigation/core';
 import { AppNaviagtionName, ChatNavigationName } from 'src/common/constants/nameScreen';
@@ -54,7 +48,7 @@ function ContactList() {
 
   return (
     <>
-      {loading && <ActivityIndicator size='large' color='#0066FF' style={{ marginTop: 20 }} />}
+      {loading && <ActivityIndicator color='#0066FF' style={{ marginTop: '50%' }} />}
       {!loading &&
         chatlist.map((contact, index) => (
           <TouchableRipple
@@ -83,18 +77,13 @@ function ContactList() {
   );
 }
 function InboxScreen() {
+  const navigation = useNavigation();
   return (
     <>
-      <Surface style={styles.surface}>
-        <IconButton
-          style={styles.iconButton}
-          icon='format-list-bulleted'
-          size={20}
-          onPress={() => {}}
-        />
-        <Text style={styles.title}> Đoạn chat </Text>
-        <IconButton style={styles.iconButton} icon='pencil' size={20} onPress={() => {}} />
-      </Surface>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title='Đoạn chat' />
+      </Appbar.Header>
       <ScrollView style={styles.scrollView}>
         <ContactList />
       </ScrollView>
