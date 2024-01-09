@@ -30,8 +30,8 @@ const MAX_LENGTH_CONTENT = 500;
 export interface PostProps {
   id: string;
   name: string;
-  image: [{ id: string; url: string }];
-  video: {
+  image?: [{ id: string; url: string }];
+  video?: {
     url: string;
     thumb: string;
   };

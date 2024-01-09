@@ -1,4 +1,4 @@
-import { View, Text, TouchableHighlight, TextInput, Alert, FlatList } from 'react-native';
+import { View, Text, TouchableHighlight, TextInput, Alert, FlatList, BackHandler } from 'react-native';
 import Modal from 'react-native-modal';
 import styles from './styles';
 import { color } from 'src/common/constants/color';
@@ -219,6 +219,14 @@ const CommentTab = (props: CommentTabProps) => {
       screen: PostNavigationName.ListFeelScreen,
       params: { postId: id }
     });
+  useEffect(() => {
+    const backAction = () => {
+      handleCancel();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, []);
   return (
     <Modal
       // visible={openModal}

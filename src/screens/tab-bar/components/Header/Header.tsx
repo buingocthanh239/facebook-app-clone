@@ -16,6 +16,7 @@ import { selectAuth } from 'src/redux/slices/authSlice';
 import { useSelector } from 'react-redux';
 import { selectFriend } from 'src/redux/slices/friendSlice';
 import database from '@react-native-firebase/database';
+import { formatNumber } from 'src/utils/helper';
 
 function Header() {
   const listfriends = useSelector(selectFriend);
@@ -111,7 +112,7 @@ function Header() {
           activeOpacity={0.8}
         >
           <Text style={{ color: color.iconButtonColor, fontWeight: 'bold', fontSize: 16 }}>
-            {parseFloat(coins as string).toLocaleString('en-US')}
+            {formatNumber(coins as string)}
           </Text>
           <IconFont name='coins' color={color.iconButtonColor} size={16} />
         </TouchableOpacity>

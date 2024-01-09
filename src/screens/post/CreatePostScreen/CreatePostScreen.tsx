@@ -37,6 +37,7 @@ import {
   getNewPost,
   resetProgress,
   resetUnfinishedPost,
+  setProgress,
   setUnfinishedPost
 } from 'src/redux/slices/newPostSlice';
 
@@ -306,11 +307,14 @@ const CreatePostScreen = () => {
         formData.append('status', status);
       }
       formData.append('auto_accept', 'true');
-      dispatch(resetProgress());
+      navigationGoBack.goBack();
+      dispatch(setProgress(0.3));
+      setTimeout(() => {
+        dispatch(setProgress(0.6));
+      }, 700);
       const res = await addPost(formData);
 
       if (res.success) {
-        navigationGoBack.goBack();
         dispatch(getNewPost({ id: res.data.id }));
         dispatch(resetUnfinishedPost());
         dispatch(changeCoins(res.data.coins));
@@ -334,9 +338,11 @@ const CreatePostScreen = () => {
           ]
         );
       } else {
+        dispatch(resetProgress());
         dispatch(setMessage(handShowErrorMessage(parseInt(res.code as unknown as string))));
       }
     } catch (error) {
+      dispatch(resetProgress());
       dispatch(setMessage('Vui lòng kiểm tra lại kết nối'));
     }
   };

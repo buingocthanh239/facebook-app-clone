@@ -49,7 +49,7 @@ export const newPostSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(getNewPost.pending, state => {
       state.loading = true;
-      state.progress += 0.1;
+      state.progress = 0.8;
     });
     builder.addCase(getNewPost.rejected, (state, action) => {
       state.error = action.payload as string;
@@ -84,6 +84,9 @@ export const newPostSlice = createSlice({
     resetProgress: state => {
       state.progress = 0;
     },
+    setProgress: (state, action: PayloadAction<number>) => {
+      state.progress = action.payload;
+    },
     setUnfinishedPost: (state, action: PayloadAction<IUnfinishedPost>) => {
       state.unfinishedPost = action.payload;
     },
@@ -94,7 +97,7 @@ export const newPostSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { deleteNewPost, resetProgress, setUnfinishedPost, resetUnfinishedPost } =
+export const { deleteNewPost, resetProgress, setProgress, setUnfinishedPost, resetUnfinishedPost } =
   newPostSlice.actions;
 
 export default newPostSlice.reducer;
