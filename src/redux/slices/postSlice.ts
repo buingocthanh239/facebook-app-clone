@@ -11,6 +11,7 @@ interface IPostState {
   lastId: string | null;
   newPosts: string | null;
   isNextFetch: boolean;
+  haveNewPost: boolean;
 }
 
 const initialState: IPostState = {
@@ -19,7 +20,8 @@ const initialState: IPostState = {
   post: [],
   lastId: null,
   newPosts: null,
-  isNextFetch: true
+  isNextFetch: true,
+  haveNewPost: false
 };
 
 export const getNextListPosts = createAsyncThunk(
@@ -67,13 +69,18 @@ const postSlice = createSlice({
       state.getPostloading = false;
     });
     builder.addCase(getListPosts.fulfilled, (state, action) => {
-      state.post = action.payload.post;
-      state.lastId = action.payload.last_id;
-      state.newPosts = action.payload.new_posts;
-      if (!action.payload.post?.length) {
-        state.isNextFetch = false;
+      if (state.post[0].id !== action.payload.post[0].id) {
+        state.haveNewPost = true;
+        state.post = action.payload.post;
+        state.lastId = action.payload.last_id;
+        state.newPosts = action.payload.new_posts;
+        if (!action.payload.post?.length) {
+          state.isNextFetch = false;
+        }
+        state.getPostloading = false;
+      } else {
+        state.haveNewPost = false;
       }
-      state.getPostloading = false;
     });
     builder.addCase(getNextListPosts.rejected, state => {
       state.getPostloading = false;

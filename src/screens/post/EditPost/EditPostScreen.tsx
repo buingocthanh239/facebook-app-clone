@@ -240,8 +240,12 @@ const EditPostScreen = () => {
       const id = data.id;
       const formData = new FormData();
       formData.append('id', id);
-      formData.append('status', status);
-      formData.append('described', described);
+      if (described !== '') {
+        formData.append('described', described);
+      }
+      if (status !== '') {
+        formData.append('status', status);
+      }
       if (video) {
         formData.append('video', {
           uri: video,
@@ -258,6 +262,7 @@ const EditPostScreen = () => {
       const res = await editPost(formData);
       if (res.success) {
         dispatch(setMessage('Bạn đã chỉnh sửa bài viết.'));
+        dispatch(getNewPost({ id: res.data.id }));
         dispatch(changeCoins(res.data.coins));
         navigationGoBack.goBack();
         return res;

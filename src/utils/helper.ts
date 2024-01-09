@@ -148,3 +148,7 @@ export const formatDate = (date: string) => {
     }, ${dateObject.getUTCFullYear()}`;
   }
 };
+
+export function formatNumber(number: string): string {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}

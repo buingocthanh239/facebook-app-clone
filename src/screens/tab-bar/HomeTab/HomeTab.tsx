@@ -15,6 +15,7 @@ import { getListPosts, getNextListPosts, selectPost } from 'src/redux/slices/pos
 import { deleteNewPost } from 'src/redux/slices/newPostSlice';
 import { ProgressBar } from 'react-native-paper';
 import { color } from 'src/common/constants/color';
+// import { ToastAndroid } from 'react-native';
 const COUNT_ITEM = 10;
 
 function HomeTab() {
@@ -24,17 +25,17 @@ function HomeTab() {
   const postStore = useAppSelector(selectPost);
   const newPost = useAppSelector(state => state.newPost.post);
   const progress = useAppSelector(state => state.newPost.progress);
-  const loadingNewPost = useAppSelector(state => state.newPost.loading);
 
   const isBlock = useAppSelector(state => state.block.time);
 
   const [refreshing, setrefreshing] = useState(false);
   const onRefresh = async () => {
     setrefreshing(true);
-    const skips = Math.floor(Math.random() * 4);
-    dispatch(getListPosts({ index: skips, count: COUNT_ITEM }));
+    dispatch(getListPosts({ index: 0, count: COUNT_ITEM }));
     dispatch(deleteNewPost());
-    setSkip(skips + COUNT_ITEM);
+    // if (!postStore.haveNewPost) {
+    //   ToastAndroid.showWithGravity('No new posts', ToastAndroid.SHORT, ToastAndroid.TOP);
+    // }
     setrefreshing(false);
   };
   // const refeshWhenNoNotWork = () => {
@@ -84,10 +85,10 @@ function HomeTab() {
   // ).current;
 
   // get post handle
-  useEffect(() => {
-    dispatch(getListPosts({ index: 0, count: COUNT_ITEM }));
-    setSkip(skip => skip + COUNT_ITEM);
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getListPosts({ index: 0, count: COUNT_ITEM }));
+  //   setSkip(skip => skip + COUNT_ITEM);
+  // }, [dispatch]);
 
   return (
     <BaseFlatList
@@ -96,29 +97,29 @@ function HomeTab() {
       ListHeaderComponent={
         <>
           <NewPostCreate />
+          <ProgressBar
+            progress={progress}
+            color={color.primary}
+            visible={progress > 0 && progress < 1}
+          />
           {newPost && (
-            <>
-              <ProgressBar progress={progress} visible={loadingNewPost} color={color.primary} />
-              {!loadingNewPost && (
-                <Post
-                  id={newPost.id}
-                  author={newPost.author}
-                  created={newPost.created}
-                  comment_mark={newPost.comment_mark}
-                  described={newPost.described}
-                  image={newPost.image}
-                  video={newPost.video}
-                  name={newPost.name}
-                  feel={newPost.feel}
-                  numberShares={newPost.numberShares}
-                  banned={newPost.banned}
-                  can_edit={newPost.can_edit}
-                  is_blocked={newPost.is_blocked}
-                  is_felt={newPost.is_felt}
-                  status={newPost.status}
-                />
-              )}
-            </>
+            <Post
+              id={newPost.id}
+              author={newPost.author}
+              created={newPost.created}
+              comment_mark={newPost.comment_mark}
+              described={newPost.described}
+              image={newPost.image}
+              video={newPost.video}
+              name={newPost.name}
+              feel={newPost.feel}
+              numberShares={newPost.numberShares}
+              banned={newPost.banned}
+              can_edit={newPost.can_edit}
+              is_blocked={newPost.is_blocked}
+              is_felt={newPost.is_felt}
+              status={newPost.status}
+            />
           )}
         </>
       }
