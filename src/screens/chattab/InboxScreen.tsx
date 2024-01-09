@@ -32,10 +32,13 @@ function ContactList() {
     });
   const auth = useAppSelector(selectAuth);
   useEffect(() => {
-    setLoading(true);
-    getChatlist().then(() => {
-      setLoading(false); // Kết thúc loading
-    });
+    const timer = setTimeout(() => {
+      getChatlist().then(() => {
+        setLoading(false);
+      });
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, [auth.user?.id]);
 
   const getChatlist = async () => {
@@ -51,10 +54,7 @@ function ContactList() {
 
   return (
     <>
-      {loading && (
-        // Hiển thị biểu tượng loading ở đây, ví dụ: một biểu tượng vòng tròn xoay
-        <ActivityIndicator size='large' color='#000' style={{ marginTop: 20 }} />
-      )}
+      {loading && <ActivityIndicator size='large' color='#0066FF' style={{ marginTop: 20 }} />}
       {!loading &&
         chatlist.map((contact, index) => (
           <TouchableRipple
