@@ -43,6 +43,7 @@ type AppNavigationType = {
     | { screen: PostNavigationName.EnAScreen }
     | { screen: PostNavigationName.ListFeelScreen; params: { postId: string } }
     | { screen: PostNavigationName.AllPostDetail; params: { postId: string } };
+
   SearchNavigation: { screen: SearchNavigationName };
   ReportNavigation: {
     screen: ReportNavigationName;
@@ -129,6 +130,7 @@ type PostNavigationType = {
   };
   ListImageDetail: { data: PostProps };
   EditPostScreen: { data?: PostProps; selectedItem?: CardData };
+  AllPostDetail: { postId: string };
 };
 
 type TabNavigationType = {
