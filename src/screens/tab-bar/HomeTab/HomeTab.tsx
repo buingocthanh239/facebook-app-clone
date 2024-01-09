@@ -31,12 +31,15 @@ function HomeTab() {
   const [refreshing, setrefreshing] = useState(false);
   const onRefresh = async () => {
     setrefreshing(true);
-    const skips = Math.floor(Math.random() * (postStore.post.length ?? 1));
+    const skips = Math.floor(Math.random() * 4);
     dispatch(getListPosts({ index: skips, count: COUNT_ITEM }));
     dispatch(deleteNewPost());
     setSkip(skips + COUNT_ITEM);
     setrefreshing(false);
   };
+  // const refeshWhenNoNotWork = () => {
+
+  // }
   useEffect(() => {
     onRefresh();
   }, [isBlock]);
