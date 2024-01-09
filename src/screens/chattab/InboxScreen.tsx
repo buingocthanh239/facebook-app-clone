@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { IconButton, Avatar, Surface, TouchableRipple } from 'react-native-paper';
+import {
+  IconButton,
+  Avatar,
+  Surface,
+  TouchableRipple,
+  ActivityIndicator
+} from 'react-native-paper';
 import database from '@react-native-firebase/database';
 import { NavigationProp, useNavigation } from '@react-navigation/core';
 import { AppNaviagtionName, ChatNavigationName } from 'src/common/constants/nameScreen';
@@ -15,6 +21,8 @@ interface Contact {
 
 function ContactList() {
   const [chatlist, setChatlist] = useState<Contact[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const navigationChatScreen: NavigationProp<AppNavigationType, AppNaviagtionName.ChatNavigation> =
     useNavigation();
   const handleNaviagtionChatScreen = (contact: Contact) =>
@@ -24,7 +32,13 @@ function ContactList() {
     });
   const auth = useAppSelector(selectAuth);
   useEffect(() => {
-    getChatlist();
+    const timer = setTimeout(() => {
+      getChatlist().then(() => {
+        setLoading(false);
+      });
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, [auth.user?.id]);
 
   const getChatlist = async () => {
@@ -40,29 +54,31 @@ function ContactList() {
 
   return (
     <>
-      {chatlist.map((contact, index) => (
-        <TouchableRipple
-          key={index}
-          style={{ marginVertical: 10 }}
-          onPress={() => handleNaviagtionChatScreen(contact)}
-          rippleColor='rgba(0, 0, 0, .32)'
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Avatar.Image
-              size={60}
-              style={{ marginTop: 10, marginLeft: 10 }}
-              source={getAvatarUri(contact.avatar)}
-            />
-            <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 10 }}>
-              <Text style={{ fontWeight: '500', fontSize: 15, color: '#000', marginBottom: 5 }}>
-                {contact.name}
-              </Text>
-              <Text style={{ fontWeight: '500', color: '#000' }}> {contact.lastMsg}</Text>
+      {loading && <ActivityIndicator size='large' color='#0066FF' style={{ marginTop: 20 }} />}
+      {!loading &&
+        chatlist.map((contact, index) => (
+          <TouchableRipple
+            key={index}
+            style={{ marginVertical: 10 }}
+            onPress={() => handleNaviagtionChatScreen(contact)}
+            rippleColor='rgba(0, 0, 0, .32)'
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Avatar.Image
+                size={60}
+                style={{ marginTop: 10, marginLeft: 10 }}
+                source={getAvatarUri(contact.avatar)}
+              />
+              <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 10 }}>
+                <Text style={{ fontWeight: '500', fontSize: 15, color: '#000', marginBottom: 5 }}>
+                  {contact.name}
+                </Text>
+                <Text style={{ fontWeight: '500', color: '#000' }}> {contact.lastMsg}</Text>
+              </View>
+              <IconButton icon={'check-circle-outline'} style={{ marginLeft: 'auto' }} size={20} />
             </View>
-            <IconButton icon={'check-circle-outline'} style={{ marginLeft: 'auto' }} size={20} />
-          </View>
-        </TouchableRipple>
-      ))}
+          </TouchableRipple>
+        ))}
     </>
   );
 }
