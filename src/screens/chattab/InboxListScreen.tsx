@@ -76,11 +76,17 @@ const InboxListScreen = ({ route }: { route: any }) => {
   const auth = useAppSelector(selectAuth);
 
   const msgvalid = (txt: string) => txt && txt.replace(/\s/g, '').length;
+  const [isMessageSent, setIsMessageSent] = useState(false);
 
   const sendMsg = () => {
-    if (msg == '' || msgvalid(msg) == 0) {
+    if (isMessageSent || msg == '' || msgvalid(msg) == 0) {
       alert('Enter something...');
+      return;
     }
+    setIsMessageSent(true);
+    setTimeout(() => {
+      setIsMessageSent(false);
+    }, 1000);
     const msgData = {
       roomId: contact.roomId,
       messages: msg,
@@ -129,13 +135,17 @@ const InboxListScreen = ({ route }: { route: any }) => {
         <Avatar.Image size={35} style={{ marginTop: 10 }} source={getAvatarUri(contact.avatar)} />
         <View style={{ flexDirection: 'column', marginTop: 8, marginLeft: 10 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#003' }}>{contact.name}</Text>
-          <Text style={{ fontSize: 10, fontWeight: '300' }}> Hoạt động 20 phút trước </Text>
+          <Text style={{ fontSize: 10, fontWeight: '500' }}> Đang hoạt động </Text>
         </View>
       </View>
       <ScrollView invertStickyHeaders style={styles.container}>
         <View style={{ flex: 1, width: '100%', flexDirection: 'column' }}>
-          {allChat.map((message, index) => {
-            return (
+          {allChat.length === 0 ? (
+            <Text style={styles.emptyMessage}>
+              Hai bạn đã là bạn bè của nhau, hãy bắt đầu cuộc trò chuyện nhé
+            </Text>
+          ) : (
+            allChat.map((message, index) => (
               <View
                 key={index}
                 style={[
@@ -149,10 +159,11 @@ const InboxListScreen = ({ route }: { route: any }) => {
                   {message.messages}
                 </Text>
               </View>
-            );
-          })}
+            ))
+          )}
         </View>
       </ScrollView>
+
       <View
         style={{
           flexDirection: 'row',
@@ -172,7 +183,9 @@ const InboxListScreen = ({ route }: { route: any }) => {
           onFocus={() => setIsTyping(true)}
           onChangeText={msg => setMsg(msg)}
           onSubmitEditing={() => {
-            sendMsg();
+            if (!isMessageSent) {
+              sendMsg();
+            }
           }}
           underlineColor='transparent'
           style={{
@@ -183,6 +196,16 @@ const InboxListScreen = ({ route }: { route: any }) => {
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
             flex: 1
+          }}
+        />
+        <IconButton
+          icon={'send'} // Icon gửi tin nhắn, bạn có thể thay đổi theo ý muốn
+          size={30}
+          iconColor='#0066FF'
+          onPress={() => {
+            if (!isMessageSent) {
+              sendMsg();
+            }
           }}
         />
       </View>
@@ -215,6 +238,13 @@ const styles = StyleSheet.create({
   },
   receivedText: {
     color: '#000000'
+  },
+  emptyMessage: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 16,
+    color: '#888888',
+    fontWeight: 'bold'
   }
 });
 export default InboxListScreen;
