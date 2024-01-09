@@ -1,9 +1,8 @@
-import { View, Text, TouchableHighlight, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableHighlight, TextInput, Alert, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 import styles from './styles';
 import { color } from 'src/common/constants/color';
-import BaseFlatList from 'src/components/BaseFlatList';
-import { ActivityIndicator, Avatar, Divider } from 'react-native-paper';
+import { ActivityIndicator, Avatar, Divider, TouchableRipple } from 'react-native-paper';
 import { getAvatarUri } from 'src/utils/helper';
 import { getMarkCommentApi, setFeelApi, setMarkCommentApi } from 'src/services/comment.service';
 import { useEffect, useState, useRef } from 'react';
@@ -30,6 +29,7 @@ const CommentTab = (props: CommentTabProps) => {
   const dispatch = useAppDispatch();
   const [skip, setSkip] = useState<number>(0);
   const [isNext, setIsNext] = useState<boolean>(false);
+  const [isLoadingSendComment, setIsLoadingSendComment] = useState<boolean>(false);
   const [isNextFetch, setIsNextFetch] = useState<boolean>(true);
   const [isLoadingFirstApi, setIsLoadingFirstAPi] = useState<boolean>(false);
   const [markId, setMarkId] = useState(0);
@@ -113,6 +113,7 @@ const CommentTab = (props: CommentTabProps) => {
   const handlePressEnter = async () => {
     if (commentText && commentText !== '') {
       try {
+        setIsLoadingSendComment(true);
         const result = await setMarkCommentApi({
           id: id,
           content: commentText,
@@ -131,6 +132,8 @@ const CommentTab = (props: CommentTabProps) => {
         }
       } catch (e) {
         return;
+      } finally {
+        setIsLoadingSendComment(false);
       }
     }
     setCommentText('');
@@ -304,7 +307,7 @@ const CommentTab = (props: CommentTabProps) => {
             </View>
           </TouchableHighlight>
           <View style={isComment ? { height: '75%' } : { height: '86%' }}>
-            <BaseFlatList
+            <FlatList
               ListHeaderComponent={() => (
                 <TouchableHighlight style={{ padding: 10 }} underlayColor={color.Comment}>
                   <Text
@@ -375,8 +378,8 @@ const CommentTab = (props: CommentTabProps) => {
                           </Text>
                         </TouchableHighlight>
                       </View>
-                      {item.comments.length > 0
-                        ? item.comments.map((repItem: any, index: number) => (
+                      {(item.comments ?? []).length > 0
+                        ? (item.comments ?? []).map((repItem: any, index: number) => (
                             <View key={index}>
                               <View style={styles.topRep}>
                                 <TouchableHighlight
@@ -424,7 +427,13 @@ const CommentTab = (props: CommentTabProps) => {
                 </>
               )}
               keyExtractor={item => item.id}
-              isFootterLoading={isNext}
+              ListFooterComponent={
+                isNext ? (
+                  <View style={{ marginTop: 20 }}>
+                    <ActivityIndicator color={color.outlineColor} />
+                  </View>
+                ) : null
+              }
               onEndReached={onEndReadable}
               onEndReachedThreshold={0.001}
             />
@@ -471,15 +480,16 @@ const CommentTab = (props: CommentTabProps) => {
                 }}
               />
             </TouchableHighlight>
-            <TouchableHighlight>
-              <Ionicons
-                name='send'
-                size={25}
-                color={color.likeIcon}
-                style={styles.rightIcon}
-                onPress={handlePressEnter}
-              />
-            </TouchableHighlight>
+            <TouchableRipple
+              style={{ paddingHorizontal: 10 }}
+              onPress={isLoadingSendComment ? () => {} : handlePressEnter}
+            >
+              {isLoadingSendComment ? (
+                <ActivityIndicator color={color.primary} />
+              ) : (
+                <Ionicons name='send' size={25} color={color.likeIcon} style={styles.rightIcon} />
+              )}
+            </TouchableRipple>
           </View>
         </View>
       )}
