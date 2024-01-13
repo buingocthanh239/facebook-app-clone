@@ -32,6 +32,7 @@ function HomeTab() {
   const onRefresh = async () => {
     setrefreshing(true);
     dispatch(getListPosts({ index: 0, count: COUNT_ITEM }));
+    setSkip(COUNT_ITEM);
     dispatch(deleteNewPost());
     // if (!postStore.haveNewPost) {
     //   ToastAndroid.showWithGravity('No new posts', ToastAndroid.SHORT, ToastAndroid.TOP);

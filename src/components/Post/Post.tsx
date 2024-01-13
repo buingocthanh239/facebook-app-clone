@@ -141,6 +141,9 @@ function Post(props: PostProps) {
   };
 
   const handleLike = async () => {
+    setfeel('1');
+    setNumberFeel(numberFeel + 1);
+    setOpenModalFeel(false);
     if (feel == '-1') {
       try {
         const res = await setFeelApi({
@@ -149,29 +152,29 @@ function Post(props: PostProps) {
         });
         if (res.success) {
           dispatch(changeCoins(res.data.coins));
-          setfeel('1');
-          setNumberFeel(numberFeel + 1);
         }
       } catch (e) {
         return;
       }
-      setOpenModalFeel(false);
     } else {
+      setfeel('-1');
+      setNumberFeel(numberFeel - 1);
+      setOpenModalFeel(false);
       try {
-        const res = await deleteFeelsApi({
+        await deleteFeelsApi({
           id: id
         });
-        if (res.success) {
-          setfeel('-1');
-          setNumberFeel(numberFeel - 1);
-        }
       } catch (e) {
         return;
       }
-      setOpenModalFeel(false);
     }
   };
   const handleSetLike = async (id: string) => {
+    if (feel == '-1') {
+      setNumberFeel(numberFeel + 1);
+    }
+    setfeel('1');
+    setOpenModalFeel(false);
     try {
       const res = await setFeelApi({
         id: id,
@@ -179,18 +182,18 @@ function Post(props: PostProps) {
       });
       if (res.success) {
         dispatch(changeCoins(res.data.coins));
-        if (feel == '-1') {
-          setNumberFeel(numberFeel + 1);
-        }
-        setfeel('1');
       }
     } catch (e) {
       return;
     }
-    setOpenModalFeel(false);
   };
 
   const handleSetDislike = async (id: string) => {
+    setfeel('0');
+    if (feel == '-1') {
+      setNumberFeel(numberFeel + 1);
+    }
+    setOpenModalFeel(false);
     try {
       const res = await setFeelApi({
         id: id,
@@ -198,17 +201,12 @@ function Post(props: PostProps) {
       });
       if (res.success) {
         dispatch(changeCoins(res.data.coins));
-        setfeel('0');
-        if (feel == '-1') {
-          setNumberFeel(numberFeel + 1);
-        }
 
         // const response = res.data;
       }
     } catch (e) {
       return;
     }
-    setOpenModalFeel(false);
   };
 
   const isInteract: boolean =
