@@ -240,7 +240,7 @@ const CommentTab = (props: CommentTabProps) => {
       // visible={openModal}
       // onClose={handleCancel}
       animationIn='slideInUp'
-      animationOut='slideInDown'
+      // animationOut='slideInDown'
       isVisible={openModal}
       style={styles.container}
       onBackdropPress={handleCancel}
@@ -251,7 +251,13 @@ const CommentTab = (props: CommentTabProps) => {
           style={{ marginTop: '50%', backgroundColor: color.white }}
         />
       ) : (
-        <View style={{ backgroundColor: color.white }}>
+        <View
+          style={{
+            backgroundColor: color.white,
+            borderTopRightRadius: 10,
+            borderTopLeftRadius: 10
+          }}
+        >
           <TouchableHighlight
             style={styles.header}
             onPress={handleNavigationFeelScreen}
