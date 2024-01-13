@@ -69,18 +69,13 @@ const postSlice = createSlice({
       state.getPostloading = false;
     });
     builder.addCase(getListPosts.fulfilled, (state, action) => {
-      if (state.post[0].id !== action.payload.post[0].id) {
-        state.haveNewPost = true;
-        state.post = action.payload.post;
-        state.lastId = action.payload.last_id;
-        state.newPosts = action.payload.new_posts;
-        if (!action.payload.post?.length) {
-          state.isNextFetch = false;
-        }
-        state.getPostloading = false;
-      } else {
-        state.haveNewPost = false;
+      state.post = action.payload.post;
+      state.lastId = action.payload.last_id;
+      state.newPosts = action.payload.new_posts;
+      if (!action.payload.post?.length) {
+        state.isNextFetch = false;
       }
+      state.getPostloading = false;
     });
     builder.addCase(getNextListPosts.rejected, state => {
       state.getPostloading = false;

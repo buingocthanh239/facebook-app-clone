@@ -240,7 +240,6 @@ const CommentTab = (props: CommentTabProps) => {
       // visible={openModal}
       // onClose={handleCancel}
       animationIn='slideInUp'
-      animationInTiming={500}
       animationOut='slideInDown'
       isVisible={openModal}
       style={styles.container}

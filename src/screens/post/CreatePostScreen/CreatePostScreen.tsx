@@ -309,9 +309,9 @@ const CreatePostScreen = () => {
       formData.append('auto_accept', 'true');
       navigationGoBack.goBack();
       dispatch(setProgress(0.3));
-      setTimeout(() => {
+      await setTimeout(() => {
         dispatch(setProgress(0.6));
-      }, 700);
+      }, 300);
       const res = await addPost(formData);
 
       if (res.success) {

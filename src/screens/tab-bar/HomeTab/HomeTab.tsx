@@ -31,12 +31,11 @@ function HomeTab() {
   const [refreshing, setrefreshing] = useState(false);
   const onRefresh = async () => {
     setrefreshing(true);
+    const skips = Math.floor(Math.random() * 4);
     dispatch(getListPosts({ index: 0, count: COUNT_ITEM }));
     setSkip(COUNT_ITEM);
     dispatch(deleteNewPost());
-    // if (!postStore.haveNewPost) {
-    //   ToastAndroid.showWithGravity('No new posts', ToastAndroid.SHORT, ToastAndroid.TOP);
-    // }
+    setSkip(skips + COUNT_ITEM);
     setrefreshing(false);
   };
   // const refeshWhenNoNotWork = () => {
