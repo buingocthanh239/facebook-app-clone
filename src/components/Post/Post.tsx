@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import GridImage from '../GridImages/GridImage';
 import BaseVideo from '../BaseVideo';
 import ReportModal from './ReportModal';
-import { getAvatarUri } from 'src/utils/helper';
+import { getAvatarUri, handShowErrorMessage } from 'src/utils/helper';
 import { coverTimeToNow } from 'src/utils/dayjs';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { changeCoins } from 'src/redux/slices/authSlice';
@@ -23,6 +23,7 @@ import CommentTab from './components/Comment';
 import { deleteFeelsApi, getMarkCommentApi, setFeelApi } from 'src/services/comment.service';
 import { useAppDispatch } from 'src/redux';
 import { IListCommentPost } from 'src/interfaces/comments.interface';
+import { setMessage } from 'src/redux/slices/appSlice';
 
 const MAX_LENGTH_CONTENT = 500;
 
@@ -151,7 +152,9 @@ function Post(props: PostProps) {
           type: 1
         });
         if (res.success) {
-          dispatch(changeCoins(res.data.coins));
+          dispatch(changeCoins(res.coins));
+        } else {
+          dispatch(setMessage(handShowErrorMessage(parseInt(res.code))));
         }
       } catch (e) {
         return;
@@ -161,9 +164,12 @@ function Post(props: PostProps) {
       setNumberFeel(numberFeel - 1);
       setOpenModalFeel(false);
       try {
-        await deleteFeelsApi({
+        const res = await deleteFeelsApi({
           id: id
         });
+        if (!res.success) {
+          dispatch(setMessage(handShowErrorMessage(parseInt(res.code))));
+        }
       } catch (e) {
         return;
       }
@@ -181,7 +187,9 @@ function Post(props: PostProps) {
         type: 1
       });
       if (res.success) {
-        dispatch(changeCoins(res.data.coins));
+        dispatch(changeCoins(res.coins));
+      } else {
+        dispatch(setMessage(handShowErrorMessage(parseInt(res.code))));
       }
     } catch (e) {
       return;
@@ -200,9 +208,11 @@ function Post(props: PostProps) {
         type: 0
       });
       if (res.success) {
-        dispatch(changeCoins(res.data.coins));
+        dispatch(changeCoins(res.coins));
 
         // const response = res.data;
+      } else {
+        dispatch(setMessage(handShowErrorMessage(parseInt(res.code))));
       }
     } catch (e) {
       return;
